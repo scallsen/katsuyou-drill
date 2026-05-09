@@ -50,21 +50,25 @@ export default function CardContent({ label, n, past, word }) {
       >
         <div
           style={{
+            fontFamily: "'DotGothic16', sans-serif",
             fontSize: 48,
-            fontWeight: 700,
+            fontWeight: 400,
             color: '#222',
-            letterSpacing: '-0.02em',
+            letterSpacing: '0.02em',
             lineHeight: 1.2,
+            textShadow: '2px 2px 0 rgba(0,0,0,0.25)',
           }}
         >
           {word}
         </div>
         <div
           style={{
-            fontSize: 18,
-            fontWeight: 600,
+            fontFamily: "'DotGothic16', sans-serif",
+            fontSize: 26,
+            fontWeight: 400,
             letterSpacing: '0.05em',
             color: '#666',
+            textShadow: '2px 2px 0 rgba(0,0,0,0.15)',
           }}
         >
           {label}
