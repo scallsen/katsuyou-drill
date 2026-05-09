@@ -14,7 +14,7 @@ function makeVariant(label, colorKey, BgComponent = null) {
     label,
     keyColor: `#${hex}`,
     bgColor: lightenHex(hex),
-    border: `2px solid #${hex}`,
+    border: `3px solid #${hex}`,
     BgComponent,
   }
 }
