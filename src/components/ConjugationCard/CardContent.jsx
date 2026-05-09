@@ -1,13 +1,14 @@
-const stampStyle = {
-  display: 'inline-block',
-  padding: '2px 8px',
+const stampBase = {
+  position: 'absolute',
+  padding: '3px 10px',
   borderRadius: 4,
   fontSize: 11,
   fontWeight: 700,
-  letterSpacing: '0.08em',
+  letterSpacing: '0.1em',
   textTransform: 'uppercase',
   border: '2px solid',
   lineHeight: 1.5,
+  pointerEvents: 'none',
 }
 
 export default function CardContent({ label, n, past, word }) {
@@ -22,53 +23,52 @@ export default function CardContent({ label, n, past, word }) {
         alignItems: 'center',
       }}
     >
-      {/* Label strip */}
-      <div
-        style={{
-          width: '100%',
-          padding: '8px 14px',
-          background: 'rgba(0,0,0,0.08)',
-          fontSize: 13,
-          fontWeight: 600,
-          letterSpacing: '0.05em',
-          color: '#333',
-          boxSizing: 'border-box',
-        }}
-      >
-        {label}
-      </div>
+      {/* Stamps — absolutely positioned, out of flow */}
+      {n && (
+        <span style={{ ...stampBase, top: 14, left: 14, color: '#c0392b', borderColor: '#c0392b', transform: 'rotate(-8deg)' }}>
+          Negative
+        </span>
+      )}
+      {past && (
+        <span style={{ ...stampBase, bottom: 14, right: 14, color: '#2471a3', borderColor: '#2471a3', transform: 'rotate(6deg)' }}>
+          Past
+        </span>
+      )}
 
-      {/* Stamp badges */}
-      <div style={{ display: 'flex', gap: 6, marginTop: 14 }}>
-        {n && (
-          <span style={{ ...stampStyle, color: '#c0392b', borderColor: '#c0392b' }}>
-            Negative
-          </span>
-        )}
-        {past && (
-          <span style={{ ...stampStyle, color: '#2471a3', borderColor: '#2471a3' }}>
-            Past
-          </span>
-        )}
-      </div>
-
-      {/* Word */}
+      {/* Word + label */}
       <div
         style={{
           flex: 1,
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: 48,
-          fontWeight: 700,
-          color: '#222',
-          letterSpacing: '-0.02em',
+          gap: 6,
           padding: '0 16px',
           textAlign: 'center',
-          lineHeight: 1.2,
         }}
       >
-        {word}
+        <div
+          style={{
+            fontSize: 48,
+            fontWeight: 700,
+            color: '#222',
+            letterSpacing: '-0.02em',
+            lineHeight: 1.2,
+          }}
+        >
+          {word}
+        </div>
+        <div
+          style={{
+            fontSize: 18,
+            fontWeight: 600,
+            letterSpacing: '0.05em',
+            color: '#666',
+          }}
+        >
+          {label}
+        </div>
       </div>
     </div>
   )

@@ -7,8 +7,8 @@ export default function CardShell({ bgColor, border, BgComponent, children }) {
         borderRadius: 16,
         border,
         backgroundColor: bgColor,
-        width: 280,
-        height: 380,
+        width: 380,
+        height: 280,
         flexShrink: 0,
       }}
     >
