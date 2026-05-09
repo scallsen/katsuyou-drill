@@ -9,8 +9,8 @@ const VARIANTS = {
   },
   polite: {
     label: 'Polite',
-    bgColor: '#ddeeff',
-    border: '2px solid #7aafd4',
+    bgColor: '#ffffff',
+    border: '2px solid #d0d0d0',
     BgComponent: null,
   },
 }

@@ -1,0 +1,32 @@
+<svg width="430" height="277" viewBox="0 0 430 277" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g filter="url(#filter0_d_19_10253)">
+<rect width="430" height="272" fill="url(#pattern0_19_10253)"/>
+</g>
+<defs>
+<filter id="filter0_d_19_10253" x="0" y="0" width="430" height="277" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="5"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_19_10253"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_19_10253" result="shape"/>
+</filter>
+<pattern id="pattern0_19_10253" patternUnits="userSpaceOnUse" patternTransform="matrix(429 0 0 276 0 0)" preserveAspectRatio="none" viewBox="0 0 429 276" width="1" height="1">
+<g id="pattern0_19_10253_inner">
+<rect width="429" height="276" fill="#F0F0A3"/>
+<mask id="mask0_19_10253" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="429" height="276">
+<rect width="429" height="276" fill="#F0F0A3"/>
+</mask>
+<g mask="url(#mask0_19_10253)">
+<line x1="-11" y1="68.5" x2="441" y2="68.5" stroke="#86D2CC" stroke-width="3"/>
+<line x1="46.5" y1="6.55671e-08" x2="46.5" y2="283" stroke="#F8BD7C" stroke-width="3"/>
+<line x1="61.5" y1="6.55671e-08" x2="61.5" y2="283" stroke="#F8BD7C" stroke-width="3"/>
+<line x1="-16" y1="110.5" x2="436" y2="110.5" stroke="#86D2CC" stroke-width="3"/>
+<line x1="-16" y1="152.5" x2="436" y2="152.5" stroke="#86D2CC" stroke-width="3"/>
+<line x1="-16" y1="194.5" x2="436" y2="194.5" stroke="#86D2CC" stroke-width="3"/>
+<line x1="-16" y1="236.5" x2="436" y2="236.5" stroke="#86D2CC" stroke-width="3"/>
+</g>
+</g>
+</pattern></defs>
+</svg>
