@@ -1,15 +1,5 @@
-const stampBase = {
-  position: 'absolute',
-  padding: '3px 10px',
-  borderRadius: 4,
-  fontSize: 11,
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  border: '2px solid',
-  lineHeight: 1.5,
-  pointerEvents: 'none',
-}
+import StampNegative from './stamps/stamp-negative.svg?react'
+import StampPast from './stamps/stamp-past.svg?react'
 
 export default function CardContent({ label, n, past, word }) {
   return (
@@ -25,14 +15,14 @@ export default function CardContent({ label, n, past, word }) {
     >
       {/* Stamps — absolutely positioned, out of flow */}
       {n && (
-        <span style={{ ...stampBase, top: 14, left: 14, color: '#c0392b', borderColor: '#c0392b', transform: 'rotate(-8deg)' }}>
-          Negative
-        </span>
+        <div style={{ position: 'absolute', top: 12, left: 5, pointerEvents: 'none', transform: 'rotate(-8deg)' }}>
+          <StampNegative width={222} height={64} />
+        </div>
       )}
       {past && (
-        <span style={{ ...stampBase, bottom: 14, right: 14, color: '#2471a3', borderColor: '#2471a3', transform: 'rotate(6deg)' }}>
-          Past
-        </span>
+        <div style={{ position: 'absolute', bottom: 12, right: 5, pointerEvents: 'none', transform: 'rotate(6deg)' }}>
+          <StampPast width={171} height={64} />
+        </div>
       )}
 
       {/* Word + label */}
