@@ -10,11 +10,12 @@ Japanese verb conjugation drill app. Vite + React, no TypeScript.
 
 ## How the drill works
 
-Options drawer → `buildPool()` → `useDrill(pool, { engine })` → renders cards one at a time.
+Options drawer → `buildPool()` → `useDrill(pool, { engine, seekCardId })` → renders cards one at a time.
 
 - **Pool** — flat array of card specs, one per valid `(word × form × subKey)` combo. Built by `src/data/drill.js::buildPool()`.
 - **Float** — the active hand of ~7 cards. `float[0]` is always current. Correct answers retire the card and pull a fresh one from the pool. Wrong answers reinsert the card a few positions ahead so it returns after a short gap.
 - **Streak** — increments on correct, resets to 0 on wrong.
+- **Seek** — when a sidebar filter is toggled, `DrillPage` synchronously computes the new pool, finds the best matching card via `findSeekCard` (scoring: same word +8, same form +4, same register/tense/polarity +2 each), and passes its id as `seekCardId` to `useDrill`. On pool reinit, `useDrill` moves that card to `float[0]`. Adding a filter biases toward cards that match the new axis/value; removing one just finds the most similar valid card.
 
 ## Adding a new drill engine
 
@@ -61,8 +62,8 @@ It will automatically appear as a selectable option in the options drawer.
 | `src/data/forms.js` | `FORMS` — all form/register definitions with axes and colors |
 | `src/data/words.json` | Word entries with conjugation tables |
 | `src/engines/simpleQueue.js` | Default engine — float + wrong-card reinsertion |
-| `src/hooks/useDrill.js` | React wrapper for any engine; `ENGINES` registry |
-| `src/pages/DrillPage.jsx` | Main page — options state, pool memoization, drill rendering |
+| `src/hooks/useDrill.js` | React wrapper for any engine; `ENGINES` registry; seek-on-reinit |
+| `src/pages/DrillPage.jsx` | Main page — options state, pool memoization, drill rendering, `findSeekCard` |
 | `src/components/ConjugationCard/` | Card component family (CardShell, CardContent, variants) |
 
 ## Card spec shape

@@ -6,7 +6,7 @@ export const ENGINES = {
   simpleQueue: SimpleQueue,
 }
 
-export function useDrill(pool, { engine = SimpleQueue, floatSize = 7 } = {}) {
+export function useDrill(pool, { engine = SimpleQueue, floatSize = 7, seekCardId = null } = {}) {
   const [state, setState] = useState(() => engine.init(pool, floatSize))
 
   // Reinitialize when the pool reference changes (options changed).
@@ -14,9 +14,22 @@ export function useDrill(pool, { engine = SimpleQueue, floatSize = 7 } = {}) {
   useEffect(() => {
     if (pool !== poolRef.current) {
       poolRef.current = pool
-      setState(engine.init(pool, floatSize))
+      const next = engine.init(pool, floatSize)
+      if (seekCardId) {
+        const target = next.float.find(c => c.id === seekCardId)
+                    ?? next.pool.find(c => c.id === seekCardId)
+        if (target) {
+          setState({
+            ...next,
+            float: [target, ...next.float.filter(c => c.id !== seekCardId)],
+            pool:  next.pool.filter(c => c.id !== seekCardId),
+          })
+          return
+        }
+      }
+      setState(next)
     }
-  }, [pool, engine, floatSize])
+  }, [pool, engine, floatSize, seekCardId])
 
   const onCorrect = useCallback(() => setState(s => engine.onCorrect(s)), [engine])
   const onWrong   = useCallback(() => setState(s => engine.onWrong(s)),   [engine])
