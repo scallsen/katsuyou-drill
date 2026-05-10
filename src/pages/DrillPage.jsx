@@ -282,6 +282,7 @@ export default function DrillPage() {
   })
   const [pulseColor,         setPulseColor]         = useState(null)
   const isMobile = useIsMobile()
+  const swipeTouchX = useRef(null)
 
   useEffect(() => { localStorage.setItem('tts-enabled', ttsEnabled) }, [ttsEnabled])
 
@@ -401,7 +402,10 @@ export default function DrillPage() {
       )}
 
       {/* Options drawer */}
-      <div style={{
+      <div
+        onTouchStart={e => { swipeTouchX.current = e.touches[0].clientX }}
+        onTouchEnd={e => { if (isMobile && e.changedTouches[0].clientX - swipeTouchX.current > 60) setShowOptions(false) }}
+        style={{
         position: 'absolute',
         top: 0,
         right: 0,
