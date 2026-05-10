@@ -9,6 +9,19 @@ import { WORD_TYPES, REGISTERS, GRAMMAR_FORMS, TENSES, POLARITIES } from '../dat
 import { buildPool } from '../data/drill.js'
 import { useDrill, ENGINES } from '../hooks/useDrill.js'
 import { useTTS } from '../hooks/useTTS.js'
+import VolumeOnIcon from '../icons/volume-on.svg?react'
+import VolumeOffIcon from '../icons/volume-off.svg?react'
+
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint)
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`)
+    const handler = e => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [breakpoint])
+  return isMobile
+}
 
 function toggle(arr, val) {
   return arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val]
@@ -268,6 +281,7 @@ export default function DrillPage() {
     return stored === null ? true : stored === 'true'
   })
   const [pulseColor,         setPulseColor]         = useState(null)
+  const isMobile = useIsMobile()
 
   useEffect(() => { localStorage.setItem('tts-enabled', ttsEnabled) }, [ttsEnabled])
 
@@ -313,30 +327,54 @@ export default function DrillPage() {
       />
 
       {/* Header */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 24px', zIndex: 10 }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: showOptions ? 260 : 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 24px', zIndex: 10, transition: 'right 220ms ease' }}>
         <div>
           <div style={{ color: '#fff', fontSize: 15, fontWeight: 700, letterSpacing: '0.01em' }}>Doushi Drill v0.1</div>
           <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, marginTop: 3 }}>by Simon Callsen</div>
         </div>
-        <button
-          onClick={() => setShowOptions(v => !v)}
-          style={{
-            padding: '7px 16px',
-            fontSize: 13,
-            fontFamily: 'inherit',
-            background: 'rgba(255,255,255,0.1)',
-            color: '#fff',
-            border: '1px solid rgba(255,255,255,0.2)',
-            borderRadius: 8,
-            cursor: 'pointer',
-          }}
-        >
-          {showOptions ? 'Hide options' : 'Options'}
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button
+            onClick={() => setTtsEnabled(v => !v)}
+            title={ttsEnabled ? 'Mute audio' : 'Enable audio'}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 34,
+              height: 34,
+              background: 'rgba(255,255,255,0.1)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              borderRadius: 8,
+              cursor: 'pointer',
+              opacity: ttsEnabled ? 1 : 0.35,
+              padding: 0,
+            }}
+          >
+            {ttsEnabled
+              ? <VolumeOnIcon width={16} height={16} />
+              : <VolumeOffIcon width={16} height={16} />
+            }
+          </button>
+          <button
+            onClick={() => setShowOptions(v => !v)}
+            style={{
+              padding: '7px 16px',
+              fontSize: 13,
+              fontFamily: 'inherit',
+              background: 'rgba(255,255,255,0.1)',
+              color: '#fff',
+              border: '1px solid rgba(255,255,255,0.2)',
+              borderRadius: 8,
+              cursor: 'pointer',
+            }}
+          >
+            {showOptions ? 'Hide options' : 'Options'}
+          </button>
+        </div>
       </div>
 
       {/* Center */}
-      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', zIndex: 2 }}>
+      <div style={{ position: 'absolute', left: 0, right: showOptions ? 260 : 0, top: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'right 220ms ease', zIndex: 2 }}>
         {!drillMode ? (
           <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14 }}>Open options to start drilling</div>
         ) : pool.length === 0 ? (
@@ -364,15 +402,17 @@ export default function DrillPage() {
         flexDirection: 'column',
         overflow: 'hidden',
       }}>
-        <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>Options</div>
-          <button
-            onClick={() => setShowOptions(false)}
-            style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontSize: 13, fontFamily: 'inherit', cursor: 'pointer', padding: 0 }}
-          >
-            Hide
-          </button>
-        </div>
+        {isMobile && (
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>Options</div>
+            <button
+              onClick={() => setShowOptions(false)}
+              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontSize: 13, fontFamily: 'inherit', cursor: 'pointer', padding: 0 }}
+            >
+              Hide
+            </button>
+          </div>
+        )}
 
         <div style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
 
@@ -485,14 +525,6 @@ export default function DrillPage() {
               ))}
             </div>
             <SelectionError visible={selectedPolarities.length === 0} />
-          </div>
-
-          {/* Read aloud */}
-          <div style={{ marginTop: 28 }}>
-            <DrawerSectionHeader title="Read aloud" />
-            <SelectButton selected={ttsEnabled} onClick={() => setTtsEnabled(v => !v)}>
-              Read answer aloud
-            </SelectButton>
           </div>
 
           {/* Algorithm */}
