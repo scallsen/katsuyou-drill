@@ -2,10 +2,45 @@ import { useState } from 'react'
 import ConjugationCard from '../components/ConjugationCard/index.jsx'
 import VARIANTS from '../components/ConjugationCard/variants.js'
 import SelectButton from '../components/SelectButton.jsx'
+import DrawerSectionHeader from '../components/DrawerSectionHeader.jsx'
+import SelectionError from '../components/SelectionError.jsx'
 
 function toggle(arr, val) {
   return arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val]
 }
+
+const WORD_TYPES = [
+  { key: 'u-verb',    label: 'う verbs' },
+  { key: 'ru-verb',   label: 'る verbs' },
+  { key: 'irregular', label: 'Irregular verbs' },
+  { key: 'i-adj',     label: 'い adjectives' },
+  { key: 'na-adj',    label: 'な adjectives' },
+]
+
+const REGISTERS = [
+  { key: 'plain',  subtext: '〜う・る' },
+  { key: 'polite', subtext: '〜ます' },
+]
+
+const REGISTER_KEYS = REGISTERS.map(r => r.key)
+
+const FORM_SUBTEXTS = {
+  te:               '〜て',
+  potential:        '〜られる',
+  volitional:       '〜よう',
+  conditional:      '〜えば',
+  passive:          '〜られる',
+  causative:        '〜させる',
+  passiveCausative: '〜させられる',
+  imperative:       '〜え',
+}
+
+const GRAMMAR_FORMS = [
+  { key: 'default', label: 'Default', bgColor: '#e8e8e8', keyColor: '#888888', subtext: null },
+  ...Object.keys(VARIANTS)
+    .filter(k => !REGISTER_KEYS.includes(k))
+    .map(k => ({ key: k, label: VARIANTS[k].label, bgColor: VARIANTS[k].bgColor, keyColor: VARIANTS[k].keyColor, subtext: FORM_SUBTEXTS[k] ?? null })),
+]
 
 const TENSES = [
   { key: 'non-past', label: 'Non-past' },
@@ -28,17 +63,13 @@ export default function CardPreview() {
   const [showTestControls, setShowTestControls] = useState(false)
 
   // Options drawer state — not wired up yet
-  const [selectedVariants,   setSelectedVariants]   = useState(['plain'])
+  const [selectedWordTypes,  setSelectedWordTypes]  = useState([])
+  const [selectedRegisters,  setSelectedRegisters]  = useState([])
+  const [selectedForms,      setSelectedForms]      = useState([])
   const [selectedTenses,     setSelectedTenses]     = useState(['non-past'])
   const [selectedPolarities, setSelectedPolarities] = useState(['positive'])
 
-  const sectionLabel = {
-    color: 'rgba(255,255,255,0.4)',
-    fontSize: 11,
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase',
-    margin: 0,
-  }
+  const verbSelected = ['u-verb', 'ru-verb', 'irregular'].some(k => selectedWordTypes.includes(k))
 
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#2E2E2E', fontFamily: "'DotGothic16', system-ui, sans-serif", overflow: 'hidden' }}>
@@ -162,37 +193,74 @@ export default function CardPreview() {
 
         <div style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
 
-          {/* Grammar forms */}
+          {/* Words */}
           <div style={{ marginTop: 24 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-              <div style={sectionLabel}>Grammar forms</div>
-              {selectedVariants.length > 0 && (
-                <button
-                  onClick={() => setSelectedVariants([])}
-                  style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: 11, fontFamily: 'inherit', cursor: 'pointer', padding: 0 }}
-                >
-                  Unselect all
-                </button>
-              )}
-            </div>
+            <DrawerSectionHeader
+              title="Words"
+              hasSelections={selectedWordTypes.length > 0}
+              onClearAll={() => setSelectedWordTypes([])}
+            />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {Object.keys(VARIANTS).map((key) => (
+              {WORD_TYPES.map(({ key, label }) => (
                 <SelectButton
                   key={key}
-                  selected={selectedVariants.includes(key)}
+                  selected={selectedWordTypes.includes(key)}
+                  onClick={() => setSelectedWordTypes(v => toggle(v, key))}
+                >
+                  {label}
+                </SelectButton>
+              ))}
+            </div>
+            <SelectionError visible={selectedWordTypes.length === 0} />
+          </div>
+
+          {/* Verb register */}
+          {verbSelected && <div style={{ marginTop: 28 }}>
+            <DrawerSectionHeader title="Verb register" />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {REGISTERS.map(({ key, subtext }) => (
+                <SelectButton
+                  key={key}
+                  selected={selectedRegisters.includes(key)}
                   bgColor={VARIANTS[key].bgColor}
                   borderColor={VARIANTS[key].keyColor}
-                  onClick={() => setSelectedVariants(v => toggle(v, key))}
+                  subtext={subtext}
+                  onClick={() => setSelectedRegisters(v => toggle(v, key))}
                 >
                   {VARIANTS[key].label}
                 </SelectButton>
               ))}
             </div>
-          </div>
+            <SelectionError visible={selectedRegisters.length === 0} />
+          </div>}
+
+          {/* Verb forms */}
+          {verbSelected && <div style={{ marginTop: 28 }}>
+            <DrawerSectionHeader
+              title="Verb forms"
+              hasSelections={selectedForms.length > 0}
+              onClearAll={() => setSelectedForms([])}
+            />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {GRAMMAR_FORMS.map(({ key, label, bgColor, keyColor, subtext }) => (
+                <SelectButton
+                  key={key}
+                  selected={selectedForms.includes(key)}
+                  bgColor={bgColor}
+                  borderColor={keyColor}
+                  subtext={subtext}
+                  onClick={() => setSelectedForms(v => toggle(v, key))}
+                >
+                  {label}
+                </SelectButton>
+              ))}
+            </div>
+            <SelectionError visible={selectedForms.length === 0} />
+          </div>}
 
           {/* Tense */}
           <div style={{ marginTop: 28 }}>
-            <div style={{ ...sectionLabel, marginBottom: 10 }}>Tense</div>
+            <DrawerSectionHeader title="Tense" />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {TENSES.map(({ key, label }) => (
                 <SelectButton
@@ -204,11 +272,12 @@ export default function CardPreview() {
                 </SelectButton>
               ))}
             </div>
+            <SelectionError visible={selectedTenses.length === 0} />
           </div>
 
           {/* Polarity */}
           <div style={{ marginTop: 28 }}>
-            <div style={{ ...sectionLabel, marginBottom: 10 }}>Polarity</div>
+            <DrawerSectionHeader title="Polarity" />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {POLARITIES.map(({ key, label }) => (
                 <SelectButton
@@ -220,6 +289,7 @@ export default function CardPreview() {
                 </SelectButton>
               ))}
             </div>
+            <SelectionError visible={selectedPolarities.length === 0} />
           </div>
 
         </div>
