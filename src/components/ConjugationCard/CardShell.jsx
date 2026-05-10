@@ -1,4 +1,4 @@
-export default function CardShell({ bgColor, border, BgComponent, children }) {
+export default function CardShell({ bgColor, border, BgComponent, color, bgTransparent = false, children }) {
   return (
     <div
       style={{
@@ -12,7 +12,7 @@ export default function CardShell({ bgColor, border, BgComponent, children }) {
     >
       {BgComponent && (
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-          <BgComponent />
+          <BgComponent color={color} transparent={bgTransparent} />
         </div>
       )}
       {children}

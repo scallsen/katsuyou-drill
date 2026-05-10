@@ -1,5 +1,5 @@
-import CardPreview from './pages/CardPreview.jsx'
+import DrillPage from './pages/DrillPage.jsx'
 
 export default function App() {
-  return <CardPreview />
+  return <DrillPage />
 }
