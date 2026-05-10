@@ -3,7 +3,6 @@ export default function CardShell({ bgColor, border, BgComponent, color, bgTrans
     <div
       style={{
         position: 'relative',
-        overflow: 'hidden',
         border,
         backgroundColor: bgColor,
         width: '100%',
