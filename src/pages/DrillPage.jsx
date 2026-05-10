@@ -167,6 +167,7 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
             <button
               onClick={() => handleVerdictRef.current(false)}
               disabled={transitioning}
+              className="verdict-btn"
               style={{
                 padding: '10px 28px',
                 fontSize: 14,
@@ -184,6 +185,7 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
             <button
               onClick={() => handleVerdictRef.current(true)}
               disabled={transitioning}
+              className="verdict-btn"
               style={{
                 padding: '10px 28px',
                 fontSize: 14,

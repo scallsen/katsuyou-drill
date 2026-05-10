@@ -121,3 +121,14 @@
 .card-entering {
   animation: cardEnter 300ms ease-out forwards;
 }
+
+/* ── Verdict buttons ─────────────────────────────────────────── */
+
+.verdict-btn {
+  transition: transform 80ms ease-out;
+}
+
+.verdict-btn:active:not(:disabled) {
+  transform: scale(0.93);
+  transition: transform 40ms ease-in;
+}
