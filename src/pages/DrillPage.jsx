@@ -153,7 +153,7 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
       <div style={{ height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {streak > 0 && (
           <div style={{ color: '#fff', fontSize: 20, fontWeight: 700, fontFamily: "'DotGothic16', sans-serif", letterSpacing: '0.05em' }}>
-            {streak}
+            Current streak: {streak}
           </div>
         )}
       </div>
