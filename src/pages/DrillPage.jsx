@@ -65,14 +65,35 @@ function findSeekCard(newPool, currentCard, axis, value) {
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
-function ActiveDrill({ drill, ttsEnabled }) {
+function ActiveDrill({ drill, ttsEnabled, onPulse }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
+  const [transitioning, setTransitioning] = useState(false)
+  const [exitDir, setExitDir] = useState(null)
   const { currentCard, streak, totalCorrect, totalWrong, remaining } = drill
   const isFlipped = flippedCardId === currentCard.id
   const tts = useTTS()
 
   const isFlippedRef = useRef(isFlipped)
+  const transitioningRef = useRef(false)
   useEffect(() => { isFlippedRef.current = isFlipped }, [isFlipped])
+  useEffect(() => { transitioningRef.current = transitioning }, [transitioning])
+
+  const handleVerdictRef = useRef()
+  handleVerdictRef.current = (isCorrect) => {
+    if (transitioningRef.current) return
+    const action = isCorrect ? drill.onCorrect : drill.onWrong
+    setTransitioning(true)
+    setExitDir(isCorrect ? 'up' : 'down')
+    onPulse(isCorrect ? 'correct' : 'wrong')
+    setTimeout(() => {
+      action()
+      setExitDir(null)
+    }, 280)
+    setTimeout(() => {
+      setTransitioning(false)
+      onPulse(null)
+    }, 600)
+  }
 
   useEffect(() => {
     if (isFlipped && ttsEnabled) {
@@ -90,13 +111,14 @@ function ActiveDrill({ drill, ttsEnabled }) {
 
   useEffect(() => {
     function onKey(e) {
+      if (transitioningRef.current) return
       if (e.code === 'Space') {
         e.preventDefault()
         setFlippedCardId(prev => prev === currentCard.id ? null : currentCard.id)
       } else if (e.code === 'KeyZ' && isFlippedRef.current) {
-        drill.onWrong()
+        handleVerdictRef.current(false)
       } else if (e.code === 'KeyX' && isFlippedRef.current) {
-        drill.onCorrect()
+        handleVerdictRef.current(true)
       }
     }
     window.addEventListener('keydown', onKey)
@@ -105,6 +127,11 @@ function ActiveDrill({ drill, ttsEnabled }) {
 
   const bgComponent    = currentCard.register === 'plain' ? PlainBg : null
   const registerLabel  = currentCard.register ? VARIANTS[currentCard.register]?.label ?? null : null
+
+  let cardClass = ''
+  if (exitDir === 'up') cardClass = 'card-exit-up'
+  else if (exitDir === 'down') cardClass = 'card-exit-down'
+  else if (transitioning) cardClass = 'card-entering'
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
@@ -118,26 +145,28 @@ function ActiveDrill({ drill, ttsEnabled }) {
         )}
       </div>
 
-      <ConjugationCard
-        key={currentCard.id}
-        variant={currentCard.variant}
-        word={currentCard.word.kanji}
-        answer={currentCard.conjugation}
-        negative={currentCard.polarity === 'negative'}
-        past={currentCard.tense === 'past'}
-        bgComponent={bgComponent}
-        bgComponentColor={currentCard.bgColor}
-        registerLabel={registerLabel}
-        flipped={isFlipped}
-        onFlip={handleFlip}
-      />
+      <div key={currentCard.id} className={cardClass}>
+        <ConjugationCard
+          variant={currentCard.variant}
+          word={currentCard.word.kanji}
+          answer={currentCard.conjugation}
+          negative={currentCard.polarity === 'negative'}
+          past={currentCard.tense === 'past'}
+          bgComponent={bgComponent}
+          bgComponentColor={currentCard.bgColor}
+          registerLabel={registerLabel}
+          flipped={isFlipped}
+          onFlip={handleFlip}
+        />
+      </div>
 
       {/* Action area — fixed height so card position never shifts */}
       <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {isFlipped ? (
           <div style={{ display: 'flex', gap: 12 }}>
             <button
-              onClick={drill.onWrong}
+              onClick={() => handleVerdictRef.current(false)}
+              disabled={transitioning}
               style={{
                 padding: '10px 28px',
                 fontSize: 14,
@@ -153,7 +182,8 @@ function ActiveDrill({ drill, ttsEnabled }) {
               Wrong [Z]
             </button>
             <button
-              onClick={drill.onCorrect}
+              onClick={() => handleVerdictRef.current(true)}
+              disabled={transitioning}
               style={{
                 padding: '10px 28px',
                 fontSize: 14,
@@ -226,6 +256,7 @@ export default function DrillPage() {
     const stored = localStorage.getItem('tts-enabled')
     return stored === null ? true : stored === 'true'
   })
+  const [pulseColor,         setPulseColor]         = useState(null)
 
   useEffect(() => { localStorage.setItem('tts-enabled', ttsEnabled) }, [ttsEnabled])
 
@@ -264,6 +295,12 @@ export default function DrillPage() {
       overflow: 'hidden',
     }}>
 
+      {/* Verdict pulse — full-page background flash */}
+      <div
+        className={pulseColor ? `stage-pulse-${pulseColor}` : ''}
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }}
+      />
+
       {/* Header */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 24px', zIndex: 10 }}>
         <div>
@@ -288,7 +325,7 @@ export default function DrillPage() {
       </div>
 
       {/* Center */}
-      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', zIndex: 2 }}>
         {!drillMode ? (
           <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14 }}>Open options to start drilling</div>
         ) : pool.length === 0 ? (
@@ -296,7 +333,7 @@ export default function DrillPage() {
         ) : drill.done ? (
           <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
         ) : (
-          <ActiveDrill drill={drill} ttsEnabled={ttsEnabled} />
+          <ActiveDrill drill={drill} ttsEnabled={ttsEnabled} onPulse={setPulseColor} />
         )}
       </div>
 

@@ -78,3 +78,46 @@
 .fc-face--back {
   transform: rotateX(180deg);
 }
+
+/* ── Verdict transition animations ───────────────────────────── */
+
+@keyframes stagePulse {
+  0%   { opacity: 0; }
+  8%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes cardExitUp {
+  to { transform: translateY(-150px); opacity: 0; }
+}
+
+@keyframes cardExitDown {
+  to { transform: translateY(150px); opacity: 0; }
+}
+
+@keyframes cardEnter {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.stage-pulse-correct {
+  background: rgba(39, 174, 96, 0.20);
+  animation: stagePulse 700ms ease-out forwards;
+}
+
+.stage-pulse-wrong {
+  background: rgba(192, 57, 43, 0.20);
+  animation: stagePulse 700ms ease-out forwards;
+}
+
+.card-exit-up {
+  animation: cardExitUp 280ms ease-in forwards;
+}
+
+.card-exit-down {
+  animation: cardExitDown 280ms ease-in forwards;
+}
+
+.card-entering {
+  animation: cardEnter 300ms ease-out forwards;
+}
