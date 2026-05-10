@@ -17,7 +17,7 @@ export default function CardContent({ label, n, past, word, answerLabel = null, 
     >
       {/* Answer label */}
       {answerLabel && (
-        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, textAlign: 'center', fontFamily: "'DotGothic16', sans-serif", fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor === '#ffffff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.35)' }}>
+        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, textAlign: 'center', fontFamily: "'DotGothic16', sans-serif", fontSize: 16, letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor === '#ffffff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.35)' }}>
           {answerLabel}
         </div>
       )}

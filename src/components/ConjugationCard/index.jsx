@@ -12,7 +12,7 @@ export default function ConjugationCard({ variant = 'plain', word = '', answer =
 
   const front = (
     <CardShell bgColor={config.bgColor} border={config.border} BgComponent={FrontBg} color={frontBgColor}>
-      <CardContent label={config.label} n={negative} past={past} word={word} />
+      <CardContent label={config.label} n={negative} past={past} word={word} answerLabel={answerLabel} answerBg={config.bgColor} />
     </CardShell>
   )
 
