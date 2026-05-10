@@ -386,6 +386,20 @@ export default function DrillPage() {
         )}
       </div>
 
+      {/* Mobile backdrop */}
+      {isMobile && showOptions && (
+        <div
+          onClick={() => setShowOptions(false)}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'rgba(0,0,0,0.5)',
+            zIndex: 20,
+            transition: 'opacity 220ms ease',
+          }}
+        />
+      )}
+
       {/* Options drawer */}
       <div style={{
         position: 'absolute',
