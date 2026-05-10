@@ -245,14 +245,23 @@ function DoneScreen({ totalCorrect, totalWrong, onRestart }) {
 
 // ── Main page ────────────────────────────────────────────────────────────────
 
+const DEFAULTS = {
+  wordTypes:  ['u-verb', 'ru-verb', 'irregular', 'i-adj', 'na-adj', 'noun'],
+  registers:  ['polite'],
+  forms:      ['default'],
+  tenses:     ['present'],
+  polarities: ['positive'],
+  engine:     'simpleQueue',
+}
+
 export default function DrillPage() {
   const [showOptions,        setShowOptions]        = useState(false)
-  const [selectedWordTypes,  setSelectedWordTypes]  = useState([])
-  const [selectedRegisters,  setSelectedRegisters]  = useState([])
-  const [selectedForms,      setSelectedForms]      = useState([])
-  const [selectedTenses,     setSelectedTenses]     = useState(['present'])
-  const [selectedPolarities, setSelectedPolarities] = useState(['positive'])
-  const [selectedEngine,     setSelectedEngine]     = useState('simpleQueue')
+  const [selectedWordTypes,  setSelectedWordTypes]  = useState(DEFAULTS.wordTypes)
+  const [selectedRegisters,  setSelectedRegisters]  = useState(DEFAULTS.registers)
+  const [selectedForms,      setSelectedForms]      = useState(DEFAULTS.forms)
+  const [selectedTenses,     setSelectedTenses]     = useState(DEFAULTS.tenses)
+  const [selectedPolarities, setSelectedPolarities] = useState(DEFAULTS.polarities)
+  const [selectedEngine,     setSelectedEngine]     = useState(DEFAULTS.engine)
   const [seekCardId,         setSeekCardId]         = useState(null)
   const [ttsEnabled,         setTtsEnabled]         = useState(() => {
     const stored = localStorage.getItem('tts-enabled')
