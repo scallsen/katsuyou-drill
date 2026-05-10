@@ -327,7 +327,7 @@ export default function DrillPage() {
       />
 
       {/* Header */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: showOptions ? 260 : 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 24px', zIndex: 10, transition: 'right 220ms ease' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: showOptions && !isMobile ? 260 : 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 24px', zIndex: 10, transition: 'right 220ms ease' }}>
         <div>
           <div style={{ color: '#fff', fontSize: 15, fontWeight: 700, letterSpacing: '0.01em' }}>Doushi Drill v0.1</div>
           <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, marginTop: 3 }}>by Simon Callsen</div>
@@ -374,7 +374,7 @@ export default function DrillPage() {
       </div>
 
       {/* Center */}
-      <div style={{ position: 'absolute', left: 0, right: showOptions ? 260 : 0, top: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'right 220ms ease', zIndex: 2 }}>
+      <div style={{ position: 'absolute', left: 0, right: showOptions && !isMobile ? 260 : 0, top: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'right 220ms ease', zIndex: 2 }}>
         {!drillMode ? (
           <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14 }}>Open options to start drilling</div>
         ) : pool.length === 0 ? (
