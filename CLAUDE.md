@@ -64,6 +64,7 @@ It will automatically appear as a selectable option in the options drawer.
 | `src/data/words.json` | Word entries with conjugation tables |
 | `src/engines/simpleQueue.js` | Default engine — float + wrong-card reinsertion |
 | `src/hooks/useDrill.js` | React wrapper for any engine; `ENGINES` registry; seek-on-reinit |
+| `src/hooks/useTTS.js` | Web Speech API wrapper; speaks `conjugation` on card flip-to-back; `ttsEnabled` persisted in localStorage |
 | `src/pages/DrillPage.jsx` | Main page — options state, pool memoization, drill rendering, `findSeekCard` |
 | `src/components/ConjugationCard/` | Card component family (CardShell, CardContent, variants) |
 

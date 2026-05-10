@@ -8,6 +8,7 @@ import SelectionError from '../components/SelectionError.jsx'
 import { WORD_TYPES, REGISTERS, GRAMMAR_FORMS, TENSES, POLARITIES } from '../data/options.js'
 import { buildPool } from '../data/drill.js'
 import { useDrill, ENGINES } from '../hooks/useDrill.js'
+import { useTTS } from '../hooks/useTTS.js'
 
 function toggle(arr, val) {
   return arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val]
@@ -64,13 +65,24 @@ function findSeekCard(newPool, currentCard, axis, value) {
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
-function ActiveDrill({ drill }) {
+function ActiveDrill({ drill, ttsEnabled }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
   const { currentCard, streak, totalCorrect, totalWrong, remaining } = drill
   const isFlipped = flippedCardId === currentCard.id
+  const tts = useTTS()
 
   const isFlippedRef = useRef(isFlipped)
   useEffect(() => { isFlippedRef.current = isFlipped }, [isFlipped])
+
+  useEffect(() => {
+    if (isFlipped && ttsEnabled) {
+      tts.speak(currentCard.conjugation)
+    } else {
+      tts.cancel()
+    }
+    return () => tts.cancel()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFlipped, currentCard.id, ttsEnabled])
 
   function handleFlip(next) {
     setFlippedCardId(next ? currentCard.id : null)
@@ -210,6 +222,12 @@ export default function DrillPage() {
   const [selectedPolarities, setSelectedPolarities] = useState(['positive'])
   const [selectedEngine,     setSelectedEngine]     = useState('simpleQueue')
   const [seekCardId,         setSeekCardId]         = useState(null)
+  const [ttsEnabled,         setTtsEnabled]         = useState(() => {
+    const stored = localStorage.getItem('tts-enabled')
+    return stored === null ? true : stored === 'true'
+  })
+
+  useEffect(() => { localStorage.setItem('tts-enabled', ttsEnabled) }, [ttsEnabled])
 
   function seek(newWordTypes, newForms, newRegs, newTenses, newPols, axis, value) {
     const newPool = buildPool({
@@ -278,7 +296,7 @@ export default function DrillPage() {
         ) : drill.done ? (
           <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
         ) : (
-          <ActiveDrill drill={drill} />
+          <ActiveDrill drill={drill} ttsEnabled={ttsEnabled} />
         )}
       </div>
 
@@ -419,6 +437,14 @@ export default function DrillPage() {
               ))}
             </div>
             <SelectionError visible={selectedPolarities.length === 0} />
+          </div>
+
+          {/* Read aloud */}
+          <div style={{ marginTop: 28 }}>
+            <DrawerSectionHeader title="Read aloud" />
+            <SelectButton selected={ttsEnabled} onClick={() => setTtsEnabled(v => !v)}>
+              Read answer aloud
+            </SelectButton>
           </div>
 
           {/* Algorithm */}
