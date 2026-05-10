@@ -59,6 +59,7 @@ It will automatically appear as a selectable option in the options drawer.
 | File | Purpose |
 |---|---|
 | `src/data/drill.js` | `buildPool`, `filterWords`, `buildSubKey`, `getConjugation`, `resolveVariant` |
+| `src/data/illegalCombos.js` | Declarative list of card combos to suppress (e.g. trivial/duplicate answers); checked in `buildPool()` |
 | `src/data/forms.js` | `FORMS` — all form/register definitions with axes and colors |
 | `src/data/words.json` | Word entries with conjugation tables |
 | `src/engines/simpleQueue.js` | Default engine — float + wrong-card reinsertion |
