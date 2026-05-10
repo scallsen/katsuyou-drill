@@ -4,53 +4,12 @@ import VARIANTS from '../components/ConjugationCard/variants.js'
 import SelectButton from '../components/SelectButton.jsx'
 import DrawerSectionHeader from '../components/DrawerSectionHeader.jsx'
 import SelectionError from '../components/SelectionError.jsx'
+import { WORD_TYPES, REGISTERS, REGISTER_KEYS, GRAMMAR_FORMS, TENSES, POLARITIES } from '../data/options.js'
+import { filterWords, buildSubKey, getConjugation, resolveVariant } from '../data/drill.js'
 
 function toggle(arr, val) {
   return arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val]
 }
-
-const WORD_TYPES = [
-  { key: 'u-verb',    label: 'う verbs' },
-  { key: 'ru-verb',   label: 'る verbs' },
-  { key: 'irregular', label: 'Irregular verbs' },
-  { key: 'i-adj',     label: 'い adjectives' },
-  { key: 'na-adj',    label: 'な adjectives' },
-]
-
-const REGISTERS = [
-  { key: 'plain',  subtext: '〜う・る' },
-  { key: 'polite', subtext: '〜ます' },
-]
-
-const REGISTER_KEYS = REGISTERS.map(r => r.key)
-
-const FORM_SUBTEXTS = {
-  te:               '〜て',
-  potential:        '〜られる',
-  volitional:       '〜よう',
-  conditional:      '〜えば',
-  passive:          '〜られる',
-  causative:        '〜させる',
-  passiveCausative: '〜させられる',
-  imperative:       '〜え',
-}
-
-const GRAMMAR_FORMS = [
-  { key: 'default', label: 'Default', bgColor: '#e8e8e8', keyColor: '#888888', subtext: null },
-  ...Object.keys(VARIANTS)
-    .filter(k => !REGISTER_KEYS.includes(k))
-    .map(k => ({ key: k, label: VARIANTS[k].label, bgColor: VARIANTS[k].bgColor, keyColor: VARIANTS[k].keyColor, subtext: FORM_SUBTEXTS[k] ?? null })),
-]
-
-const TENSES = [
-  { key: 'non-past', label: 'Non-past' },
-  { key: 'past',     label: 'Past' },
-]
-
-const POLARITIES = [
-  { key: 'positive', label: 'Positive' },
-  { key: 'negative', label: 'Negative' },
-]
 
 export default function CardPreview() {
   // Test controls — drive the preview card
@@ -62,14 +21,33 @@ export default function CardPreview() {
   const [showOptions,      setShowOptions]      = useState(false)
   const [showTestControls, setShowTestControls] = useState(false)
 
-  // Options drawer state — not wired up yet
+  // Options drawer state
   const [selectedWordTypes,  setSelectedWordTypes]  = useState([])
   const [selectedRegisters,  setSelectedRegisters]  = useState([])
   const [selectedForms,      setSelectedForms]      = useState([])
-  const [selectedTenses,     setSelectedTenses]     = useState(['non-past'])
+  const [selectedTenses,     setSelectedTenses]     = useState(['present'])
   const [selectedPolarities, setSelectedPolarities] = useState(['positive'])
 
   const verbSelected = ['u-verb', 'ru-verb', 'irregular'].some(k => selectedWordTypes.includes(k))
+
+  // Drill mode: active when at least one word type is selected
+  const drillMode = selectedWordTypes.length > 0
+  const filteredWords = drillMode ? filterWords(selectedWordTypes) : []
+  const activeWord    = filteredWords[0] ?? null
+  const activeForm    = selectedForms[0] ?? 'default'
+  const activeReg     = selectedRegisters[0] ?? null
+  const activeTense   = selectedTenses[0] ?? 'present'
+  const activePolarity = selectedPolarities[0] ?? 'positive'
+  const subKey        = buildSubKey(activeForm, { register: activeReg, tense: activeTense, polarity: activePolarity })
+  const conjugation   = getConjugation(activeWord, activeForm, subKey)
+  const drillVariant  = resolveVariant(activeForm, activeReg)
+
+  // Values passed to the card — drill data takes priority over test controls
+  const cardWord     = drillMode ? (activeWord?.kanji ?? '—') : word
+  const cardAnswer   = drillMode ? conjugation : null
+  const cardVariant  = drillMode ? drillVariant : variant
+  const cardNegative = drillMode ? activePolarity === 'negative' : negative
+  const cardPast     = drillMode ? activeTense === 'past' : past
 
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#2E2E2E', fontFamily: "'DotGothic16', system-ui, sans-serif", overflow: 'hidden' }}>
@@ -99,7 +77,7 @@ export default function CardPreview() {
 
       {/* Card + hint */}
       <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
-        <ConjugationCard variant={variant} word={word} negative={negative} past={past} />
+        <ConjugationCard variant={cardVariant} word={cardWord} answer={cardAnswer} negative={cardNegative} past={cardPast} />
         <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>Click to flip card</div>
       </div>
 

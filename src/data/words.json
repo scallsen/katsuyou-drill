@@ -1,0 +1,341 @@
+[
+  {
+    "id": "yomu",
+    "kanji": "読む",
+    "kana": "よむ",
+    "romaji": "yomu",
+    "english": "to read",
+    "wordType": "verb",
+    "group": 1,
+    "jlpt": 5,
+    "source": "builtin",
+    "listId": null,
+    "forms": {
+      "default": {
+        "plain_present_positive":  "読む",
+        "plain_present_negative":  "読まない",
+        "plain_past_positive":     "読んだ",
+        "plain_past_negative":     "読まなかった",
+        "polite_present_positive": "読みます",
+        "polite_present_negative": "読みません",
+        "polite_past_positive":    "読みました",
+        "polite_past_negative":    "読みませんでした"
+      },
+      "te": {
+        "positive": "読んで",
+        "negative": "読まないで"
+      },
+      "conditional": {
+        "positive": "読めば",
+        "negative": "読まなければ"
+      },
+      "volitional": {
+        "plain":  "読もう",
+        "polite": "読みましょう"
+      },
+      "potential": {
+        "plain_present_positive":  "読める",
+        "plain_present_negative":  "読めない",
+        "plain_past_positive":     "読めた",
+        "plain_past_negative":     "読めなかった",
+        "polite_present_positive": "読めます",
+        "polite_present_negative": "読めません",
+        "polite_past_positive":    "読めました",
+        "polite_past_negative":    "読めませんでした"
+      },
+      "passive": {
+        "plain_present_positive":  "読まれる",
+        "plain_present_negative":  "読まれない",
+        "plain_past_positive":     "読まれた",
+        "plain_past_negative":     "読まれなかった",
+        "polite_present_positive": "読まれます",
+        "polite_present_negative": "読まれません",
+        "polite_past_positive":    "読まれました",
+        "polite_past_negative":    "読まれませんでした"
+      },
+      "causative": {
+        "plain_present_positive":  "読ませる",
+        "plain_present_negative":  "読ませない",
+        "plain_past_positive":     "読ませた",
+        "plain_past_negative":     "読ませなかった",
+        "polite_present_positive": "読ませます",
+        "polite_present_negative": "読ませません",
+        "polite_past_positive":    "読ませました",
+        "polite_past_negative":    "読ませませんでした"
+      },
+      "imperative": {
+        "positive": "読め",
+        "negative": "読むな"
+      },
+      "passive_causative": {
+        "plain_present_positive":  "読まされる",
+        "plain_present_negative":  "読まされない",
+        "plain_past_positive":     "読まされた",
+        "plain_past_negative":     "読まされなかった",
+        "polite_present_positive": "読まされます",
+        "polite_present_negative": "読まされません",
+        "polite_past_positive":    "読まされました",
+        "polite_past_negative":    "読まされませんでした"
+      }
+    }
+  },
+
+  {
+    "id": "taberu",
+    "kanji": "食べる",
+    "kana": "たべる",
+    "romaji": "taberu",
+    "english": "to eat",
+    "wordType": "verb",
+    "group": 2,
+    "jlpt": 5,
+    "source": "builtin",
+    "listId": null,
+    "forms": {
+      "default": {
+        "plain_present_positive":  "食べる",
+        "plain_present_negative":  "食べない",
+        "plain_past_positive":     "食べた",
+        "plain_past_negative":     "食べなかった",
+        "polite_present_positive": "食べます",
+        "polite_present_negative": "食べません",
+        "polite_past_positive":    "食べました",
+        "polite_past_negative":    "食べませんでした"
+      },
+      "te": {
+        "positive": "食べて",
+        "negative": "食べないで"
+      },
+      "conditional": {
+        "positive": "食べれば",
+        "negative": "食べなければ"
+      },
+      "volitional": {
+        "plain":  "食べよう",
+        "polite": "食べましょう"
+      },
+      "potential": {
+        "plain_present_positive":  "食べられる",
+        "plain_present_negative":  "食べられない",
+        "plain_past_positive":     "食べられた",
+        "plain_past_negative":     "食べられなかった",
+        "polite_present_positive": "食べられます",
+        "polite_present_negative": "食べられません",
+        "polite_past_positive":    "食べられました",
+        "polite_past_negative":    "食べられませんでした"
+      },
+      "passive": {
+        "plain_present_positive":  "食べられる",
+        "plain_present_negative":  "食べられない",
+        "plain_past_positive":     "食べられた",
+        "plain_past_negative":     "食べられなかった",
+        "polite_present_positive": "食べられます",
+        "polite_present_negative": "食べられません",
+        "polite_past_positive":    "食べられました",
+        "polite_past_negative":    "食べられませんでした"
+      },
+      "causative": {
+        "plain_present_positive":  "食べさせる",
+        "plain_present_negative":  "食べさせない",
+        "plain_past_positive":     "食べさせた",
+        "plain_past_negative":     "食べさせなかった",
+        "polite_present_positive": "食べさせます",
+        "polite_present_negative": "食べさせません",
+        "polite_past_positive":    "食べさせました",
+        "polite_past_negative":    "食べさせませんでした"
+      },
+      "imperative": {
+        "positive": "食べろ",
+        "negative": "食べるな"
+      },
+      "passive_causative": {
+        "plain_present_positive":  "食べさせられる",
+        "plain_present_negative":  "食べさせられない",
+        "plain_past_positive":     "食べさせられた",
+        "plain_past_negative":     "食べさせられなかった",
+        "polite_present_positive": "食べさせられます",
+        "polite_present_negative": "食べさせられません",
+        "polite_past_positive":    "食べさせられました",
+        "polite_past_negative":    "食べさせられませんでした"
+      }
+    }
+  },
+
+  {
+    "id": "suru",
+    "kanji": "する",
+    "kana": "する",
+    "romaji": "suru",
+    "english": "to do",
+    "wordType": "verb",
+    "group": 3,
+    "jlpt": 5,
+    "source": "builtin",
+    "listId": null,
+    "forms": {
+      "default": {
+        "plain_present_positive":  "する",
+        "plain_present_negative":  "しない",
+        "plain_past_positive":     "した",
+        "plain_past_negative":     "しなかった",
+        "polite_present_positive": "します",
+        "polite_present_negative": "しません",
+        "polite_past_positive":    "しました",
+        "polite_past_negative":    "しませんでした"
+      },
+      "te": {
+        "positive": "して",
+        "negative": "しないで"
+      },
+      "conditional": {
+        "positive": "すれば",
+        "negative": "しなければ"
+      },
+      "volitional": {
+        "plain":  "しよう",
+        "polite": "しましょう"
+      },
+      "potential": {
+        "plain_present_positive":  "できる",
+        "plain_present_negative":  "できない",
+        "plain_past_positive":     "できた",
+        "plain_past_negative":     "できなかった",
+        "polite_present_positive": "できます",
+        "polite_present_negative": "できません",
+        "polite_past_positive":    "できました",
+        "polite_past_negative":    "できませんでした"
+      },
+      "passive": {
+        "plain_present_positive":  "される",
+        "plain_present_negative":  "されない",
+        "plain_past_positive":     "された",
+        "plain_past_negative":     "されなかった",
+        "polite_present_positive": "されます",
+        "polite_present_negative": "されません",
+        "polite_past_positive":    "されました",
+        "polite_past_negative":    "されませんでした"
+      },
+      "causative": {
+        "plain_present_positive":  "させる",
+        "plain_present_negative":  "させない",
+        "plain_past_positive":     "させた",
+        "plain_past_negative":     "させなかった",
+        "polite_present_positive": "させます",
+        "polite_present_negative": "させません",
+        "polite_past_positive":    "させました",
+        "polite_past_negative":    "させませんでした"
+      },
+      "imperative": {
+        "positive": "しろ",
+        "negative": "するな"
+      },
+      "passive_causative": {
+        "plain_present_positive":  "させられる",
+        "plain_present_negative":  "させられない",
+        "plain_past_positive":     "させられた",
+        "plain_past_negative":     "させられなかった",
+        "polite_present_positive": "させられます",
+        "polite_present_negative": "させられません",
+        "polite_past_positive":    "させられました",
+        "polite_past_negative":    "させられませんでした"
+      }
+    }
+  },
+
+  {
+    "id": "genki",
+    "kanji": "元気",
+    "kana": "げんき",
+    "romaji": "genki",
+    "english": "healthy; energetic",
+    "wordType": "adjective",
+    "group": "na",
+    "jlpt": 5,
+    "source": "builtin",
+    "listId": null,
+    "forms": {
+      "default": {
+        "plain_present_positive":  "元気だ",
+        "plain_present_negative":  "元気じゃない",
+        "plain_past_positive":     "元気だった",
+        "plain_past_negative":     "元気じゃなかった",
+        "polite_present_positive": "元気です",
+        "polite_present_negative": "元気じゃないです",
+        "polite_past_positive":    "元気でした",
+        "polite_past_negative":    "元気じゃなかったです"
+      },
+      "te": {
+        "positive": "元気で",
+        "negative": "元気じゃなくて"
+      },
+      "adverbial": {
+        "positive": "元気に"
+      }
+    }
+  },
+
+  {
+    "id": "nagai",
+    "kanji": "長い",
+    "kana": "ながい",
+    "romaji": "nagai",
+    "english": "long; lengthy",
+    "wordType": "adjective",
+    "group": "i",
+    "jlpt": 5,
+    "source": "builtin",
+    "listId": null,
+    "forms": {
+      "default": {
+        "plain_present_positive":  "長い",
+        "plain_present_negative":  "長くない",
+        "plain_past_positive":     "長かった",
+        "plain_past_negative":     "長くなかった",
+        "polite_present_positive": "長いです",
+        "polite_present_negative": "長くないです",
+        "polite_past_positive":    "長かったです",
+        "polite_past_negative":    "長くなかったです"
+      },
+      "te": {
+        "positive": "長くて",
+        "negative": "長くなくて"
+      },
+      "conditional": {
+        "positive": "長ければ",
+        "negative": "長くなければ"
+      },
+      "adverbial": {
+        "positive": "長く"
+      }
+    }
+  },
+
+  {
+    "id": "gakusei",
+    "kanji": "学生",
+    "kana": "がくせい",
+    "romaji": "gakusei",
+    "english": "student",
+    "wordType": "noun",
+    "group": null,
+    "jlpt": 5,
+    "source": "builtin",
+    "listId": null,
+    "forms": {
+      "default": {
+        "plain_present_positive":  "学生だ",
+        "plain_present_negative":  "学生じゃない",
+        "plain_past_positive":     "学生だった",
+        "plain_past_negative":     "学生じゃなかった",
+        "polite_present_positive": "学生です",
+        "polite_present_negative": "学生じゃないです",
+        "polite_past_positive":    "学生でした",
+        "polite_past_negative":    "学生じゃなかったです"
+      },
+      "te": {
+        "positive": "学生で",
+        "negative": "学生じゃなくて"
+      }
+    }
+  }
+]

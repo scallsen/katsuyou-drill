@@ -1,7 +1,7 @@
 import StampNegative from './stamps/stamp-negative.svg?react'
 import StampPast from './stamps/stamp-past.svg?react'
 
-export default function CardContent({ label, n, past, word }) {
+export default function CardContent({ label, n, past, word, isAnswer = false }) {
   return (
     <div
       style={{
@@ -13,6 +13,13 @@ export default function CardContent({ label, n, past, word }) {
         alignItems: 'center',
       }}
     >
+      {/* Answer label */}
+      {isAnswer && (
+        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, textAlign: 'center', fontFamily: "'DotGothic16', sans-serif", fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.35)' }}>
+          Answer
+        </div>
+      )}
+
       {/* Stamps — absolutely positioned, out of flow */}
       {n && (
         <div style={{ position: 'absolute', top: 12, left: 5, pointerEvents: 'none', transform: 'rotate(-8deg)' }}>
