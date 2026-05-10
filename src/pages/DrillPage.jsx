@@ -82,6 +82,7 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
+  const [streakLost, setStreakLost] = useState(null)
   const { currentCard, streak, totalCorrect, totalWrong, remaining } = drill
   const isFlipped = flippedCardId === currentCard.id
   const tts = useTTS()
@@ -98,6 +99,11 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
     setTransitioning(true)
     setExitDir(isCorrect ? 'up' : 'down')
     onPulse(isCorrect ? 'correct' : 'wrong')
+    if (!isCorrect && streak > 0) {
+      setStreakLost('visible')
+      setTimeout(() => setStreakLost('fading'), 250)
+      setTimeout(() => setStreakLost(null), 400)
+    }
     setTimeout(() => {
       action()
       setExitDir(null)
@@ -151,9 +157,14 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
 
       {/* Streak counter — reserves space so layout doesn't shift */}
       <div style={{ height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {streak > 0 && (
+        {streak > 0 && !streakLost && (
           <div style={{ color: '#fff', fontSize: 20, fontWeight: 700, fontFamily: "'DotGothic16', sans-serif", letterSpacing: '0.05em' }}>
             Current streak: {streak}
+          </div>
+        )}
+        {streakLost && (
+          <div style={{ color: '#f87171', fontSize: 16, fontWeight: 700, fontFamily: "'DotGothic16', sans-serif", opacity: streakLost === 'fading' ? 0 : 1, transition: 'opacity 0.3s ease' }}>
+            Streak lost
           </div>
         )}
       </div>
