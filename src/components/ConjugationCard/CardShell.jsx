@@ -6,10 +6,8 @@ export default function CardShell({ bgColor, border, BgComponent, children }) {
         overflow: 'hidden',
         border,
         backgroundColor: bgColor,
-        width: 380,
-        height: 280,
-        flexShrink: 0,
-        boxShadow: '4px 4px 0 rgba(0,0,0,0.3)',
+        width: '100%',
+        height: '100%',
       }}
     >
       {BgComponent && (
