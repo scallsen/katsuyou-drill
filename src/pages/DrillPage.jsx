@@ -259,7 +259,7 @@ function DoneScreen({ totalCorrect, totalWrong, onRestart }) {
 // ── Main page ────────────────────────────────────────────────────────────────
 
 const DEFAULTS = {
-  wordTypes:  ['u-verb', 'ru-verb', 'irregular', 'i-adj', 'na-adj', 'noun'],
+  wordTypes:  ['u-verb', 'ru-verb', 'irregular'],
   registers:  ['polite'],
   forms:      ['default'],
   tenses:     ['present'],
