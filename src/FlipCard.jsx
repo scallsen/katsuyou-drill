@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import './FlipCard.css';
 
 /**
@@ -18,14 +17,11 @@ export default function FlipCard({
   width = '320px',
   height = '180px',
   className = '',
+  flipped = false,
   onFlip,
 }) {
-  const [flipped, setFlipped] = useState(false);
-
   function handleClick() {
-    const next = !flipped;
-    setFlipped(next);
-    onFlip?.(next);
+    onFlip?.(!flipped);
   }
 
   return (

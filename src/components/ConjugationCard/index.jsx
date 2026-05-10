@@ -4,7 +4,7 @@ import CardContent from './CardContent.jsx'
 import FlipCard from '../../FlipCard.jsx'
 import { FORMS } from '../../data/forms.js'
 
-export default function ConjugationCard({ variant = 'plain', word = '', answer = null, negative = false, past = false, bgComponent = null, bgComponentColor = null, registerLabel = null, onFlip = null }) {
+export default function ConjugationCard({ variant = 'plain', word = '', answer = null, negative = false, past = false, bgComponent = null, bgComponentColor = null, registerLabel = null, flipped = false, onFlip = null }) {
   const config = VARIANTS[variant] ?? VARIANTS.plain
   const FrontBg = bgComponent ?? config.BgComponent
   const frontBgColor = bgComponentColor ?? config.keyColor
@@ -22,5 +22,5 @@ export default function ConjugationCard({ variant = 'plain', word = '', answer =
     </CardShell>
   )
 
-  return <FlipCard front={front} back={back} width="380px" height="280px" onFlip={onFlip} />
+  return <FlipCard front={front} back={back} width="380px" height="280px" flipped={flipped} onFlip={onFlip} />
 }
