@@ -1,40 +1,53 @@
 /* ─── FlipCard.css ───────────────────────────────────────────────
-   Animation values locked from demo session:
-     Flip  : X-axis, 450ms, cubic-bezier(0.4, 0, 0.2, 1)   [material standard]
-     Hover : -5px lift, no scale, 100ms in / 140ms out, cubic-bezier(0.34, 1.56, 0.64, 1) [springy]
-     Persp : 1000px
+   Animation values:
+     Flip   : X-axis, 450ms, cubic-bezier(0.4, 0, 0.2, 1)  [material standard]
+     Wiggle : rotateZ, 200ms, triggered on hover enter
+     Persp  : 1000px
 ────────────────────────────────────────────────────────────────── */
 
+/* ── Outer wrapper ───────────────────────────────────────────────
+   Positions the shadow and the 3D card relative to each other.
+──────────────────────────────────────────────────────────────── */
+.fc-wrapper {
+  position: relative;
+}
+
+/* ── Shadow ──────────────────────────────────────────────────────
+   A real element outside the 3D context — always flat, always
+   visible, unaffected by the flip. Slightly smaller than the card,
+   offset behind it.
+──────────────────────────────────────────────────────────────── */
+.fc-shadow {
+  position: absolute;
+  inset: 3px;
+  background: rgba(0,0,0,0.3);
+  transform: translate(7px, 7px);
+}
+
+/* ── Perspective container ───────────────────────────────────────
+   Fills the wrapper exactly; owns the 3D context.
+──────────────────────────────────────────────────────────────── */
 .fc-container {
+  position: absolute;
+  inset: 0;
   perspective: 1000px;
 }
 
 /* ── Hover layer ─────────────────────────────────────────────────
-   Only ever sets translateY. Never touches rotation.
-   Transition-out is slightly slower (140ms) so the card
-   settles rather than snapping back.
+   Lifts the card slightly on hover. Shadow stays put since it's
+   a separate element outside the 3D context.
 ──────────────────────────────────────────────────────────────── */
 .fc-hover {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
   cursor: pointer;
-  box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
-  transition: transform 140ms ease-in, box-shadow 170ms ease-in;
+  transition: transform 140ms ease-in;
 }
 
 .fc-hover:hover {
   transform: translateY(-5px);
-  /* Y offset increases by 5px to keep shadow pinned to the surface as the card lifts */
-  box-shadow: 4px 9px 0 rgba(0,0,0,0.2);
-  transition: transform 100ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 100ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Shadow hidden for the duration of the flip */
-.fc-hover--flipping,
-.fc-hover--flipping:hover {
-  box-shadow: none;
-  transition: box-shadow 80ms ease-out;
+  transition: transform 100ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* ── Flip layer ──────────────────────────────────────────────────
@@ -54,8 +67,6 @@
 
 /* ── Faces ───────────────────────────────────────────────────────
    backface-visibility hides each face when it's pointing away.
-   Add your own background/border/padding inside the face classes
-   or pass styled children via the front/back props.
 ──────────────────────────────────────────────────────────────── */
 .fc-face {
   position: absolute;

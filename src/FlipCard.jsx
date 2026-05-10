@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import './FlipCard.css';
 
 /**
@@ -21,29 +21,23 @@ export default function FlipCard({
   onFlip,
 }) {
   const [flipped, setFlipped] = useState(false);
-  const [flipping, setFlipping] = useState(false);
-  const flipTimer = useRef(null);
 
   function handleClick() {
     const next = !flipped;
     setFlipped(next);
-    setFlipping(true);
-    clearTimeout(flipTimer.current);
-    flipTimer.current = setTimeout(() => setFlipping(false), 280);
     onFlip?.(next);
   }
 
   return (
-    <div
-      className={`fc-container ${className}`}
-      style={{ width, height }}
-    >
-      {/* Hover layer — owns lift only, never touches rotation */}
-      <div className={`fc-hover ${flipping ? 'fc-hover--flipping' : ''}`} onClick={handleClick}>
-        {/* Flip layer — owns rotation only, never touches position */}
-        <div className={`fc-inner ${flipped ? 'fc-inner--flipped' : ''}`}>
-          <div className="fc-face fc-face--front">{front}</div>
-          <div className="fc-face fc-face--back">{back}</div>
+    <div className={`fc-wrapper ${className}`} style={{ width, height }}>
+      {/* Shadow sits outside the 3D perspective context so it's always flat and always visible */}
+      <div className="fc-shadow" />
+      <div className="fc-container">
+        <div className="fc-hover" onClick={handleClick}>
+          <div className={`fc-inner ${flipped ? 'fc-inner--flipped' : ''}`}>
+            <div className="fc-face fc-face--front">{front}</div>
+            <div className="fc-face fc-face--back">{back}</div>
+          </div>
         </div>
       </div>
     </div>
