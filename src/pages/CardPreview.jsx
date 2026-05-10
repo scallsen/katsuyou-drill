@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import ConjugationCard from '../components/ConjugationCard/index.jsx'
 import VARIANTS from '../components/ConjugationCard/variants.js'
+import PlainBg from '../components/ConjugationCard/backgrounds/PlainBg.jsx'
 import SelectButton from '../components/SelectButton.jsx'
 import DrawerSectionHeader from '../components/DrawerSectionHeader.jsx'
 import SelectionError from '../components/SelectionError.jsx'
 import { WORD_TYPES, REGISTERS, REGISTER_KEYS, GRAMMAR_FORMS, TENSES, POLARITIES } from '../data/options.js'
+import { FORMS } from '../data/forms.js'
 import { filterWords, buildSubKey, getConjugation, resolveVariant } from '../data/drill.js'
 
 function toggle(arr, val) {
@@ -48,6 +50,10 @@ export default function CardPreview() {
   const cardVariant  = drillMode ? drillVariant : variant
   const cardNegative = drillMode ? activePolarity === 'negative' : negative
   const cardPast     = drillMode ? activeTense === 'past' : past
+  // Show plain texture whenever register is plain, using the active form's key color
+  const cardBgComponent    = drillMode && activeReg === 'plain' ? PlainBg : null
+  const cardBgColor        = drillMode ? (FORMS[activeForm]?.color ?? null) : null
+  const cardRegisterLabel  = drillMode && activeReg ? VARIANTS[activeReg]?.label ?? null : null
 
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#2E2E2E', fontFamily: "'DotGothic16', system-ui, sans-serif", overflow: 'hidden' }}>
@@ -77,7 +83,7 @@ export default function CardPreview() {
 
       {/* Card + hint */}
       <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
-        <ConjugationCard variant={cardVariant} word={cardWord} answer={cardAnswer} negative={cardNegative} past={cardPast} />
+        <ConjugationCard variant={cardVariant} word={cardWord} answer={cardAnswer} negative={cardNegative} past={cardPast} bgComponent={cardBgComponent} bgComponentColor={cardBgColor} registerLabel={cardRegisterLabel} />
         <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>Click to flip card</div>
       </div>
 

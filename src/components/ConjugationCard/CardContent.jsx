@@ -1,7 +1,9 @@
 import StampNegative from './stamps/stamp-negative.svg?react'
 import StampPast from './stamps/stamp-past.svg?react'
+import { getTextColor } from '../../utils/color.js'
 
-export default function CardContent({ label, n, past, word, isAnswer = false }) {
+export default function CardContent({ label, n, past, word, answerLabel = null, answerBg = null }) {
+  const textColor = answerBg ? getTextColor(answerBg) : null
   return (
     <div
       style={{
@@ -14,9 +16,9 @@ export default function CardContent({ label, n, past, word, isAnswer = false }) 
       }}
     >
       {/* Answer label */}
-      {isAnswer && (
-        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, textAlign: 'center', fontFamily: "'DotGothic16', sans-serif", fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.35)' }}>
-          Answer
+      {answerLabel && (
+        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, textAlign: 'center', fontFamily: "'DotGothic16', sans-serif", fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor === '#ffffff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.35)' }}>
+          {answerLabel}
         </div>
       )}
 
@@ -50,7 +52,7 @@ export default function CardContent({ label, n, past, word, isAnswer = false }) 
             fontFamily: "'DotGothic16', sans-serif",
             fontSize: 48,
             fontWeight: 400,
-            color: '#222',
+            color: textColor ?? '#222',
             letterSpacing: '0.02em',
             lineHeight: 1.2,
             textShadow: '2px 2px 0 rgba(0,0,0,0.25)',
@@ -64,7 +66,7 @@ export default function CardContent({ label, n, past, word, isAnswer = false }) 
             fontSize: 26,
             fontWeight: 400,
             letterSpacing: '0.05em',
-            color: '#666',
+            color: textColor ? (textColor === '#ffffff' ? 'rgba(255,255,255,0.65)' : '#666') : '#666',
             textShadow: '2px 2px 0 rgba(0,0,0,0.15)',
           }}
         >
