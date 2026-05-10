@@ -2,6 +2,9 @@
 
 Japanese verb conjugation drill app. Vite + React, no TypeScript.
 
+## Git workflow
+- **Always create a feature branch before making any code changes.** Never commit directly to `main`.
+
 ## Conventions
 - **Inline styles only** — no CSS modules, no Tailwind. The one exception is `FlipCard.css` (3D flip animation that needs CSS classes).
 - **No comments** unless the WHY is non-obvious (a hidden constraint, a workaround, a subtle invariant).
