@@ -1,6 +1,7 @@
 import { getAllWords } from './wordStore.js'
 import { FORMS } from './forms.js'
 import { CATEGORIES } from './categories.js'
+import { isIllegal } from './illegalCombos.js'
 
 // Builds a flat array of card specs from the current option selections.
 // Each spec is one (word × form × subKey) combo that has a valid conjugation.
@@ -29,7 +30,7 @@ export function buildPool({ selectedWordTypes, selectedForms, selectedRegisters,
           for (const word of words) {
             const conjugation = getConjugation(word, formKey, subKey)
             if (!conjugation) continue
-            cards.push({
+            const spec = {
               id: `${word.id}__${formKey}__${subKey}`,
               word,
               formKey,
@@ -40,7 +41,8 @@ export function buildPool({ selectedWordTypes, selectedForms, selectedRegisters,
               conjugation,
               variant: resolveVariant(formKey, register),
               bgColor: form.color ?? null,
-            })
+            }
+            if (!isIllegal(spec)) cards.push(spec)
           }
         }
       }
