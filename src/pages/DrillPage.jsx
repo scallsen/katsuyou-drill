@@ -13,6 +13,55 @@ function toggle(arr, val) {
   return arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val]
 }
 
+function cardWordTypeKey(card) {
+  const { wordType, group } = card.word
+  if (wordType === 'verb') {
+    if (group === 1) return 'u-verb'
+    if (group === 2) return 'ru-verb'
+    if (group === 3) return 'irregular'
+  }
+  if (wordType === 'adjective') {
+    if (group === 'i') return 'i-adj'
+    if (group === 'na') return 'na-adj'
+  }
+  if (wordType === 'noun') return 'noun'
+  return null
+}
+
+function findSeekCard(newPool, currentCard, axis, value) {
+  if (!newPool.length) return null
+
+  function matchesAxis(card) {
+    if (!axis) return true
+    if (axis === 'form')     return card.formKey  === value
+    if (axis === 'register') return card.register === value
+    if (axis === 'tense')    return card.tense    === value
+    if (axis === 'polarity') return card.polarity === value
+    if (axis === 'wordType') return cardWordTypeKey(card) === value
+    return true
+  }
+
+  function similarity(card) {
+    if (!currentCard) return 0
+    let s = 0
+    if (card.word.id  === currentCard.word.id)  s += 8
+    if (card.formKey  === currentCard.formKey)   s += 4
+    if (card.register === currentCard.register)  s += 2
+    if (card.tense    === currentCard.tense)     s += 2
+    if (card.polarity === currentCard.polarity)  s += 2
+    return s
+  }
+
+  const candidates = newPool.filter(matchesAxis)
+  const source = candidates.length ? candidates : newPool
+  let best = source[0], bestSim = similarity(source[0])
+  for (let i = 1; i < source.length; i++) {
+    const s = similarity(source[i])
+    if (s > bestSim) { bestSim = s; best = source[i] }
+  }
+  return best
+}
+
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
 function ActiveDrill({ drill }) {
@@ -133,13 +182,25 @@ function DoneScreen({ totalCorrect, totalWrong, onRestart }) {
 // ── Main page ────────────────────────────────────────────────────────────────
 
 export default function DrillPage() {
-  const [showOptions,       setShowOptions]       = useState(false)
-  const [selectedWordTypes, setSelectedWordTypes] = useState([])
-  const [selectedRegisters, setSelectedRegisters] = useState([])
-  const [selectedForms,     setSelectedForms]     = useState([])
-  const [selectedTenses,    setSelectedTenses]    = useState(['present'])
+  const [showOptions,        setShowOptions]        = useState(false)
+  const [selectedWordTypes,  setSelectedWordTypes]  = useState([])
+  const [selectedRegisters,  setSelectedRegisters]  = useState([])
+  const [selectedForms,      setSelectedForms]      = useState([])
+  const [selectedTenses,     setSelectedTenses]     = useState(['present'])
   const [selectedPolarities, setSelectedPolarities] = useState(['positive'])
-  const [selectedEngine,    setSelectedEngine]    = useState('simpleQueue')
+  const [selectedEngine,     setSelectedEngine]     = useState('simpleQueue')
+  const [seekCardId,         setSeekCardId]         = useState(null)
+
+  function seek(newWordTypes, newForms, newRegs, newTenses, newPols, axis, value) {
+    const newPool = buildPool({
+      selectedWordTypes:  newWordTypes,
+      selectedForms:      newForms,
+      selectedRegisters:  newRegs,
+      selectedTenses:     newTenses,
+      selectedPolarities: newPols,
+    })
+    setSeekCardId(findSeekCard(newPool, drill.currentCard, axis, value)?.id ?? null)
+  }
 
   const verbSelected = ['u-verb', 'ru-verb', 'irregular'].some(k => selectedWordTypes.includes(k))
   const drillMode    = selectedWordTypes.length > 0
@@ -153,7 +214,7 @@ export default function DrillPage() {
   const pool = useMemo(() => buildPool({ selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, selectedPolarities }), [poolKey])
 
   const engine = ENGINES[selectedEngine]
-  const drill  = useDrill(pool, { engine })
+  const drill  = useDrill(pool, { engine, seekCardId })
 
   return (
     <div style={{
@@ -231,10 +292,15 @@ export default function DrillPage() {
 
           {/* Words */}
           <div style={{ marginTop: 24 }}>
-            <DrawerSectionHeader title="Words" hasSelections={selectedWordTypes.length > 0} onClearAll={() => setSelectedWordTypes([])} />
+            <DrawerSectionHeader title="Words" hasSelections={selectedWordTypes.length > 0} onClearAll={() => { setSelectedWordTypes([]); setSeekCardId(null) }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {WORD_TYPES.map(({ key, label }) => (
-                <SelectButton key={key} selected={selectedWordTypes.includes(key)} onClick={() => setSelectedWordTypes(v => toggle(v, key))}>
+                <SelectButton key={key} selected={selectedWordTypes.includes(key)} onClick={() => {
+                  const next = toggle(selectedWordTypes, key)
+                  const adding = !selectedWordTypes.includes(key)
+                  seek(next, selectedForms, selectedRegisters, selectedTenses, selectedPolarities, adding ? 'wordType' : null, adding ? key : null)
+                  setSelectedWordTypes(next)
+                }}>
                   {label}
                 </SelectButton>
               ))}
@@ -254,7 +320,12 @@ export default function DrillPage() {
                     bgColor={VARIANTS[key].bgColor}
                     borderColor={VARIANTS[key].keyColor}
                     subtext={subtext}
-                    onClick={() => setSelectedRegisters(v => toggle(v, key))}
+                    onClick={() => {
+                      const next = toggle(selectedRegisters, key)
+                      const adding = !selectedRegisters.includes(key)
+                      seek(selectedWordTypes, selectedForms, next, selectedTenses, selectedPolarities, adding ? 'register' : null, adding ? key : null)
+                      setSelectedRegisters(next)
+                    }}
                   >
                     {VARIANTS[key].label}
                   </SelectButton>
@@ -267,7 +338,10 @@ export default function DrillPage() {
           {/* Verb forms */}
           {verbSelected && (
             <div style={{ marginTop: 28 }}>
-              <DrawerSectionHeader title="Verb forms" hasSelections={selectedForms.length > 0} onClearAll={() => setSelectedForms([])} />
+              <DrawerSectionHeader title="Verb forms" hasSelections={selectedForms.length > 0} onClearAll={() => {
+                seek(selectedWordTypes, [], selectedRegisters, selectedTenses, selectedPolarities, null, null)
+                setSelectedForms([])
+              }} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {GRAMMAR_FORMS.map(({ key, label, bgColor, keyColor, subtext }) => (
                   <SelectButton
@@ -276,7 +350,12 @@ export default function DrillPage() {
                     bgColor={bgColor}
                     borderColor={keyColor}
                     subtext={subtext}
-                    onClick={() => setSelectedForms(v => toggle(v, key))}
+                    onClick={() => {
+                      const next = toggle(selectedForms, key)
+                      const adding = !selectedForms.includes(key)
+                      seek(selectedWordTypes, next, selectedRegisters, selectedTenses, selectedPolarities, adding ? 'form' : null, adding ? key : null)
+                      setSelectedForms(next)
+                    }}
                   >
                     {label}
                   </SelectButton>
@@ -291,7 +370,12 @@ export default function DrillPage() {
             <DrawerSectionHeader title="Tense" />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {TENSES.map(({ key, label }) => (
-                <SelectButton key={key} selected={selectedTenses.includes(key)} onClick={() => setSelectedTenses(v => toggle(v, key))}>
+                <SelectButton key={key} selected={selectedTenses.includes(key)} onClick={() => {
+                  const next = toggle(selectedTenses, key)
+                  const adding = !selectedTenses.includes(key)
+                  seek(selectedWordTypes, selectedForms, selectedRegisters, next, selectedPolarities, adding ? 'tense' : null, adding ? key : null)
+                  setSelectedTenses(next)
+                }}>
                   {label}
                 </SelectButton>
               ))}
@@ -304,7 +388,12 @@ export default function DrillPage() {
             <DrawerSectionHeader title="Polarity" />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {POLARITIES.map(({ key, label }) => (
-                <SelectButton key={key} selected={selectedPolarities.includes(key)} onClick={() => setSelectedPolarities(v => toggle(v, key))}>
+                <SelectButton key={key} selected={selectedPolarities.includes(key)} onClick={() => {
+                  const next = toggle(selectedPolarities, key)
+                  const adding = !selectedPolarities.includes(key)
+                  seek(selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, next, adding ? 'polarity' : null, adding ? key : null)
+                  setSelectedPolarities(next)
+                }}>
                   {label}
                 </SelectButton>
               ))}
