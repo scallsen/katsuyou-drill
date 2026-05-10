@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import ConjugationCard from '../components/ConjugationCard/index.jsx'
 import VARIANTS from '../components/ConjugationCard/variants.js'
 import PlainBg from '../components/ConjugationCard/backgrounds/PlainBg.jsx'
@@ -65,14 +65,31 @@ function findSeekCard(newPool, currentCard, axis, value) {
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
 function ActiveDrill({ drill }) {
-  // Track which card id the user has flipped — naturally resets when card changes.
   const [flippedCardId, setFlippedCardId] = useState(null)
   const { currentCard, streak, totalCorrect, totalWrong, remaining } = drill
   const isFlipped = flippedCardId === currentCard.id
 
-  function handleFlip(flipped) {
-    setFlippedCardId(flipped ? currentCard.id : null)
+  const isFlippedRef = useRef(isFlipped)
+  useEffect(() => { isFlippedRef.current = isFlipped }, [isFlipped])
+
+  function handleFlip(next) {
+    setFlippedCardId(next ? currentCard.id : null)
   }
+
+  useEffect(() => {
+    function onKey(e) {
+      if (e.code === 'Space') {
+        e.preventDefault()
+        setFlippedCardId(prev => prev === currentCard.id ? null : currentCard.id)
+      } else if (e.code === 'KeyZ' && isFlippedRef.current) {
+        drill.onWrong()
+      } else if (e.code === 'KeyX' && isFlippedRef.current) {
+        drill.onCorrect()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [currentCard.id, drill])
 
   const bgComponent    = currentCard.register === 'plain' ? PlainBg : null
   const registerLabel  = currentCard.register ? VARIANTS[currentCard.register]?.label ?? null : null
@@ -99,48 +116,51 @@ function ActiveDrill({ drill }) {
         bgComponent={bgComponent}
         bgComponentColor={currentCard.bgColor}
         registerLabel={registerLabel}
+        flipped={isFlipped}
         onFlip={handleFlip}
       />
 
-      {/* Action area */}
-      {isFlipped ? (
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button
-            onClick={drill.onWrong}
-            style={{
-              padding: '10px 28px',
-              fontSize: 14,
-              fontFamily: 'inherit',
-              background: 'rgba(192, 57, 43, 0.85)',
-              color: '#fff',
-              border: '1px solid rgba(255,255,255,0.15)',
-              borderRadius: 8,
-              cursor: 'pointer',
-              letterSpacing: '0.05em',
-            }}
-          >
-            Wrong
-          </button>
-          <button
-            onClick={drill.onCorrect}
-            style={{
-              padding: '10px 28px',
-              fontSize: 14,
-              fontFamily: 'inherit',
-              background: 'rgba(39, 174, 96, 0.85)',
-              color: '#fff',
-              border: '1px solid rgba(255,255,255,0.15)',
-              borderRadius: 8,
-              cursor: 'pointer',
-              letterSpacing: '0.05em',
-            }}
-          >
-            Correct
-          </button>
-        </div>
-      ) : (
-        <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>Click to flip</div>
-      )}
+      {/* Action area — fixed height so card position never shifts */}
+      <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {isFlipped ? (
+          <div style={{ display: 'flex', gap: 12 }}>
+            <button
+              onClick={drill.onWrong}
+              style={{
+                padding: '10px 28px',
+                fontSize: 14,
+                fontFamily: 'inherit',
+                background: 'rgba(192, 57, 43, 0.85)',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.15)',
+                borderRadius: 8,
+                cursor: 'pointer',
+                letterSpacing: '0.05em',
+              }}
+            >
+              Wrong [Z]
+            </button>
+            <button
+              onClick={drill.onCorrect}
+              style={{
+                padding: '10px 28px',
+                fontSize: 14,
+                fontFamily: 'inherit',
+                background: 'rgba(39, 174, 96, 0.85)',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.15)',
+                borderRadius: 8,
+                cursor: 'pointer',
+                letterSpacing: '0.05em',
+              }}
+            >
+              Correct [X]
+            </button>
+          </div>
+        ) : (
+          <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>Click or Space to flip</div>
+        )}
+      </div>
 
       {/* Stats row */}
       <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.25)', fontSize: 12, fontFamily: "'DotGothic16', sans-serif" }}>
