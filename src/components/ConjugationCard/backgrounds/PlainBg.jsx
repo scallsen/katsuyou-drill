@@ -3,8 +3,8 @@ import { lightenHex } from '../../../utils/color.js'
 export default function PlainBg({ color = 'C8B89A', transparent = false }) {
   const hex = color.replace('#', '')
   const bg    = lightenHex(hex, 0.88)
-  const hLine = lightenHex(hex, 0.55)
-  const vLine = lightenHex(hex, 0.65)
+  const hLine = lightenHex(hex, transparent ? 0.20 : 0.60)
+  const vLine = lightenHex(hex, transparent ? 0.25 : 0.68)
 
   return (
     <svg width="100%" height="100%" viewBox="0 0 380 276" preserveAspectRatio="xMidYMid slice"

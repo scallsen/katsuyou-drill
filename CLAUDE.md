@@ -10,6 +10,7 @@ Japanese verb conjugation drill app. Vite + React, no TypeScript.
 - **No comments** unless the WHY is non-obvious (a hidden constraint, a workaround, a subtle invariant).
 - **No TypeScript** — plain JS throughout.
 - `src/pages/CardPreview.jsx` is a dev sandbox for visual testing. `DrillPage` is the real entry point (`App.jsx` renders it).
+- `src/pages/ColorReview.jsx` is a **color/appearance testing page** — navigate to `/#/color-review` in the dev server to see a static grid of all 11 card variants (4 columns × 2 rows each). Use it to tweak card visuals in isolation without loading the full drill. Routing is hash-based in `App.jsx`.
 
 ## How the drill works
 
@@ -70,6 +71,7 @@ It will automatically appear as a selectable option in the options drawer.
 | `src/hooks/useTTS.js` | Web Speech API wrapper; speaks `conjugation` on card flip-to-back; `ttsEnabled` persisted in localStorage |
 | `src/pages/DrillPage.jsx` | Main page — options state, pool memoization, drill rendering, `findSeekCard` |
 | `src/components/ConjugationCard/` | Card component family (CardShell, CardContent, variants) |
+| `src/pages/ColorReview.jsx` | Static color/appearance testing grid — all variants, all states |
 
 ## Card spec shape
 
@@ -86,3 +88,9 @@ Output of `buildPool()`, input to engine and card rendering:
 }
 // UI derives: bgComponent (register==='plain' → PlainBg), registerLabel (VARIANTS[register]?.label)
 ```
+
+## Card appearance notes
+
+- **`backColor`** — optional field in `FORMS` / `variants`. Overrides the back-face background color (e.g. plain/polite use `#4C4C4C`; all others fall back to `keyColor`). When set, `PlainBg` on the back also receives `backColor` as its `color` prop so the ruled lines are derived from the dark bg rather than the form accent color.
+- **Stamps** — rendered as plain text labels (`DotGothic16`, uppercase, same color as the word text). Past label sits bottom-left, Negative bottom-right.
+- **`PlainBg` contrast** — front lines use `lightenHex(hex, 0.60/0.68)`, back lines use `lightenHex(hex, 0.20/0.25)` (lower = closer to the vivid key color, less contrast).

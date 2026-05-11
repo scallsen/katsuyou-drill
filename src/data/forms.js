@@ -1,7 +1,7 @@
 import { lightenHex } from '../utils/color.js'
 
-function def(label, hex, axes, validWordTypes, icon = null) {
-  return { label, color: `#${hex}`, bgColor: lightenHex(hex), icon, axes, validWordTypes }
+function def(label, hex, axes, validWordTypes, icon = null, backColor = null) {
+  return { label, color: `#${hex}`, bgColor: lightenHex(hex), backColor, icon, axes, validWordTypes }
 }
 
 // Single source of truth for all form and register definitions.
@@ -9,8 +9,8 @@ function def(label, hex, axes, validWordTypes, icon = null) {
 // validWordTypes: which word types this form is valid for
 export const FORMS = {
   // ── Registers ─────────────────────────────────────────────────────
-  plain:            def('Plain',             'C8B89A', ['tense', 'polarity'],            ['verb', 'adjective']),
-  polite:           def('Polite',            'D0D0D0', ['tense', 'polarity'],            ['verb']),
+  plain:            def('Plain',             'D0D0D0', ['tense', 'polarity'],            ['verb', 'adjective'],   null, '#4C4C4C'),
+  polite:           def('Polite',            'D0D0D0', ['tense', 'polarity'],            ['verb'],                null, '#4C4C4C'),
 
   // ── Verb / word forms ──────────────────────────────────────────────
   default:          def('Default',           '888888', ['register', 'tense', 'polarity'], ['verb', 'adjective', 'noun']),

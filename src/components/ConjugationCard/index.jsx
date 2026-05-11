@@ -17,8 +17,8 @@ export default function ConjugationCard({ variant = 'plain', word = '', answer =
   )
 
   const back = (
-    <CardShell bgColor={answer ? config.keyColor : config.bgColor} border={config.border} BgComponent={FrontBg} color={frontBgColor} bgTransparent>
-      {answer && <CardContent label={config.label} n={negative} past={past} word={answer} answerLabel={answerLabel} answerBg={config.keyColor} />}
+    <CardShell bgColor={answer ? config.backColor : config.bgColor} border={config.border} BgComponent={FrontBg} color={config.backColor} bgTransparent>
+      {answer && <CardContent label={config.label} n={negative} past={past} word={answer} answerLabel={answerLabel} answerBg={config.backColor} />}
     </CardShell>
   )
 
