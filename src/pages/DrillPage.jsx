@@ -9,6 +9,7 @@ import { WORD_TYPES, REGISTERS, GRAMMAR_FORMS, TENSES, POLARITIES } from '../dat
 import { buildPool } from '../data/drill.js'
 import { useDrill, ENGINES } from '../hooks/useDrill.js'
 import { useTTS } from '../hooks/useTTS.js'
+import { useSFX } from '../hooks/useSFX.js'
 import VolumeOnIcon from '../icons/volume-on.svg?react'
 import VolumeOffIcon from '../icons/volume-off.svg?react'
 
@@ -85,7 +86,7 @@ function findSeekCard(newPool, currentCard, axis, value) {
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
-function ActiveDrill({ drill, ttsEnabled, onPulse }) {
+function ActiveDrill({ drill, ttsEnabled, sfxEnabled, onPulse }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
@@ -98,11 +99,13 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
   const transitioningRef = useRef(false)
   useEffect(() => { isFlippedRef.current = isFlipped }, [isFlipped])
   useEffect(() => { transitioningRef.current = transitioning }, [transitioning])
+  const sfx = useSFX()
 
   const handleVerdictRef = useRef()
   handleVerdictRef.current = (isCorrect) => {
     if (transitioningRef.current) return
     const action = isCorrect ? drill.onCorrect : drill.onWrong
+    if (sfxEnabled) sfx.play('draw_card')
     setTransitioning(true)
     setExitDir(isCorrect ? 'up' : 'down')
     onPulse(isCorrect ? 'correct' : 'wrong')
@@ -132,6 +135,7 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
   }, [isFlipped, currentCard.id, ttsEnabled])
 
   function handleFlip(next) {
+    if (sfxEnabled) sfx.play('flip_card')
     setFlippedCardId(next ? currentCard.id : null)
   }
 
@@ -140,6 +144,7 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
       if (transitioningRef.current) return
       if (e.code === 'Space') {
         e.preventDefault()
+        if (sfxEnabled) sfx.play('flip_card')
         setFlippedCardId(prev => prev === currentCard.id ? null : currentCard.id)
       } else if (e.code === 'KeyZ' && isFlippedRef.current) {
         handleVerdictRef.current(false)
@@ -295,10 +300,15 @@ export default function DrillPage() {
     const stored = localStorage.getItem('tts-enabled')
     return stored === null ? true : stored === 'true'
   })
+  const [sfxEnabled,         setSfxEnabled]         = useState(() => {
+    const stored = localStorage.getItem('sfx-enabled')
+    return stored === null ? true : stored === 'true'
+  })
   const [pulseColor,         setPulseColor]         = useState(null)
   const isMobile = useIsMobile()
 
   useEffect(() => { localStorage.setItem('tts-enabled', ttsEnabled) }, [ttsEnabled])
+  useEffect(() => { localStorage.setItem('sfx-enabled', sfxEnabled) }, [sfxEnabled])
 
   function seek(newWordTypes, newForms, newRegs, newTenses, newPols, axis, value) {
     const newPool = buildPool({
@@ -525,7 +535,7 @@ export default function DrillPage() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button
-              onClick={() => setTtsEnabled(v => !v)}
+              onClick={() => { setTtsEnabled(v => !v); setSfxEnabled(v => !v) }}
               title={ttsEnabled ? 'Mute audio' : 'Enable audio'}
               style={{
                 display: 'flex',
@@ -582,7 +592,7 @@ export default function DrillPage() {
           ) : drill.done ? (
             <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
           ) : (
-            <ActiveDrill drill={drill} ttsEnabled={ttsEnabled} onPulse={setPulseColor} />
+            <ActiveDrill drill={drill} ttsEnabled={ttsEnabled} sfxEnabled={sfxEnabled} onPulse={setPulseColor} />
           )}
         </div>
       </div>
