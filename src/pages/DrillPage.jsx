@@ -436,8 +436,6 @@ export default function DrillPage() {
                       selected={selectedRegisters.includes(key)}
                       horizontal
                       fontSize={BTN_FONT}
-                      bgColor={VARIANTS[key].bgColor}
-                      borderColor={VARIANTS[key].keyColor}
                       onClick={() => {
                         const next = toggle(selectedRegisters, key)
                         const adding = !selectedRegisters.includes(key)
