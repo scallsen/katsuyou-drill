@@ -12,6 +12,9 @@ import { useTTS } from '../hooks/useTTS.js'
 import VolumeOnIcon from '../icons/volume-on.svg?react'
 import VolumeOffIcon from '../icons/volume-off.svg?react'
 
+const PANEL_W = 280
+const CHEVRON_W = 28
+
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint)
   useEffect(() => {
@@ -74,6 +77,53 @@ function findSeekCard(newPool, currentCard, axis, value) {
     if (s > bestSim) { bestSim = s; best = source[i] }
   }
   return best
+}
+
+// ── Pill-style button group (Polarity / Tense / Register rows) ────────────
+
+function PillGroup({ items, selected, onSelect, getAccent }) {
+  return (
+    <div style={{ display: 'flex' }}>
+      {items.map(({ key, label, subtext }, i) => {
+        const isSel = selected.includes(key)
+        const accent = getAccent?.(key)
+        const isFirst = i === 0
+        const isLast = i === items.length - 1
+        return (
+          <button
+            key={key}
+            onClick={() => onSelect(key)}
+            style={{
+              flex: 1,
+              position: 'relative',
+              zIndex: isSel ? 1 : 0,
+              background: isSel ? (accent?.bgColor ?? 'rgba(255,255,255,0.15)') : 'transparent',
+              color: isSel ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.5)',
+              border: isSel
+                ? `2px solid ${accent?.borderColor ?? 'rgba(255,255,255,0.55)'}`
+                : '1px solid rgba(255,255,255,0.18)',
+              borderRadius: isFirst ? '5px 0 0 5px' : isLast ? '0 5px 5px 0' : '0',
+              marginLeft: i === 0 ? 0 : -1,
+              padding: isSel ? '4px 8px' : '5px 9px',
+              fontSize: 12,
+              fontFamily: 'inherit',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'stretch',
+              minWidth: 0,
+              transition: 'background 130ms, color 130ms',
+            }}
+          >
+            <span style={{ textAlign: 'left' }}>{label}</span>
+            {subtext && (
+              <span style={{ textAlign: 'right', opacity: 0.6, fontSize: 10 }}>{subtext}</span>
+            )}
+          </button>
+        )
+      })}
+    </div>
+  )
 }
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
@@ -155,7 +205,6 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
 
-      {/* Streak counter — reserves space so layout doesn't shift */}
       <div style={{ height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {streak > 0 && !streakLost && (
           <div style={{ color: '#fff', fontSize: 20, fontWeight: 700, fontFamily: "'DotGothic16', sans-serif", letterSpacing: '0.05em' }}>
@@ -184,7 +233,6 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
         />
       </div>
 
-      {/* Action area — fixed height so card position never shifts */}
       <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {isFlipped ? (
           <div style={{ display: 'flex', gap: 12 }}>
@@ -230,7 +278,6 @@ function ActiveDrill({ drill, ttsEnabled, onPulse }) {
         )}
       </div>
 
-      {/* Stats row */}
       <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.25)', fontSize: 12, fontFamily: "'DotGothic16', sans-serif" }}>
         <span>{remaining} remaining</span>
         <span>{totalCorrect} correct</span>
@@ -279,7 +326,7 @@ const DEFAULTS = {
 }
 
 export default function DrillPage() {
-  const [showOptions,        setShowOptions]        = useState(false)
+  const [showOptions,        setShowOptions]        = useState(() => window.innerWidth > 768)
   const [selectedWordTypes,  setSelectedWordTypes]  = useState(DEFAULTS.wordTypes)
   const [selectedRegisters,  setSelectedRegisters]  = useState(DEFAULTS.registers)
   const [selectedForms,      setSelectedForms]      = useState(DEFAULTS.forms)
@@ -293,6 +340,7 @@ export default function DrillPage() {
   })
   const [pulseColor,         setPulseColor]         = useState(null)
   const isMobile = useIsMobile()
+  const isNarrow = useIsMobile(480)
   const swipeTouchX = useRef(null)
 
   useEffect(() => { localStorage.setItem('tts-enabled', ttsEnabled) }, [ttsEnabled])
@@ -311,7 +359,6 @@ export default function DrillPage() {
   const verbSelected = ['u-verb', 'ru-verb', 'irregular'].some(k => selectedWordTypes.includes(k))
   const drillMode    = selectedWordTypes.length > 0
 
-  // Stable key — only changes when option content changes, not on every render.
   const poolKey = [selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, selectedPolarities]
     .map(a => [...a].sort().join(','))
     .join('|')
@@ -322,8 +369,181 @@ export default function DrillPage() {
   const engine = ENGINES[selectedEngine]
   const drill  = useDrill(pool, { engine, seekCardId })
 
+  const gridCols = (isMobile && isNarrow) ? '1fr' : 'repeat(2, 1fr)'
+
+  const rowStyle = { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }
+  const rowLabelStyle = {
+    width: 60,
+    flexShrink: 0,
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 10,
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+  }
+  const hairline = { height: 1, background: 'rgba(255,255,255,0.08)', margin: '20px 0' }
+
+  const registerItems = REGISTERS.map(r => ({
+    key: r.key,
+    label: VARIANTS[r.key].label,
+    subtext: r.subtext,
+  }))
+
+  function renderPanelContent(paddingH) {
+    return (
+      <div style={{ padding: `16px ${paddingH}px 24px` }}>
+
+        {/* ── Section 1: Words ── */}
+        <DrawerSectionHeader
+          title="Words"
+          hasSelections={selectedWordTypes.length > 0}
+          onClearAll={() => { setSelectedWordTypes([]); setSeekCardId(null) }}
+        />
+        <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 6 }}>
+          {WORD_TYPES.map(({ key, label }) => (
+            <SelectButton
+              key={key}
+              selected={selectedWordTypes.includes(key)}
+              onClick={() => {
+                const next = toggle(selectedWordTypes, key)
+                const adding = !selectedWordTypes.includes(key)
+                seek(next, selectedForms, selectedRegisters, selectedTenses, selectedPolarities, adding ? 'wordType' : null, adding ? key : null)
+                setSelectedWordTypes(next)
+              }}
+            >
+              {label}
+            </SelectButton>
+          ))}
+        </div>
+        <SelectionError visible={selectedWordTypes.length === 0} />
+
+        {/* ── Separator ── */}
+        <div style={hairline} />
+
+        {/* ── Section 2: Polarity + Tense + Register ── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+
+          {/* Polarity row */}
+          <div>
+            <div style={rowStyle}>
+              <span style={rowLabelStyle}>Polarity</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <PillGroup
+                  items={POLARITIES}
+                  selected={selectedPolarities}
+                  onSelect={(key) => {
+                    const next = toggle(selectedPolarities, key)
+                    const adding = !selectedPolarities.includes(key)
+                    seek(selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, next, adding ? 'polarity' : null, adding ? key : null)
+                    setSelectedPolarities(next)
+                  }}
+                />
+              </div>
+            </div>
+            <SelectionError visible={selectedPolarities.length === 0} />
+          </div>
+
+          {/* Tense row */}
+          <div>
+            <div style={rowStyle}>
+              <span style={rowLabelStyle}>Tense</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <PillGroup
+                  items={TENSES}
+                  selected={selectedTenses}
+                  onSelect={(key) => {
+                    const next = toggle(selectedTenses, key)
+                    const adding = !selectedTenses.includes(key)
+                    seek(selectedWordTypes, selectedForms, selectedRegisters, next, selectedPolarities, adding ? 'tense' : null, adding ? key : null)
+                    setSelectedTenses(next)
+                  }}
+                />
+              </div>
+            </div>
+            <SelectionError visible={selectedTenses.length === 0} />
+          </div>
+
+          {/* Register row — only when verb types are selected */}
+          {verbSelected && (
+            <div>
+              <div style={rowStyle}>
+                <span style={rowLabelStyle}>Register</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <PillGroup
+                    items={registerItems}
+                    selected={selectedRegisters}
+                    onSelect={(key) => {
+                      const next = toggle(selectedRegisters, key)
+                      const adding = !selectedRegisters.includes(key)
+                      seek(selectedWordTypes, selectedForms, next, selectedTenses, selectedPolarities, adding ? 'register' : null, adding ? key : null)
+                      setSelectedRegisters(next)
+                    }}
+                    getAccent={(key) => ({ bgColor: VARIANTS[key].bgColor, borderColor: VARIANTS[key].keyColor })}
+                  />
+                </div>
+              </div>
+              <SelectionError visible={selectedRegisters.length === 0} />
+            </div>
+          )}
+        </div>
+
+        {/* ── Separator + Section 3: Verb Forms ── */}
+        {verbSelected && (
+          <>
+            <div style={hairline} />
+            <DrawerSectionHeader
+              title="Verb forms"
+              hasSelections={selectedForms.length > 0}
+              onClearAll={() => {
+                seek(selectedWordTypes, [], selectedRegisters, selectedTenses, selectedPolarities, null, null)
+                setSelectedForms([])
+              }}
+            />
+            <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 6 }}>
+              {GRAMMAR_FORMS.map(({ key, label, bgColor, keyColor, subtext }) => (
+                <SelectButton
+                  key={key}
+                  selected={selectedForms.includes(key)}
+                  bgColor={bgColor}
+                  borderColor={keyColor}
+                  subtext={subtext}
+                  onClick={() => {
+                    const next = toggle(selectedForms, key)
+                    const adding = !selectedForms.includes(key)
+                    seek(selectedWordTypes, next, selectedRegisters, selectedTenses, selectedPolarities, adding ? 'form' : null, adding ? key : null)
+                    setSelectedForms(next)
+                  }}
+                >
+                  {label}
+                </SelectButton>
+              ))}
+            </div>
+            <SelectionError visible={selectedForms.length === 0} />
+          </>
+        )}
+
+        {/* ── Algorithm ── */}
+        <div style={hairline} />
+        <DrawerSectionHeader title="Algorithm" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {Object.entries(ENGINES).map(([key, eng]) => (
+            <div key={key}>
+              <SelectButton selected={selectedEngine === key} onClick={() => setSelectedEngine(key)}>
+                {eng.label}
+              </SelectButton>
+              <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, marginTop: 4, paddingLeft: 2, lineHeight: 1.4 }}>
+                {eng.description}
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    )
+  }
+
   return (
     <div style={{
+      display: 'flex',
       position: 'relative',
       width: '100vw',
       height: '100vh',
@@ -332,249 +552,186 @@ export default function DrillPage() {
       overflow: 'hidden',
     }}>
 
-      {/* Verdict pulse — full-page background flash */}
-      <div
-        className={pulseColor ? `stage-pulse-${pulseColor}` : ''}
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }}
-      />
+      {/* ── Main content area ── */}
+      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minWidth: 0 }}>
 
-      {/* Header */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: showOptions && !isMobile ? 260 : 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 24px', zIndex: 10, transition: 'right 220ms ease' }}>
-        <div>
-          <div style={{ color: '#fff', fontSize: 15, fontWeight: 700, letterSpacing: '0.01em' }}>Doushi Drill v0.1</div>
-          <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, marginTop: 3 }}>by Simon Callsen</div>
+        {/* Verdict pulse — full-page background flash */}
+        <div
+          className={pulseColor ? `stage-pulse-${pulseColor}` : ''}
+          style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }}
+        />
+
+        {/* Header */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0,
+          display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
+          padding: '20px 24px', zIndex: 10,
+        }}>
+          <div>
+            <div style={{ color: '#fff', fontSize: 15, fontWeight: 700, letterSpacing: '0.01em' }}>Doushi Drill v0.1</div>
+            <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, marginTop: 3 }}>by Simon Callsen</div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button
+              onClick={() => setTtsEnabled(v => !v)}
+              title={ttsEnabled ? 'Mute audio' : 'Enable audio'}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 34,
+                height: 34,
+                background: 'rgba(255,255,255,0.1)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: 8,
+                cursor: 'pointer',
+                opacity: ttsEnabled ? 1 : 0.35,
+                padding: 0,
+              }}
+            >
+              {ttsEnabled
+                ? <VolumeOnIcon width={16} height={16} />
+                : <VolumeOffIcon width={16} height={16} />
+              }
+            </button>
+            {isMobile && (
+              <button
+                onClick={() => setShowOptions(v => !v)}
+                style={{
+                  padding: '7px 4px',
+                  fontSize: 13,
+                  fontFamily: 'inherit',
+                  background: 'none',
+                  color: 'rgba(255,255,255,0.7)',
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                {showOptions ? 'Hide options' : 'Show options'}
+              </button>
+            )}
+          </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <button
-            onClick={() => setTtsEnabled(v => !v)}
-            title={ttsEnabled ? 'Mute audio' : 'Enable audio'}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 34,
-              height: 34,
-              background: 'rgba(255,255,255,0.1)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              borderRadius: 8,
-              cursor: 'pointer',
-              opacity: ttsEnabled ? 1 : 0.35,
-              padding: 0,
-            }}
-          >
-            {ttsEnabled
-              ? <VolumeOnIcon width={16} height={16} />
-              : <VolumeOffIcon width={16} height={16} />
-            }
-          </button>
+
+        {/* Center */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 2,
+        }}>
+          {!drillMode ? (
+            <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14 }}>Open options to start drilling</div>
+          ) : pool.length === 0 ? (
+            <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14 }}>No cards match your selections</div>
+          ) : drill.done ? (
+            <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
+          ) : (
+            <ActiveDrill drill={drill} ttsEnabled={ttsEnabled} onPulse={setPulseColor} />
+          )}
+        </div>
+      </div>
+
+      {/* ── Desktop options panel ── */}
+      {!isMobile && (
+        <div style={{
+          flexShrink: 0,
+          position: 'relative',
+          width: showOptions ? PANEL_W : CHEVRON_W,
+          transition: 'width 220ms ease',
+          borderLeft: '1px solid rgba(255,255,255,0.1)',
+          overflow: 'hidden',
+        }}>
+          {/* Chevron toggle */}
           <button
             onClick={() => setShowOptions(v => !v)}
             style={{
-              padding: '7px 16px',
-              fontSize: 13,
-              fontFamily: 'inherit',
-              background: 'rgba(255,255,255,0.1)',
-              color: '#fff',
-              border: '1px solid rgba(255,255,255,0.2)',
-              borderRadius: 8,
+              position: 'absolute',
+              left: 0,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              width: CHEVRON_W,
+              height: 44,
+              background: 'none',
+              border: 'none',
+              color: 'rgba(255,255,255,0.35)',
+              fontSize: 14,
               cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 5,
+              fontFamily: 'inherit',
+              padding: 0,
             }}
           >
-            {showOptions ? 'Hide options' : 'Options'}
+            {showOptions ? '›' : '‹'}
           </button>
-        </div>
-      </div>
 
-      {/* Center */}
-      <div style={{ position: 'absolute', left: 0, right: showOptions && !isMobile ? 260 : 0, top: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'right 220ms ease', zIndex: 2 }}>
-        {!drillMode ? (
-          <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14 }}>Open options to start drilling</div>
-        ) : pool.length === 0 ? (
-          <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14 }}>No cards match your selections</div>
-        ) : drill.done ? (
-          <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
-        ) : (
-          <ActiveDrill drill={drill} ttsEnabled={ttsEnabled} onPulse={setPulseColor} />
-        )}
-      </div>
-
-      {/* Mobile backdrop */}
-      {isMobile && showOptions && (
-        <div
-          onClick={() => setShowOptions(false)}
-          style={{
+          {/* Scrollable content */}
+          <div style={{
             position: 'absolute',
-            inset: 0,
-            background: 'rgba(0,0,0,0.5)',
-            zIndex: 20,
-            transition: 'opacity 220ms ease',
-          }}
-        />
+            left: CHEVRON_W,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            overflowY: 'auto',
+            opacity: showOptions ? 1 : 0,
+            pointerEvents: showOptions ? 'auto' : 'none',
+            transition: 'opacity 150ms ease',
+          }}>
+            {renderPanelContent(16)}
+          </div>
+        </div>
       )}
 
-      {/* Options drawer */}
-      <div
-        onTouchStart={e => { swipeTouchX.current = e.touches[0].clientX }}
-        onTouchEnd={e => { if (isMobile && e.changedTouches[0].clientX - swipeTouchX.current > 60) setShowOptions(false) }}
-        style={{
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        width: 260,
-        height: '100%',
-        background: '#1a1a1a',
-        borderLeft: '1px solid rgba(255,255,255,0.1)',
-        transform: showOptions ? 'translateX(0)' : 'translateX(100%)',
-        transition: 'transform 220ms ease',
-        zIndex: 30,
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-      }}>
-        {isMobile && (
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>Options</div>
-            <button
-              onClick={() => setShowOptions(false)}
-              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontSize: 13, fontFamily: 'inherit', cursor: 'pointer', padding: 0 }}
-            >
-              Hide
-            </button>
-          </div>
-        )}
-
-        <div style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
-
-          {/* Words */}
-          <div style={{ marginTop: 24 }}>
-            <DrawerSectionHeader title="Words" hasSelections={selectedWordTypes.length > 0} onClearAll={() => { setSelectedWordTypes([]); setSeekCardId(null) }} />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {WORD_TYPES.map(({ key, label }) => (
-                <SelectButton key={key} selected={selectedWordTypes.includes(key)} onClick={() => {
-                  const next = toggle(selectedWordTypes, key)
-                  const adding = !selectedWordTypes.includes(key)
-                  seek(next, selectedForms, selectedRegisters, selectedTenses, selectedPolarities, adding ? 'wordType' : null, adding ? key : null)
-                  setSelectedWordTypes(next)
-                }}>
-                  {label}
-                </SelectButton>
-              ))}
+      {/* ── Mobile overlay ── */}
+      {isMobile && showOptions && (
+        <>
+          <div
+            onClick={() => setShowOptions(false)}
+            style={{
+              position: 'absolute', inset: 0,
+              background: 'rgba(0,0,0,0.5)',
+              zIndex: 20,
+            }}
+          />
+          <div
+            onTouchStart={e => { swipeTouchX.current = e.touches[0].clientX }}
+            onTouchEnd={e => {
+              if (e.changedTouches[0].clientX - swipeTouchX.current > 60) setShowOptions(false)
+            }}
+            style={{
+              position: 'absolute',
+              top: 0, left: 0, right: 0, bottom: 0,
+              zIndex: 30,
+              background: '#2E2E2E',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+            }}
+          >
+            <div style={{
+              padding: '16px 20px',
+              borderBottom: '1px solid rgba(255,255,255,0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexShrink: 0,
+            }}>
+              <div style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>Options</div>
+              <button
+                onClick={() => setShowOptions(false)}
+                style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontSize: 13, fontFamily: 'inherit', cursor: 'pointer', padding: 0 }}
+              >
+                Hide
+              </button>
             </div>
-            <SelectionError visible={selectedWordTypes.length === 0} />
-          </div>
-
-          {/* Verb register */}
-          {verbSelected && (
-            <div style={{ marginTop: 28 }}>
-              <DrawerSectionHeader title="Verb register" />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                {REGISTERS.map(({ key, subtext }) => (
-                  <SelectButton
-                    key={key}
-                    selected={selectedRegisters.includes(key)}
-                    bgColor={VARIANTS[key].bgColor}
-                    borderColor={VARIANTS[key].keyColor}
-                    subtext={subtext}
-                    onClick={() => {
-                      const next = toggle(selectedRegisters, key)
-                      const adding = !selectedRegisters.includes(key)
-                      seek(selectedWordTypes, selectedForms, next, selectedTenses, selectedPolarities, adding ? 'register' : null, adding ? key : null)
-                      setSelectedRegisters(next)
-                    }}
-                  >
-                    {VARIANTS[key].label}
-                  </SelectButton>
-                ))}
-              </div>
-              <SelectionError visible={selectedRegisters.length === 0} />
-            </div>
-          )}
-
-          {/* Verb forms */}
-          {verbSelected && (
-            <div style={{ marginTop: 28 }}>
-              <DrawerSectionHeader title="Verb forms" hasSelections={selectedForms.length > 0} onClearAll={() => {
-                seek(selectedWordTypes, [], selectedRegisters, selectedTenses, selectedPolarities, null, null)
-                setSelectedForms([])
-              }} />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                {GRAMMAR_FORMS.map(({ key, label, bgColor, keyColor, subtext }) => (
-                  <SelectButton
-                    key={key}
-                    selected={selectedForms.includes(key)}
-                    bgColor={bgColor}
-                    borderColor={keyColor}
-                    subtext={subtext}
-                    onClick={() => {
-                      const next = toggle(selectedForms, key)
-                      const adding = !selectedForms.includes(key)
-                      seek(selectedWordTypes, next, selectedRegisters, selectedTenses, selectedPolarities, adding ? 'form' : null, adding ? key : null)
-                      setSelectedForms(next)
-                    }}
-                  >
-                    {label}
-                  </SelectButton>
-                ))}
-              </div>
-              <SelectionError visible={selectedForms.length === 0} />
-            </div>
-          )}
-
-          {/* Tense */}
-          <div style={{ marginTop: 28 }}>
-            <DrawerSectionHeader title="Tense" />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {TENSES.map(({ key, label }) => (
-                <SelectButton key={key} selected={selectedTenses.includes(key)} onClick={() => {
-                  const next = toggle(selectedTenses, key)
-                  const adding = !selectedTenses.includes(key)
-                  seek(selectedWordTypes, selectedForms, selectedRegisters, next, selectedPolarities, adding ? 'tense' : null, adding ? key : null)
-                  setSelectedTenses(next)
-                }}>
-                  {label}
-                </SelectButton>
-              ))}
-            </div>
-            <SelectionError visible={selectedTenses.length === 0} />
-          </div>
-
-          {/* Polarity */}
-          <div style={{ marginTop: 28 }}>
-            <DrawerSectionHeader title="Polarity" />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {POLARITIES.map(({ key, label }) => (
-                <SelectButton key={key} selected={selectedPolarities.includes(key)} onClick={() => {
-                  const next = toggle(selectedPolarities, key)
-                  const adding = !selectedPolarities.includes(key)
-                  seek(selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, next, adding ? 'polarity' : null, adding ? key : null)
-                  setSelectedPolarities(next)
-                }}>
-                  {label}
-                </SelectButton>
-              ))}
-            </div>
-            <SelectionError visible={selectedPolarities.length === 0} />
-          </div>
-
-          {/* Algorithm */}
-          <div style={{ marginTop: 28 }}>
-            <DrawerSectionHeader title="Algorithm" />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {Object.entries(ENGINES).map(([key, eng]) => (
-                <div key={key}>
-                  <SelectButton selected={selectedEngine === key} onClick={() => setSelectedEngine(key)}>
-                    {eng.label}
-                  </SelectButton>
-                  <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, marginTop: 4, paddingLeft: 2, lineHeight: 1.4 }}>
-                    {eng.description}
-                  </div>
-                </div>
-              ))}
+            <div style={{ flex: 1, overflowY: 'auto' }}>
+              {renderPanelContent(20)}
             </div>
           </div>
-
-        </div>
-      </div>
+        </>
+      )}
 
     </div>
   )
