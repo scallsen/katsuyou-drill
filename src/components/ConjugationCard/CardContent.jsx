@@ -1,5 +1,3 @@
-import StampNegative from './stamps/stamp-negative.svg?react'
-import StampPast from './stamps/stamp-past.svg?react'
 import { getTextColor } from '../../utils/color.js'
 
 export default function CardContent({ label, n, past, word, answerLabel = null, answerBg = null }) {
@@ -17,20 +15,19 @@ export default function CardContent({ label, n, past, word, answerLabel = null, 
     >
       {/* Answer label */}
       {answerLabel && (
-        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, textAlign: 'center', fontFamily: "'DotGothic16', sans-serif", fontSize: 16, letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor === '#ffffff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.35)' }}>
+        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, textAlign: 'center', fontFamily: "'DotGothic16', sans-serif", fontSize: 24, letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor === '#ffffff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.35)' }}>
           {answerLabel}
         </div>
       )}
 
-      {/* Stamps — absolutely positioned, out of flow */}
       {n && (
-        <div style={{ position: 'absolute', top: 12, left: 5, pointerEvents: 'none', transform: 'rotate(-8deg)' }}>
-          <StampNegative width={222} height={64} />
+        <div style={{ position: 'absolute', bottom: 12, right: 20, fontFamily: "'DotGothic16', sans-serif", fontSize: 24, letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor ?? '#222', pointerEvents: 'none' }}>
+          Negative
         </div>
       )}
       {past && (
-        <div style={{ position: 'absolute', bottom: 12, right: 5, pointerEvents: 'none', transform: 'rotate(6deg)' }}>
-          <StampPast width={171} height={64} />
+        <div style={{ position: 'absolute', bottom: 12, left: 20, fontFamily: "'DotGothic16', sans-serif", fontSize: 24, letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor ?? '#222', pointerEvents: 'none' }}>
+          Past
         </div>
       )}
 
@@ -66,7 +63,7 @@ export default function CardContent({ label, n, past, word, answerLabel = null, 
             fontSize: 26,
             fontWeight: 400,
             letterSpacing: '0.05em',
-            color: textColor ? (textColor === '#ffffff' ? 'rgba(255,255,255,0.65)' : '#666') : '#666',
+            color: textColor ?? '#222',
             textShadow: '2px 2px 0 rgba(0,0,0,0.15)',
           }}
         >

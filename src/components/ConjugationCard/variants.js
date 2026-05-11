@@ -9,6 +9,7 @@ const VARIANTS = Object.fromEntries(
   VARIANT_KEYS.map(key => [key, {
     label:       FORMS[key].label,
     keyColor:    FORMS[key].color,
+    backColor:   FORMS[key].backColor ?? FORMS[key].color,
     bgColor:     FORMS[key].bgColor,
     border:      `3px solid ${FORMS[key].color}`,
     BgComponent: BG_COMPONENTS[key] ?? null,
