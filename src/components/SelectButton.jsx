@@ -1,27 +1,33 @@
-export default function SelectButton({ selected, bgColor = '#ffffff', borderColor = 'rgba(0,0,0,0.25)', subtext, onClick, children }) {
+export default function SelectButton({ selected, bgColor = '#ffffff', borderColor = '#aaaaaa', subtext, onClick, children, centered, minHeight, horizontal, fontSize = 13 }) {
   return (
     <button
       onClick={onClick}
       style={{
-        background: selected ? bgColor : '#9E9E9E',
-        color: selected ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.65)',
-        border: selected ? `2px solid ${borderColor}` : '2px solid transparent',
+        background: selected ? bgColor : 'transparent',
+        color: selected ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.5)',
+        border: selected ? `2px solid ${borderColor}` : '1px solid rgba(255,255,255,0.18)',
         borderRadius: 6,
-        padding: '7px 14px',
-        fontSize: 13,
+        padding: selected
+          ? (horizontal ? '9px 11px' : '6px 11px')
+          : (horizontal ? '10px 12px' : '7px 12px'),
+        fontSize,
         fontFamily: 'inherit',
         cursor: 'pointer',
         transition: 'background 130ms, color 130ms',
         width: '100%',
         display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
-        gap: 8,
+        flexDirection: horizontal ? 'row' : 'column',
+        alignItems: horizontal ? 'center' : (centered ? 'center' : 'flex-start'),
+        justifyContent: horizontal ? 'space-between' : (centered ? 'center' : 'flex-start'),
+        gap: horizontal ? 8 : 2,
+        minHeight: minHeight ?? undefined,
       }}
     >
-      <span style={{ textAlign: 'left' }}>{children}</span>
+      {children}
       {subtext && (
-        <span style={{ opacity: 0.5, fontSize: 12, flexShrink: 0 }}>{subtext}</span>
+        <span style={{ opacity: 0.65, fontSize: 11, flexShrink: horizontal ? 0 : undefined }}>
+          {subtext}
+        </span>
       )}
     </button>
   )

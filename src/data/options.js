@@ -1,12 +1,12 @@
 import { FORMS } from './forms.js'
 
 export const WORD_TYPES = [
-  { key: 'u-verb',    label: 'う Verbs' },
-  { key: 'ru-verb',   label: 'る Verbs' },
-  { key: 'irregular', label: 'Irregular Verbs' },
-  { key: 'i-adj',     label: 'い Adjectives' },
-  { key: 'na-adj',    label: 'な Adjectives' },
-  { key: 'noun',      label: 'Nouns' },
+  { key: 'u-verb',    label: 'う Verbs',        line1: 'う',     line2: 'Verbs' },
+  { key: 'ru-verb',   label: 'る Verbs',        line1: 'る',     line2: 'Verbs' },
+  { key: 'irregular', label: 'Irregular Verbs', line1: 'Irreg.', line2: 'Verbs' },
+  { key: 'i-adj',     label: 'い Adjectives',   line1: 'い',     line2: 'Adj.' },
+  { key: 'na-adj',    label: 'な Adjectives',   line1: 'な',     line2: 'Adj.' },
+  { key: 'noun',      label: 'Nouns',           line1: 'Nouns',  line2: null },
 ]
 
 export const REGISTERS = [
@@ -38,11 +38,11 @@ export const GRAMMAR_FORMS = Object.entries(FORMS)
   }))
 
 export const TENSES = [
-  { key: 'present', label: 'Present' },
-  { key: 'past',    label: 'Past' },
+  { key: 'present', label: 'Present', subtext: '今' },
+  { key: 'past',    label: 'Past',    subtext: '先' },
 ]
 
 export const POLARITIES = [
-  { key: 'positive', label: 'Positive' },
-  { key: 'negative', label: 'Negative' },
+  { key: 'positive', label: 'Positive', subtext: '+' },
+  { key: 'negative', label: 'Negative', subtext: '–' },
 ]
