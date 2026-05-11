@@ -328,6 +328,8 @@ export default function DrillPage() {
 
   const gridCols = (isMobile && isNarrow) ? '1fr' : 'repeat(2, 1fr)'
   const hairline = { height: 1, background: 'rgba(255,255,255,0.08)', margin: '20px 0' }
+  const rowStyle = { display: 'flex', alignItems: 'center', gap: 10 }
+  const rowLabelStyle = { width: 60, flexShrink: 0, color: 'rgba(255,255,255,0.4)', fontSize: META_FONT, letterSpacing: '0.08em', textTransform: 'uppercase' }
 
   function renderPanelContent(paddingH) {
     return (
@@ -370,48 +372,54 @@ export default function DrillPage() {
 
           {/* Polarity */}
           <div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              {POLARITIES.map(({ key, label, subtext }) => (
-                <SelectButton
-                  key={key}
-                  selected={selectedPolarities.includes(key)}
-                  horizontal
-                  fontSize={BTN_FONT}
-                  subtext={subtext}
-                  onClick={() => {
-                    const next = toggle(selectedPolarities, key)
-                    const adding = !selectedPolarities.includes(key)
-                    seek(selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, next, adding ? 'polarity' : null, adding ? key : null)
-                    setSelectedPolarities(next)
-                  }}
-                >
-                  {label}
-                </SelectButton>
-              ))}
+            <div style={rowStyle}>
+              <span style={rowLabelStyle}>Polarity</span>
+              <div style={{ display: 'flex', gap: 8, flex: 1, minWidth: 0 }}>
+                {POLARITIES.map(({ key, label, subtext }) => (
+                  <SelectButton
+                    key={key}
+                    selected={selectedPolarities.includes(key)}
+                    horizontal
+                    fontSize={BTN_FONT}
+                    subtext={subtext}
+                    onClick={() => {
+                      const next = toggle(selectedPolarities, key)
+                      const adding = !selectedPolarities.includes(key)
+                      seek(selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, next, adding ? 'polarity' : null, adding ? key : null)
+                      setSelectedPolarities(next)
+                    }}
+                  >
+                    {label}
+                  </SelectButton>
+                ))}
+              </div>
             </div>
             <SelectionError visible={selectedPolarities.length === 0} />
           </div>
 
           {/* Tense */}
           <div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              {TENSES.map(({ key, label, subtext }) => (
-                <SelectButton
-                  key={key}
-                  selected={selectedTenses.includes(key)}
-                  horizontal
-                  fontSize={BTN_FONT}
-                  subtext={subtext}
-                  onClick={() => {
-                    const next = toggle(selectedTenses, key)
-                    const adding = !selectedTenses.includes(key)
-                    seek(selectedWordTypes, selectedForms, selectedRegisters, next, selectedPolarities, adding ? 'tense' : null, adding ? key : null)
-                    setSelectedTenses(next)
-                  }}
-                >
-                  {label}
-                </SelectButton>
-              ))}
+            <div style={rowStyle}>
+              <span style={rowLabelStyle}>Tense</span>
+              <div style={{ display: 'flex', gap: 8, flex: 1, minWidth: 0 }}>
+                {TENSES.map(({ key, label, subtext }) => (
+                  <SelectButton
+                    key={key}
+                    selected={selectedTenses.includes(key)}
+                    horizontal
+                    fontSize={BTN_FONT}
+                    subtext={subtext}
+                    onClick={() => {
+                      const next = toggle(selectedTenses, key)
+                      const adding = !selectedTenses.includes(key)
+                      seek(selectedWordTypes, selectedForms, selectedRegisters, next, selectedPolarities, adding ? 'tense' : null, adding ? key : null)
+                      setSelectedTenses(next)
+                    }}
+                  >
+                    {label}
+                  </SelectButton>
+                ))}
+              </div>
             </div>
             <SelectionError visible={selectedTenses.length === 0} />
           </div>
@@ -419,25 +427,28 @@ export default function DrillPage() {
           {/* Register — only when verb types are selected */}
           {verbSelected && (
             <div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                {REGISTERS.map(({ key }) => (
-                  <SelectButton
-                    key={key}
-                    selected={selectedRegisters.includes(key)}
-                    horizontal
-                    fontSize={BTN_FONT}
-                    bgColor={VARIANTS[key].bgColor}
-                    borderColor={VARIANTS[key].keyColor}
-                    onClick={() => {
-                      const next = toggle(selectedRegisters, key)
-                      const adding = !selectedRegisters.includes(key)
-                      seek(selectedWordTypes, selectedForms, next, selectedTenses, selectedPolarities, adding ? 'register' : null, adding ? key : null)
-                      setSelectedRegisters(next)
-                    }}
-                  >
-                    {VARIANTS[key].label}
-                  </SelectButton>
-                ))}
+              <div style={rowStyle}>
+                <span style={rowLabelStyle}>Register</span>
+                <div style={{ display: 'flex', gap: 8, flex: 1, minWidth: 0 }}>
+                  {REGISTERS.map(({ key }) => (
+                    <SelectButton
+                      key={key}
+                      selected={selectedRegisters.includes(key)}
+                      horizontal
+                      fontSize={BTN_FONT}
+                      bgColor={VARIANTS[key].bgColor}
+                      borderColor={VARIANTS[key].keyColor}
+                      onClick={() => {
+                        const next = toggle(selectedRegisters, key)
+                        const adding = !selectedRegisters.includes(key)
+                        seek(selectedWordTypes, selectedForms, next, selectedTenses, selectedPolarities, adding ? 'register' : null, adding ? key : null)
+                        setSelectedRegisters(next)
+                      }}
+                    >
+                      {VARIANTS[key].label}
+                    </SelectButton>
+                  ))}
+                </div>
               </div>
               <SelectionError visible={selectedRegisters.length === 0} />
             </div>
