@@ -105,7 +105,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, onPulse }) {
   handleVerdictRef.current = (isCorrect) => {
     if (transitioningRef.current) return
     const action = isCorrect ? drill.onCorrect : drill.onWrong
-    if (sfxEnabled) sfx.play('draw_card')
+    if (sfxEnabled) sfx.play(isCorrect ? 'flip_card_correct' : 'flip_card_wrong')
     setTransitioning(true)
     setExitDir(isCorrect ? 'up' : 'down')
     onPulse(isCorrect ? 'correct' : 'wrong')
