@@ -18,7 +18,7 @@ export default function SelectButton({ selected, bgColor = '#ffffff', borderColo
         display: 'flex',
         flexDirection: horizontal ? 'row' : 'column',
         alignItems: horizontal ? 'center' : (centered ? 'center' : 'flex-start'),
-        justifyContent: horizontal ? 'space-between' : (centered ? 'center' : 'flex-start'),
+        justifyContent: horizontal ? 'space-between' : 'center',
         gap: horizontal ? 8 : 2,
         minHeight: minHeight ?? undefined,
       }}

@@ -297,8 +297,6 @@ export default function DrillPage() {
   })
   const [pulseColor,         setPulseColor]         = useState(null)
   const isMobile = useIsMobile()
-  const isNarrow = useIsMobile(480)
-  const swipeTouchX = useRef(null)
 
   useEffect(() => { localStorage.setItem('tts-enabled', ttsEnabled) }, [ttsEnabled])
 
@@ -326,7 +324,7 @@ export default function DrillPage() {
   const engine = ENGINES[selectedEngine]
   const drill  = useDrill(pool, { engine, seekCardId })
 
-  const gridCols = (isMobile && isNarrow) ? '1fr' : 'repeat(2, 1fr)'
+  const gridCols = 'repeat(2, 1fr)'
   const hairline = { height: 1, background: 'rgba(255,255,255,0.08)', margin: '20px 0' }
   const rowStyle = { display: 'flex', alignItems: 'center', gap: 10 }
   const rowLabelStyle = { width: 60, flexShrink: 0, color: 'rgba(255,255,255,0.4)', fontSize: META_FONT, letterSpacing: '0.08em', textTransform: 'uppercase' }
@@ -548,22 +546,26 @@ export default function DrillPage() {
                 : <VolumeOffIcon width={16} height={16} />
               }
             </button>
-            {isMobile && (
-              <button
-                onClick={() => setShowOptions(v => !v)}
-                style={{
-                  padding: '7px 4px',
-                  fontSize: 13,
-                  fontFamily: 'inherit',
-                  background: 'none',
-                  color: 'rgba(255,255,255,0.7)',
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                {showOptions ? 'Hide options' : 'Show options'}
-              </button>
-            )}
+            <button
+              onClick={() => setShowOptions(v => !v)}
+              title={showOptions ? 'Hide options' : 'Show options'}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: 34,
+                padding: '0 12px',
+                fontSize: 13,
+                fontFamily: 'inherit',
+                background: 'rgba(255,255,255,0.1)',
+                color: 'rgba(255,255,255,0.7)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: 8,
+                cursor: 'pointer',
+              }}
+            >
+              {showOptions ? 'Hide options' : 'Show options'}
+            </button>
           </div>
         </div>
 
@@ -589,16 +591,19 @@ export default function DrillPage() {
       {!isMobile && (
         <>
           {/* Chevron — always visible, outside the collapsible panel */}
-          <div style={{
-            flexShrink: 0,
-            width: CHEVRON_W,
-            borderLeft: '1px solid rgba(255,255,255,0.1)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
+          <div
+            onClick={() => setShowOptions(v => !v)}
+            style={{
+              flexShrink: 0,
+              width: CHEVRON_W,
+              borderLeft: '1px solid rgba(255,255,255,0.1)',
+              borderRight: showOptions ? '1px solid rgba(255,255,255,0.1)' : 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+            }}>
             <button
-              onClick={() => setShowOptions(v => !v)}
               style={{
                 width: CHEVRON_W,
                 height: 44,
@@ -644,10 +649,6 @@ export default function DrillPage() {
             }}
           />
           <div
-            onTouchStart={e => { swipeTouchX.current = e.touches[0].clientX }}
-            onTouchEnd={e => {
-              if (e.changedTouches[0].clientX - swipeTouchX.current > 60) setShowOptions(false)
-            }}
             style={{
               position: 'absolute',
               top: 0, left: 0, right: 0, bottom: 0,
