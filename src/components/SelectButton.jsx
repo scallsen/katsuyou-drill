@@ -1,4 +1,4 @@
-export default function SelectButton({ selected, bgColor = '#ffffff', borderColor = '#aaaaaa', subtext, onClick, children }) {
+export default function SelectButton({ selected, bgColor = '#ffffff', borderColor = '#aaaaaa', subtext, onClick, children, centered, minHeight }) {
   return (
     <button
       onClick={onClick}
@@ -15,11 +15,13 @@ export default function SelectButton({ selected, bgColor = '#ffffff', borderColo
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start',
+        alignItems: centered ? 'center' : 'flex-start',
+        justifyContent: centered ? 'center' : 'flex-start',
         gap: 2,
+        minHeight: minHeight ?? undefined,
       }}
     >
-      <span>{children}</span>
+      {children}
       {subtext && (
         <span style={{ opacity: 0.65, fontSize: 11 }}>{subtext}</span>
       )}

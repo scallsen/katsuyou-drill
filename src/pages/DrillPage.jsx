@@ -12,8 +12,9 @@ import { useTTS } from '../hooks/useTTS.js'
 import VolumeOnIcon from '../icons/volume-on.svg?react'
 import VolumeOffIcon from '../icons/volume-off.svg?react'
 
-const PANEL_W = 280
+const PANEL_W = 420
 const CHEVRON_W = 28
+const PANEL_CONTENT_W = PANEL_W - CHEVRON_W
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint)
@@ -97,14 +98,14 @@ function PillGroup({ items, selected, onSelect, getAccent }) {
               flex: 1,
               position: 'relative',
               zIndex: isSel ? 1 : 0,
-              background: isSel ? (accent?.bgColor ?? 'rgba(255,255,255,0.15)') : 'transparent',
+              background: isSel ? (accent?.bgColor ?? '#ffffff') : 'transparent',
               color: isSel ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.5)',
               border: isSel
-                ? `2px solid ${accent?.borderColor ?? 'rgba(255,255,255,0.55)'}`
-                : '1px solid rgba(255,255,255,0.18)',
+                ? `2px solid ${accent?.borderColor ?? 'rgba(255,255,255,0.6)'}`
+                : '2px solid rgba(255,255,255,0.18)',
               borderRadius: isFirst ? '5px 0 0 5px' : isLast ? '0 5px 5px 0' : '0',
-              marginLeft: i === 0 ? 0 : -1,
-              padding: isSel ? '4px 8px' : '5px 9px',
+              marginLeft: i === 0 ? 0 : -2,
+              padding: '5px 8px',
               fontSize: 12,
               fontFamily: 'inherit',
               cursor: 'pointer',
@@ -385,7 +386,6 @@ export default function DrillPage() {
   const registerItems = REGISTERS.map(r => ({
     key: r.key,
     label: VARIANTS[r.key].label,
-    subtext: r.subtext,
   }))
 
   function renderPanelContent(paddingH) {
@@ -399,10 +399,12 @@ export default function DrillPage() {
           onClearAll={() => { setSelectedWordTypes([]); setSeekCardId(null) }}
         />
         <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 6 }}>
-          {WORD_TYPES.map(({ key, label }) => (
+          {WORD_TYPES.map(({ key, line1, line2 }) => (
             <SelectButton
               key={key}
               selected={selectedWordTypes.includes(key)}
+              centered
+              minHeight={50}
               onClick={() => {
                 const next = toggle(selectedWordTypes, key)
                 const adding = !selectedWordTypes.includes(key)
@@ -410,7 +412,8 @@ export default function DrillPage() {
                 setSelectedWordTypes(next)
               }}
             >
-              {label}
+              <span style={{ fontSize: 15 }}>{line1}</span>
+              {line2 && <span style={{ fontSize: 11, opacity: 0.8 }}>{line2}</span>}
             </SelectButton>
           ))}
         </div>
@@ -521,21 +524,6 @@ export default function DrillPage() {
           </>
         )}
 
-        {/* ── Algorithm ── */}
-        <div style={hairline} />
-        <DrawerSectionHeader title="Algorithm" />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          {Object.entries(ENGINES).map(([key, eng]) => (
-            <div key={key}>
-              <SelectButton selected={selectedEngine === key} onClick={() => setSelectedEngine(key)}>
-                {eng.label}
-              </SelectButton>
-              <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, marginTop: 4, paddingLeft: 2, lineHeight: 1.4 }}>
-                {eng.description}
-              </div>
-            </div>
-          ))}
-        </div>
 
       </div>
     )
@@ -633,55 +621,49 @@ export default function DrillPage() {
 
       {/* ── Desktop options panel ── */}
       {!isMobile && (
-        <div style={{
-          flexShrink: 0,
-          position: 'relative',
-          width: showOptions ? PANEL_W : CHEVRON_W,
-          transition: 'width 220ms ease',
-          borderLeft: '1px solid rgba(255,255,255,0.1)',
-          overflow: 'hidden',
-        }}>
-          {/* Chevron toggle */}
-          <button
-            onClick={() => setShowOptions(v => !v)}
-            style={{
-              position: 'absolute',
-              left: 0,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              width: CHEVRON_W,
-              height: 44,
-              background: 'none',
-              border: 'none',
-              color: 'rgba(255,255,255,0.35)',
-              fontSize: 14,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 5,
-              fontFamily: 'inherit',
-              padding: 0,
-            }}
-          >
-            {showOptions ? '›' : '‹'}
-          </button>
-
-          {/* Scrollable content */}
+        <>
+          {/* Chevron — always visible, outside the collapsible panel */}
           <div style={{
-            position: 'absolute',
-            left: CHEVRON_W,
-            top: 0,
-            right: 0,
-            bottom: 0,
-            overflowY: 'auto',
-            opacity: showOptions ? 1 : 0,
-            pointerEvents: showOptions ? 'auto' : 'none',
-            transition: 'opacity 150ms ease',
+            flexShrink: 0,
+            width: CHEVRON_W,
+            borderLeft: '1px solid rgba(255,255,255,0.1)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
-            {renderPanelContent(16)}
+            <button
+              onClick={() => setShowOptions(v => !v)}
+              style={{
+                width: CHEVRON_W,
+                height: 44,
+                background: 'none',
+                border: 'none',
+                color: 'rgba(255,255,255,0.35)',
+                fontSize: 14,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontFamily: 'inherit',
+                padding: 0,
+              }}
+            >
+              {showOptions ? '›' : '‹'}
+            </button>
           </div>
-        </div>
+
+          {/* Collapsible panel content */}
+          <div style={{
+            flexShrink: 0,
+            width: showOptions ? PANEL_CONTENT_W : 0,
+            overflow: 'hidden',
+            transition: 'width 220ms ease',
+          }}>
+            <div style={{ width: PANEL_CONTENT_W, height: '100%', overflowY: 'auto' }}>
+              {renderPanelContent(16)}
+            </div>
+          </div>
+        </>
       )}
 
       {/* ── Mobile overlay ── */}
