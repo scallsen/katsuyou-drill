@@ -16,6 +16,9 @@ const PANEL_W = 420
 const CHEVRON_W = 28
 const PANEL_CONTENT_W = PANEL_W - CHEVRON_W
 
+const BTN_FONT  = 13
+const META_FONT = 11
+
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint)
   useEffect(() => {
@@ -78,53 +81,6 @@ function findSeekCard(newPool, currentCard, axis, value) {
     if (s > bestSim) { bestSim = s; best = source[i] }
   }
   return best
-}
-
-// ── Pill-style button group (Polarity / Tense / Register rows) ────────────
-
-function PillGroup({ items, selected, onSelect, getAccent }) {
-  return (
-    <div style={{ display: 'flex' }}>
-      {items.map(({ key, label, subtext }, i) => {
-        const isSel = selected.includes(key)
-        const accent = getAccent?.(key)
-        const isFirst = i === 0
-        const isLast = i === items.length - 1
-        return (
-          <button
-            key={key}
-            onClick={() => onSelect(key)}
-            style={{
-              flex: 1,
-              position: 'relative',
-              zIndex: isSel ? 1 : 0,
-              background: isSel ? (accent?.bgColor ?? '#ffffff') : 'transparent',
-              color: isSel ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.5)',
-              border: isSel
-                ? `2px solid ${accent?.borderColor ?? 'rgba(255,255,255,0.6)'}`
-                : '2px solid rgba(255,255,255,0.18)',
-              borderRadius: isFirst ? '5px 0 0 5px' : isLast ? '0 5px 5px 0' : '0',
-              marginLeft: i === 0 ? 0 : -2,
-              padding: '5px 8px',
-              fontSize: 12,
-              fontFamily: 'inherit',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'stretch',
-              minWidth: 0,
-              transition: 'background 130ms, color 130ms',
-            }}
-          >
-            <span style={{ textAlign: 'left' }}>{label}</span>
-            {subtext && (
-              <span style={{ textAlign: 'right', opacity: 0.6, fontSize: 10 }}>{subtext}</span>
-            )}
-          </button>
-        )
-      })}
-    </div>
-  )
 }
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
@@ -371,22 +327,7 @@ export default function DrillPage() {
   const drill  = useDrill(pool, { engine, seekCardId })
 
   const gridCols = (isMobile && isNarrow) ? '1fr' : 'repeat(2, 1fr)'
-
-  const rowStyle = { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }
-  const rowLabelStyle = {
-    width: 60,
-    flexShrink: 0,
-    color: 'rgba(255,255,255,0.4)',
-    fontSize: 10,
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase',
-  }
   const hairline = { height: 1, background: 'rgba(255,255,255,0.08)', margin: '20px 0' }
-
-  const registerItems = REGISTERS.map(r => ({
-    key: r.key,
-    label: VARIANTS[r.key].label,
-  }))
 
   function renderPanelContent(paddingH) {
     return (
@@ -397,6 +338,7 @@ export default function DrillPage() {
           title="Words"
           hasSelections={selectedWordTypes.length > 0}
           onClearAll={() => { setSelectedWordTypes([]); setSeekCardId(null) }}
+          fontSize={META_FONT}
         />
         <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 6 }}>
           {WORD_TYPES.map(({ key, line1, line2 }) => (
@@ -405,6 +347,7 @@ export default function DrillPage() {
               selected={selectedWordTypes.includes(key)}
               centered
               minHeight={50}
+              fontSize={BTN_FONT}
               onClick={() => {
                 const next = toggle(selectedWordTypes, key)
                 const adding = !selectedWordTypes.includes(key)
@@ -413,7 +356,7 @@ export default function DrillPage() {
               }}
             >
               <span style={{ fontSize: 15 }}>{line1}</span>
-              {line2 && <span style={{ fontSize: 11, opacity: 0.8 }}>{line2}</span>}
+              {line2 && <span style={{ fontSize: META_FONT, opacity: 0.8 }}>{line2}</span>}
             </SelectButton>
           ))}
         </div>
@@ -422,67 +365,79 @@ export default function DrillPage() {
         {/* ── Separator ── */}
         <div style={hairline} />
 
-        {/* ── Section 2: Polarity + Tense + Register ── */}
+        {/* ── Section 2: Polarity / Tense / Register ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
 
-          {/* Polarity row */}
+          {/* Polarity */}
           <div>
-            <div style={rowStyle}>
-              <span style={rowLabelStyle}>Polarity</span>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <PillGroup
-                  items={POLARITIES}
-                  selected={selectedPolarities}
-                  onSelect={(key) => {
+            <div style={{ display: 'flex', gap: 8 }}>
+              {POLARITIES.map(({ key, label, subtext }) => (
+                <SelectButton
+                  key={key}
+                  selected={selectedPolarities.includes(key)}
+                  horizontal
+                  fontSize={BTN_FONT}
+                  subtext={subtext}
+                  onClick={() => {
                     const next = toggle(selectedPolarities, key)
                     const adding = !selectedPolarities.includes(key)
                     seek(selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, next, adding ? 'polarity' : null, adding ? key : null)
                     setSelectedPolarities(next)
                   }}
-                />
-              </div>
+                >
+                  {label}
+                </SelectButton>
+              ))}
             </div>
             <SelectionError visible={selectedPolarities.length === 0} />
           </div>
 
-          {/* Tense row */}
+          {/* Tense */}
           <div>
-            <div style={rowStyle}>
-              <span style={rowLabelStyle}>Tense</span>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <PillGroup
-                  items={TENSES}
-                  selected={selectedTenses}
-                  onSelect={(key) => {
+            <div style={{ display: 'flex', gap: 8 }}>
+              {TENSES.map(({ key, label, subtext }) => (
+                <SelectButton
+                  key={key}
+                  selected={selectedTenses.includes(key)}
+                  horizontal
+                  fontSize={BTN_FONT}
+                  subtext={subtext}
+                  onClick={() => {
                     const next = toggle(selectedTenses, key)
                     const adding = !selectedTenses.includes(key)
                     seek(selectedWordTypes, selectedForms, selectedRegisters, next, selectedPolarities, adding ? 'tense' : null, adding ? key : null)
                     setSelectedTenses(next)
                   }}
-                />
-              </div>
+                >
+                  {label}
+                </SelectButton>
+              ))}
             </div>
             <SelectionError visible={selectedTenses.length === 0} />
           </div>
 
-          {/* Register row — only when verb types are selected */}
+          {/* Register — only when verb types are selected */}
           {verbSelected && (
             <div>
-              <div style={rowStyle}>
-                <span style={rowLabelStyle}>Register</span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <PillGroup
-                    items={registerItems}
-                    selected={selectedRegisters}
-                    onSelect={(key) => {
+              <div style={{ display: 'flex', gap: 8 }}>
+                {REGISTERS.map(({ key }) => (
+                  <SelectButton
+                    key={key}
+                    selected={selectedRegisters.includes(key)}
+                    horizontal
+                    fontSize={BTN_FONT}
+                    bgColor={VARIANTS[key].bgColor}
+                    borderColor={VARIANTS[key].keyColor}
+                    onClick={() => {
                       const next = toggle(selectedRegisters, key)
                       const adding = !selectedRegisters.includes(key)
                       seek(selectedWordTypes, selectedForms, next, selectedTenses, selectedPolarities, adding ? 'register' : null, adding ? key : null)
                       setSelectedRegisters(next)
                     }}
-                    getAccent={(key) => ({ bgColor: VARIANTS[key].bgColor, borderColor: VARIANTS[key].keyColor })}
-                  />
-                </div>
+                  >
+                    {VARIANTS[key].label}
+                  </SelectButton>
+                ))}
               </div>
               <SelectionError visible={selectedRegisters.length === 0} />
             </div>
@@ -500,6 +455,7 @@ export default function DrillPage() {
                 seek(selectedWordTypes, [], selectedRegisters, selectedTenses, selectedPolarities, null, null)
                 setSelectedForms([])
               }}
+              fontSize={META_FONT}
             />
             <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 6 }}>
               {GRAMMAR_FORMS.map(({ key, label, bgColor, keyColor, subtext }) => (
@@ -509,6 +465,7 @@ export default function DrillPage() {
                   bgColor={bgColor}
                   borderColor={keyColor}
                   subtext={subtext}
+                  fontSize={BTN_FONT}
                   onClick={() => {
                     const next = toggle(selectedForms, key)
                     const adding = !selectedForms.includes(key)
