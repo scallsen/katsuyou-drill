@@ -1,8 +1,9 @@
 import { getTextColor } from '../../utils/color.js'
 import { buildFurigana, buildFuriganaForConjugation } from '../../utils/furigana.js'
 
-export default function CardContent({ label, n, past, word, kana = null, wordKanji = null, showFurigana = false, answerLabel = null, answerBg = null }) {
+export default function CardContent({ label, n, past, word, kana = null, wordKanji = null, showFurigana = false, pixelFont = true, answerLabel = null, answerBg = null }) {
   const textColor = answerBg ? getTextColor(answerBg) : null
+  const jaFont = pixelFont ? "'DotGothic16', sans-serif" : "system-ui, sans-serif"
   return (
     <div
       style={{
@@ -47,7 +48,7 @@ export default function CardContent({ label, n, past, word, kana = null, wordKan
       >
         <div
           style={{
-            fontFamily: "'DotGothic16', sans-serif",
+            fontFamily: jaFont,
             fontSize: 48,
             fontWeight: 400,
             color: textColor ?? '#222',
@@ -72,7 +73,7 @@ export default function CardContent({ label, n, past, word, kana = null, wordKan
                     right: 0,
                     textAlign: 'center',
                     fontSize: '0.45em',
-                    fontFamily: "'DotGothic16', sans-serif",
+                    fontFamily: jaFont,
                     letterSpacing: '0.05em',
                     whiteSpace: 'nowrap',
                   }}>
