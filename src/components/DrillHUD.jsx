@@ -25,11 +25,7 @@ function WaveText({ text, color }) {
   ))
 }
 
-export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong, remaining, canUndo, onUndo, children }) {
-  const [showStats, setShowStats] = useState(() => {
-    const stored = localStorage.getItem('hud-show-stats')
-    return stored === null ? true : stored === 'true'
-  })
+export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong, remaining, canUndo, onUndo, showStreak, children }) {
   const [streakLost, setStreakLost] = useState(null)
   const [popCount,   setPopCount]   = useState(0)
   const [bigPop,     setBigPop]     = useState(false)
@@ -49,8 +45,6 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
     }
     return () => document.getElementById(KEYFRAMES_ID)?.remove()
   }, [])
-
-  useEffect(() => { localStorage.setItem('hud-show-stats', showStats) }, [showStats])
 
   useEffect(() => {
     const prev = prevStreakRef.current
@@ -99,7 +93,7 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
 
-      <div style={{ height: 64, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, visibility: showStats ? 'visible' : 'hidden' }}>
+      <div style={{ height: 64, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, visibility: showStreak ? 'visible' : 'hidden' }}>
         {streakLost ? (
           <span style={{ color: '#f87171', fontSize: 16, fontWeight: 700, fontFamily: "'DotGothic16', sans-serif", opacity: streakLost === 'fading' ? 0 : 1, transition: 'opacity 0.3s ease' }}>
             Streak lost
@@ -140,11 +134,10 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
       <div>{children}</div>
 
       <div style={{ display: 'flex', gap: 24 }}>
-        {ghostBtn(true, () => setShowStats(v => !v), showStats ? 'Hide stats' : 'Show stats')}
         {ghostBtn(canUndo, onUndo, 'Undo')}
       </div>
 
-      <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.25)', fontSize: 12, fontFamily: "'DotGothic16', sans-serif", alignItems: 'center', visibility: showStats ? 'visible' : 'hidden' }}>
+      <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.25)', fontSize: 12, fontFamily: "'DotGothic16', sans-serif", alignItems: 'center', visibility: showStreak ? 'visible' : 'hidden' }}>
         <span>{remaining} remaining</span>
         <span>{totalCorrect} correct</span>
         {totalWrong > 0 && <span>{totalWrong} wrong</span>}

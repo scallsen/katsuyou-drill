@@ -9,8 +9,10 @@ import SelectionError from '../components/SelectionError.jsx'
 import { WORD_TYPES, REGISTERS, GRAMMAR_FORMS, TENSES, POLARITIES } from '../data/options.js'
 import { buildPool } from '../data/drill.js'
 import { useDrill, ENGINES } from '../hooks/useDrill.js'
-import { useTTS } from '../hooks/useTTS.js'
+import { useTTS, useJaVoices } from '../hooks/useTTS.js'
 import { useSFX } from '../hooks/useSFX.js'
+import DrawerCheckbox from '../components/DrawerCheckbox.jsx'
+import DrawerSelect from '../components/DrawerSelect.jsx'
 import VolumeOnIcon from '../icons/volume-on.svg?react'
 import VolumeOffIcon from '../icons/volume-off.svg?react'
 
@@ -87,13 +89,13 @@ function findSeekCard(newPool, currentCard, axis, value) {
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
-function ActiveDrill({ drill, ttsEnabled, sfxEnabled, onPulse }) {
+function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, onPulse }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
   const { currentCard, streak, bestStreak, totalCorrect, totalWrong, remaining, canUndo, prevCard, onUndo } = drill
   const isFlipped = flippedCardId === currentCard.id
-  const tts = useTTS()
+  const tts = useTTS(ttsVoice)
 
   // Optimistic streak — updates immediately on button press, syncs after engine resolves
   const [localStreak,     setLocalStreak]     = useState(streak)
@@ -187,6 +189,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, onPulse }) {
       remaining={remaining}
       canUndo={canUndo}
       onUndo={onUndo}
+      showStreak={showStreak}
     >
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
         <div key={currentCard.id} className={cardClass}>
@@ -300,6 +303,10 @@ export default function DrillPage() {
   const [selectedPolarities, setSelectedPolarities] = useState(DEFAULTS.polarities)
   const [selectedEngine,     setSelectedEngine]     = useState(DEFAULTS.engine)
   const [seekCardId,         setSeekCardId]         = useState(null)
+  const [audioEnabled,       setAudioEnabled]       = useState(() => {
+    const stored = localStorage.getItem('audio-enabled')
+    return stored === null ? true : stored === 'true'
+  })
   const [ttsEnabled,         setTtsEnabled]         = useState(() => {
     const stored = localStorage.getItem('tts-enabled')
     return stored === null ? true : stored === 'true'
@@ -308,11 +315,20 @@ export default function DrillPage() {
     const stored = localStorage.getItem('sfx-enabled')
     return stored === null ? true : stored === 'true'
   })
+  const [ttsVoice,           setTtsVoice]           = useState(() => localStorage.getItem('tts-voice') ?? '')
+  const [showStreak,         setShowStreak]         = useState(() => {
+    const stored = localStorage.getItem('hud-show-stats')
+    return stored === null ? true : stored === 'true'
+  })
   const [pulseColor,         setPulseColor]         = useState(null)
   const isMobile = useIsMobile()
+  const jaVoices = useJaVoices()
 
+  useEffect(() => { localStorage.setItem('audio-enabled', audioEnabled) }, [audioEnabled])
   useEffect(() => { localStorage.setItem('tts-enabled', ttsEnabled) }, [ttsEnabled])
   useEffect(() => { localStorage.setItem('sfx-enabled', sfxEnabled) }, [sfxEnabled])
+  useEffect(() => { localStorage.setItem('tts-voice', ttsVoice) }, [ttsVoice])
+  useEffect(() => { localStorage.setItem('hud-show-stats', showStreak) }, [showStreak])
 
   function seek(newWordTypes, newForms, newRegs, newTenses, newPols, axis, value) {
     const newPool = buildPool({
@@ -502,6 +518,45 @@ export default function DrillPage() {
           </>
         )}
 
+        {/* ── Separator + Section: Additional Settings ── */}
+        <div style={hairline} />
+        <DrawerSectionHeader title="Additional Settings" fontSize={META_FONT} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <DrawerCheckbox
+            checked={showStreak}
+            onChange={() => setShowStreak(v => !v)}
+            label="Show streak"
+          />
+          <DrawerCheckbox
+            checked={audioEnabled}
+            onChange={() => setAudioEnabled(v => !v)}
+            label="Audio"
+          />
+          {audioEnabled && (
+            <>
+              <DrawerCheckbox
+                checked={ttsEnabled}
+                onChange={() => setTtsEnabled(v => !v)}
+                label="Text to speech"
+                indent={1}
+              />
+              {ttsEnabled && jaVoices.length > 0 && (
+                <DrawerSelect
+                  value={ttsVoice}
+                  onChange={setTtsVoice}
+                  options={[{ value: '', label: 'Default' }, ...jaVoices.map(v => ({ value: v.name, label: v.name }))]}
+                  indent={2}
+                />
+              )}
+              <DrawerCheckbox
+                checked={sfxEnabled}
+                onChange={() => setSfxEnabled(v => !v)}
+                label="Sound effects"
+                indent={1}
+              />
+            </>
+          )}
+        </div>
 
       </div>
     )
@@ -539,8 +594,8 @@ export default function DrillPage() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button
-              onClick={() => { setTtsEnabled(v => !v); setSfxEnabled(v => !v) }}
-              title={ttsEnabled ? 'Mute audio' : 'Enable audio'}
+              onClick={() => setAudioEnabled(v => !v)}
+              title={audioEnabled ? 'Mute audio' : 'Enable audio'}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -551,11 +606,11 @@ export default function DrillPage() {
                 border: '1px solid rgba(255,255,255,0.2)',
                 borderRadius: 8,
                 cursor: 'pointer',
-                opacity: ttsEnabled ? 1 : 0.35,
+                opacity: audioEnabled ? 1 : 0.35,
                 padding: 0,
               }}
             >
-              {ttsEnabled
+              {audioEnabled
                 ? <VolumeOnIcon width={16} height={16} />
                 : <VolumeOffIcon width={16} height={16} />
               }
@@ -596,7 +651,7 @@ export default function DrillPage() {
           ) : drill.done ? (
             <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
           ) : (
-            <ActiveDrill drill={drill} ttsEnabled={ttsEnabled} sfxEnabled={sfxEnabled} onPulse={setPulseColor} />
+            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} onPulse={setPulseColor} />
           )}
         </div>
       </div>
