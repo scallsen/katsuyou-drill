@@ -16,7 +16,7 @@ Japanese verb conjugation drill app. Vite + React, no TypeScript.
 
 Options drawer → `buildPool()` → `useDrill(pool, { engine, seekCardId })` → renders cards one at a time.
 
-- **Pool** — flat array of card specs, one per valid `(word × form × subKey)` combo. Built by `src/data/drill.js::buildPool()`.
+- **Pool** — flat array of card specs, one per valid `(word × form × register/tense/polarity)` combo. Built by `src/data/drill.js::buildPool()`.
 - **Float** — the active hand of ~7 cards. `float[0]` is always current. Correct answers retire the card and pull a fresh one from the pool. Wrong answers reinsert the card a few positions ahead so it returns after a short gap.
 - **Streak** — increments on correct, resets to 0 on wrong.
 - **Seek** — when a sidebar filter is toggled, `DrillPage` synchronously computes the new pool, finds the best matching card via `findSeekCard` (scoring: same word +8, same form +4, same register/tense/polarity +2 each), and passes its id as `seekCardId` to `useDrill`. On pool reinit, `useDrill` moves that card to `float[0]`. Adding a filter biases toward cards that match the new axis/value; removing one just finds the most similar valid card.
@@ -70,10 +70,11 @@ It will automatically appear as a selectable option in the options drawer.
 
 | File | Purpose |
 |---|---|
-| `src/data/drill.js` | `buildPool`, `filterWords`, `buildSubKey`, `getConjugation`, `resolveVariant` |
+| `src/data/conjugation.js` | `conjugate(word, formKey, register, tense, polarity)` — algorithmic conjugation for verbs, adjectives, nouns; returns accepted-answer array (kanji + kana) |
+| `src/data/drill.js` | `buildPool`, `filterWords`, `resolveVariant` |
 | `src/data/illegalCombos.js` | Declarative list of card combos to suppress (e.g. trivial/duplicate answers); checked in `buildPool()` |
 | `src/data/forms.js` | `FORMS` — all form/register definitions with axes and colors |
-| `src/data/words.json` | Word entries with conjugation tables |
+| `src/data/words.json` | Word entries — id, kanji, kana, wordType, group, jlpt; no conjugation tables (computed at runtime) |
 | `src/engines/simpleQueue.js` | Default engine — float + wrong-card reinsertion |
 | `src/hooks/useDrill.js` | React wrapper for any engine; `ENGINES` registry; seek-on-reinit |
 | `src/hooks/useTTS.js` | Web Speech API wrapper; speaks `conjugation` on card flip-to-back; `ttsEnabled` persisted in localStorage |
@@ -89,12 +90,13 @@ Output of `buildPool()`, input to engine and card rendering:
 
 ```js
 {
-  id,           // "${word.id}__${formKey}__${subKey}" — unique, used as React key
-  word,         // full word object from words.json
-  formKey, subKey, register, tense, polarity,
-  conjugation,  // the answer string shown on card back
-  variant,      // variant key for ConjugationCard (e.g. 'plain', 'te', 'potential')
-  bgColor,      // form accent color string
+  id,              // "${word.id}__${formKey}__${register}__..." — unique, used as React key
+  word,            // full word object from words.json
+  formKey, register, tense, polarity,
+  conjugation,     // canonical answer string (kanji form) — shown on card back, spoken by TTS
+  acceptedAnswers, // string[] — all accepted answers for grading (kanji + kana variants)
+  variant,         // variant key for ConjugationCard (e.g. 'plain', 'te', 'potential')
+  bgColor,         // form accent color string
 }
 // UI derives: bgComponent (register==='plain' → PlainBg), registerLabel (VARIANTS[register]?.label)
 ```
