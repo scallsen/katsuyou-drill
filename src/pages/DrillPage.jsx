@@ -579,7 +579,7 @@ export default function DrillPage() {
       display: 'flex',
       position: 'relative',
       width: '100vw',
-      height: '100vh',
+      height: '100dvh',
       background: '#2E2E2E',
       fontFamily: "'DotGothic16', system-ui, sans-serif",
       overflow: 'hidden',
@@ -756,7 +756,7 @@ export default function DrillPage() {
                 Hide
               </button>
             </div>
-            <div style={{ flex: 1, overflowY: 'auto' }}>
+            <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 'env(safe-area-inset-bottom)' }}>
               {renderPanelContent(20)}
             </div>
           </div>
