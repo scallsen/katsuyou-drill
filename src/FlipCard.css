@@ -110,6 +110,15 @@
   to   { transform: scale(1);    opacity: 1; }
 }
 
+@keyframes cardExitUndo {
+  to { transform: translateY(80px); opacity: 0; }
+}
+
+@keyframes cardEnterUndo {
+  from { transform: translateY(-140px); opacity: 0; }
+  to   { transform: translateY(0);      opacity: 1; }
+}
+
 .stage-pulse-correct {
   background: rgba(39, 174, 96, 0.20);
   animation: stagePulse 700ms ease-out forwards;
@@ -130,6 +139,14 @@
 
 .card-entering {
   animation: cardEnter 300ms ease-out forwards;
+}
+
+.card-exit-undo {
+  animation: cardExitUndo 200ms ease-in forwards;
+}
+
+.card-entering-undo {
+  animation: cardEnterUndo 350ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* ── Verdict buttons ─────────────────────────────────────────── */

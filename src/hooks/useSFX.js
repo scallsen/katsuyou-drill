@@ -37,6 +37,9 @@ export function useSFX() {
     } else if (name === 'flip_card_wrong') {
       tone(ctx, { freq: 330, freqEnd: 240, vol: 0.18, type: 'triangle', duration: 0.18, offset: 0 })
       tone(ctx, { freq: 240, freqEnd: 140, vol: 0.18, type: 'triangle', duration: 0.24, offset: 0.16 })
+    } else if (name === 'undo') {
+      tone(ctx, { freq: 900, freqEnd: 70, vol: 0.22, type: 'sawtooth', duration: 0.12, offset: 0 })
+      tone(ctx, { freq: 700, freqEnd: 55, vol: 0.18, type: 'sawtooth', duration: 0.12, offset: 0.17 })
     } else if (name === 'best_streak_broken') {
       tone(ctx, { freq: 420, freqEnd: 330, vol: 0.26, type: 'triangle', duration: 0.16, offset: 0 })
       tone(ctx, { freq: 350, freqEnd: 270, vol: 0.26, type: 'triangle', duration: 0.16, offset: 0.14 })

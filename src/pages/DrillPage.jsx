@@ -93,6 +93,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
   const [flippedCardId, setFlippedCardId] = useState(null)
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
+  const [undoEntering, setUndoEntering] = useState(false)
   const { currentCard, streak, bestStreak, totalCorrect, totalWrong, remaining, canUndo, prevCard, onUndo } = drill
   const isFlipped = flippedCardId === currentCard.id
   const tts = useTTS(ttsVoice)
@@ -155,6 +156,23 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
     setFlippedCardId(next ? currentCard.id : null)
   }
 
+  function handleUndo() {
+    if (transitioningRef.current || !canUndo) return
+    if (sfxEnabled) sfx.play('undo')
+    setFlippedCardId(null)
+    setTransitioning(true)
+    setExitDir('undo')
+    setTimeout(() => {
+      onUndo()
+      setExitDir(null)
+      setUndoEntering(true)
+    }, 200)
+    setTimeout(() => {
+      setTransitioning(false)
+      setUndoEntering(false)
+    }, 580)
+  }
+
   useEffect(() => {
     function onKey(e) {
       if (transitioningRef.current) return
@@ -178,6 +196,8 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
   let cardClass = ''
   if (exitDir === 'up') cardClass = 'card-exit-up'
   else if (exitDir === 'down') cardClass = 'card-exit-down'
+  else if (exitDir === 'undo') cardClass = 'card-exit-undo'
+  else if (undoEntering) cardClass = 'card-entering-undo'
   else if (transitioning) cardClass = 'card-entering'
 
   return (
@@ -188,7 +208,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
       totalWrong={totalWrong}
       remaining={remaining}
       canUndo={canUndo}
-      onUndo={onUndo}
+      onUndo={handleUndo}
       showStreak={showStreak}
     >
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
