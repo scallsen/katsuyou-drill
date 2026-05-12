@@ -1,20 +1,16 @@
 <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M6 6H9V9H6V6Z" fill="white"/>
-<path d="M9 9H12V12H9V9Z" fill="white"/>
-<path d="M12 12H15V15H12V12Z" fill="white"/>
-<path d="M15 15H18V18H15V15Z" fill="white"/>
-<path d="M18 18H21V21H18V18Z" fill="white"/>
-<path d="M21 21H24V24H21V21Z" fill="white"/>
-<path d="M24 24H27V27H24V27Z" fill="white"/>
-<path d="M27 27H30V30H27V30Z" fill="white"/>
-<path d="M30 30H33V33H30V33Z" fill="white"/>
-<path d="M33 33H36V36H33V36Z" fill="white"/>
-<path d="M33 6H36V9H33V6Z" fill="white"/>
-<path d="M30 9H33V12H30V9Z" fill="white"/>
-<path d="M27 12H30V15H27V12Z" fill="white"/>
-<path d="M24 15H27V18H24V15Z" fill="white"/>
-<path d="M15 21H18V24H15V21Z" fill="white"/>
-<path d="M12 24H15V27H12V24Z" fill="white"/>
-<path d="M9 27H12V30H9V27Z" fill="white"/>
-<path d="M6 30H9V33H6V30Z" fill="white"/>
+<path d="M19 25H13V28H19V25Z" fill="white"/>
+<path d="M37 7H34V28H37V7Z" fill="white"/>
+<path d="M10 17H7L7 34H10L10 17Z" fill="white"/>
+<path d="M34 7L17 7V10H34V7Z" fill="white"/>
+<path d="M28 28H31V31H28V28Z" fill="white"/>
+<path d="M7 7H10V10H7V7Z" fill="white"/>
+<path d="M10 10H13V13H10V10Z" fill="white"/>
+<path d="M10 28H13V31H10V28Z" fill="white"/>
+<path d="M16 16H19V19H16V16Z" fill="white"/>
+<path d="M19 19H22V22H19V19Z" fill="white"/>
+<path d="M22 22H25V25H22V22Z" fill="white"/>
+<path d="M25 25H28V28H25V25Z" fill="white"/>
+<path d="M31 31H34V34H31V31Z" fill="white"/>
+<path d="M16 13H13V16H16V13Z" fill="white"/>
 </svg>
