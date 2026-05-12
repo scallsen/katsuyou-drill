@@ -346,6 +346,10 @@ export default function DrillPage() {
     const stored = localStorage.getItem('show-furigana')
     return stored === null ? false : stored === 'true'
   })
+  const [showVisualEffects,  setShowVisualEffects]  = useState(() => {
+    const stored = localStorage.getItem('show-visual-effects')
+    return stored === null ? true : stored === 'true'
+  })
   const [pulseColor,         setPulseColor]         = useState(null)
   const isMobile = useIsMobile()
   const jaVoices = useJaVoices()
@@ -356,6 +360,7 @@ export default function DrillPage() {
   useEffect(() => { localStorage.setItem('tts-voice', ttsVoice) }, [ttsVoice])
   useEffect(() => { localStorage.setItem('hud-show-stats', showStreak) }, [showStreak])
   useEffect(() => { localStorage.setItem('show-furigana', showFurigana) }, [showFurigana])
+  useEffect(() => { localStorage.setItem('show-visual-effects', showVisualEffects) }, [showVisualEffects])
 
   function seek(newWordTypes, newForms, newRegs, newTenses, newPols, axis, value) {
     const newPool = buildPool({
@@ -560,6 +565,11 @@ export default function DrillPage() {
             label="Show furigana"
           />
           <DrawerCheckbox
+            checked={showVisualEffects}
+            onChange={() => setShowVisualEffects(v => !v)}
+            label="Show visual effects"
+          />
+          <DrawerCheckbox
             checked={audioEnabled}
             onChange={() => setAudioEnabled(v => !v)}
             label="Enable audio"
@@ -611,7 +621,7 @@ export default function DrillPage() {
 
         {/* Verdict pulse — full-page background flash */}
         <div
-          className={pulseColor ? `stage-pulse-${pulseColor}` : ''}
+          className={showVisualEffects && pulseColor ? `stage-pulse-${pulseColor}` : ''}
           style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }}
         />
 
