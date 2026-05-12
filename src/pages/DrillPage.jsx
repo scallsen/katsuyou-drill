@@ -270,7 +270,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
               </button>
             </div>
           ) : (
-            <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>Click or Space to flip</div>
+            <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>{navigator.maxTouchPoints > 0 ? 'Tap card to flip' : 'Click card or Spacebar to flip'}</div>
           )}
         </div>
       </div>
