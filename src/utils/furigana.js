@@ -19,9 +19,14 @@ export function buildFurigana(kanjiStr, kanaStr) {
   return { kanjiPart, furigana, okurigana }
 }
 
+// 来る stem alternation: okurigana first-char → correct reading of 来
+const KURU_READINGS = { る: 'く', れ: 'く', た: 'き', て: 'き', ま: 'き', な: 'こ', よ: 'こ', ら: 'こ', さ: 'こ', い: 'こ' }
+
 export function buildFuriganaForConjugation(conjugation, wordKanji, wordKana) {
   const base = buildFurigana(wordKanji, wordKana)
   if (!base) return null
   if (!conjugation.startsWith(base.kanjiPart)) return null
-  return { kanjiPart: base.kanjiPart, furigana: base.furigana, okurigana: conjugation.slice(base.kanjiPart.length) }
+  const okurigana = conjugation.slice(base.kanjiPart.length)
+  const furigana = base.kanjiPart === '来' ? (KURU_READINGS[okurigana[0]] ?? base.furigana) : base.furigana
+  return { kanjiPart: base.kanjiPart, furigana, okurigana }
 }
