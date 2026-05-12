@@ -28,7 +28,6 @@ function WaveText({ text, color }) {
 export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong, remaining, canUndo, onUndo, showStreak, children }) {
   const [streakLost, setStreakLost] = useState(null)
   const [popCount,   setPopCount]   = useState(0)
-  const [bigPop,     setBigPop]     = useState(false)
   const prevStreakRef = useRef(streak)
 
   useEffect(() => {
@@ -37,7 +36,6 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
       style.id = KEYFRAMES_ID
       style.textContent = [
         '@keyframes streak-pop     { 0% { transform: scale(1) } 40% { transform: scale(1.18) } 100% { transform: scale(1) } }',
-        '@keyframes streak-pop-big { 0% { transform: scale(1) } 40% { transform: scale(1.55) } 100% { transform: scale(1) } }',
         '@keyframes streak-wiggle  { 0%, 100% { transform: rotate(-0.8deg) } 50% { transform: rotate(0.8deg) } }',
         '@keyframes streak-wave    { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-5px) } }',
       ].join(' ')
@@ -56,8 +54,6 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
     }
     prevStreakRef.current = streak
     if (streak > prev) {
-      const milestone = streak > WAVE_THRESHOLD && streak % 10 === 0
-      setBigPop(milestone)
       setPopCount(c => c + 1)
     }
   }, [streak])
@@ -88,7 +84,6 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
   const showWave    = streak >= WAVE_THRESHOLD
   const streakText  = streak > 0 ? `Streak: ${streak}` : 'Streak: 0'
   const streakColor = streak > 0 ? '#fff' : 'transparent'
-  const popAnim     = bigPop ? 'streak-pop-big 0.35s ease-out' : 'streak-pop 0.18s ease-out'
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
@@ -115,7 +110,7 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
                 style={{
                   display: 'inline-block',
                   userSelect: 'none',
-                  animation: popCount > 0 ? popAnim : 'none',
+                  animation: popCount > 0 ? 'streak-pop 0.18s ease-out' : 'none',
                 }}
               >
                 {showWave
