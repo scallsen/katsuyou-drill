@@ -206,7 +206,6 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
       bestStreak={localBestStreak}
       totalCorrect={totalCorrect}
       totalWrong={totalWrong}
-      remaining={remaining}
       canUndo={canUndo}
       onUndo={handleUndo}
       showStreak={showStreak}

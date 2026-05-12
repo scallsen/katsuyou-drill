@@ -25,7 +25,7 @@ function WaveText({ text, color }) {
   ))
 }
 
-export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong, remaining, canUndo, onUndo, showStreak, children }) {
+export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong, canUndo, onUndo, showStreak, children }) {
   const [streakLost, setStreakLost] = useState(null)
   const [popCount,   setPopCount]   = useState(0)
   const prevStreakRef = useRef(streak)
@@ -128,14 +128,13 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
 
       <div>{children}</div>
 
-      <div style={{ display: 'flex', gap: 24 }}>
-        {ghostBtn(canUndo, onUndo, 'Undo')}
+      <div style={{ display: 'flex', gap: 24, visibility: canUndo ? 'visible' : 'hidden' }}>
+        {ghostBtn(true, onUndo, 'Undo')}
       </div>
 
-      <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.25)', fontSize: 12, fontFamily: "'DotGothic16', sans-serif", alignItems: 'center', visibility: showStreak ? 'visible' : 'hidden' }}>
-        <span>{remaining} remaining</span>
+      <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.25)', fontSize: 12, fontFamily: "'DotGothic16', sans-serif", alignItems: 'center', visibility: showStreak && (totalCorrect > 0 || totalWrong > 0) ? 'visible' : 'hidden' }}>
         <span>{totalCorrect} correct</span>
-        {totalWrong > 0 && <span>{totalWrong} wrong</span>}
+        <span>{totalWrong} wrong</span>
       </div>
 
     </div>
