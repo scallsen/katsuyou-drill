@@ -378,7 +378,8 @@ export default function DrillPage() {
     setSeekCardId(findSeekCard(newPool, drill.currentCard, axis, value)?.id ?? null)
   }
 
-  const verbSelected = ['u-verb', 'ru-verb', 'irregular'].some(k => selectedWordTypes.includes(k))
+  const verbSelected     = ['u-verb', 'ru-verb', 'irregular'].some(k => selectedWordTypes.includes(k))
+  const registerVisible  = selectedWordTypes.length > 0
   const drillMode    = selectedWordTypes.length > 0
 
   const poolKey = [selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, selectedPolarities]
@@ -489,8 +490,8 @@ export default function DrillPage() {
             <SelectionError visible={selectedTenses.length === 0} />
           </div>
 
-          {/* Register — only when verb types are selected */}
-          {verbSelected && (
+          {/* Register — shown whenever any word type is selected */}
+          {registerVisible && (
             <div>
               <div style={rowStyle}>
                 <span style={rowLabelStyle}>Register</span>
