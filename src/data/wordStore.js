@@ -20,6 +20,3 @@ export function getAllWords() {
   return loadWords()
 }
 
-export function getWordMap() {
-  return Object.fromEntries(loadWords().map(w => [w.id, w]))
-}

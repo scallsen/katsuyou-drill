@@ -5,7 +5,6 @@ import { isIllegal } from './illegalCombos.js'
 import { conjugate } from './conjugation.js'
 
 // Builds a flat array of card specs from the current option selections.
-// Each spec is one (word × form × subKey) combo that has a valid conjugation.
 export function buildPool({ selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, selectedPolarities }) {
   const words = filterWords(selectedWordTypes)
   if (!words.length) return []
@@ -28,12 +27,11 @@ export function buildPool({ selectedWordTypes, selectedForms, selectedRegisters,
           for (const word of words) {
             const answers = conjugate(word, formKey, register, tense, polarity)
             if (!answers) continue
-            const subKey = [formKey, register, tense, polarity].filter(Boolean).join('_')
+            const id = [word.id, formKey, register, tense, polarity].filter(Boolean).join('__')
             const spec = {
-              id: `${word.id}__${formKey}__${subKey}`,
+              id,
               word,
               formKey,
-              subKey,
               register,
               tense,
               polarity,
