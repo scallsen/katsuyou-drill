@@ -2,6 +2,7 @@ import { getAllWords } from './wordStore.js'
 import { FORMS } from './forms.js'
 import { CATEGORIES } from './categories.js'
 import { isIllegal } from './illegalCombos.js'
+import { conjugate } from './conjugation.js'
 
 // Builds a flat array of card specs from the current option selections.
 // Each spec is one (word × form × subKey) combo that has a valid conjugation.
@@ -24,12 +25,10 @@ export function buildPool({ selectedWordTypes, selectedForms, selectedRegisters,
     for (const register of regs) {
       for (const tense of tens) {
         for (const polarity of pols) {
-          const subKey = buildSubKey(formKey, { register, tense, polarity })
-          if (!subKey) continue
-
           for (const word of words) {
-            const conjugation = getConjugation(word, formKey, subKey)
-            if (!conjugation) continue
+            const answers = conjugate(word, formKey, register, tense, polarity)
+            if (!answers) continue
+            const subKey = [formKey, register, tense, polarity].filter(Boolean).join('_')
             const spec = {
               id: `${word.id}__${formKey}__${subKey}`,
               word,
@@ -38,7 +37,8 @@ export function buildPool({ selectedWordTypes, selectedForms, selectedRegisters,
               register,
               tense,
               polarity,
-              conjugation,
+              conjugation: answers[0],
+              acceptedAnswers: answers,
               variant: resolveVariant(formKey, register),
               bgColor: form.color ?? null,
             }
@@ -62,34 +62,6 @@ export function filterWords(selectedWordTypeKeys) {
       return cat && word.wordType === cat.wordType && word.group === cat.group
     })
   )
-}
-
-// Builds the sub-key used to look up a conjugation within word.forms[formKey].
-// Joins only the axes that apply to the form, in order: register, tense, polarity.
-// Returns null if a required axis has no value supplied.
-export function buildSubKey(formKey, { register, tense, polarity } = {}) {
-  const axes = FORMS[formKey]?.axes ?? []
-  const parts = []
-  for (const axis of axes) {
-    if (axis === 'register') {
-      if (!register) return null
-      parts.push(register)
-    } else if (axis === 'tense') {
-      if (!tense) return null
-      parts.push(tense)
-    } else if (axis === 'polarity') {
-      if (!polarity) return null
-      parts.push(polarity)
-    }
-  }
-  return parts.join('_') || null
-}
-
-// Looks up a specific conjugation string from a word entry.
-// Returns null if the form or sub-key doesn't exist on the word.
-export function getConjugation(word, formKey, subKey) {
-  if (!word || !formKey || !subKey) return null
-  return word.forms?.[formKey]?.[subKey] ?? null
 }
 
 // Returns the card variant key to use for a given form + register selection.

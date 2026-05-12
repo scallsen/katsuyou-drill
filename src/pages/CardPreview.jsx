@@ -7,7 +7,8 @@ import DrawerSectionHeader from '../components/DrawerSectionHeader.jsx'
 import SelectionError from '../components/SelectionError.jsx'
 import { WORD_TYPES, REGISTERS, REGISTER_KEYS, GRAMMAR_FORMS, TENSES, POLARITIES } from '../data/options.js'
 import { FORMS } from '../data/forms.js'
-import { filterWords, buildSubKey, getConjugation, resolveVariant } from '../data/drill.js'
+import { filterWords, resolveVariant } from '../data/drill.js'
+import { conjugate } from '../data/conjugation.js'
 
 function toggle(arr, val) {
   return arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val]
@@ -40,8 +41,7 @@ export default function CardPreview() {
   const activeReg     = selectedRegisters[0] ?? null
   const activeTense   = selectedTenses[0] ?? 'present'
   const activePolarity = selectedPolarities[0] ?? 'positive'
-  const subKey        = buildSubKey(activeForm, { register: activeReg, tense: activeTense, polarity: activePolarity })
-  const conjugation   = getConjugation(activeWord, activeForm, subKey)
+  const conjugation   = conjugate(activeWord, activeForm, activeReg, activeTense, activePolarity)?.[0] ?? null
   const drillVariant  = resolveVariant(activeForm, activeReg)
 
   // Values passed to the card — drill data takes priority over test controls
