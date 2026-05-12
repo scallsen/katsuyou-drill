@@ -24,7 +24,7 @@ function tone(ctx, { freq, freqEnd, vol, type = 'triangle', duration, offset = 0
 export function useSFX() {
   const ctxRef = useRef(null)
 
-  function play(name) {
+  function play(name, { pitchFactor = 1 } = {}) {
     const ctx = getCtx(ctxRef)
     if (name === 'flip_card') {
       tone(ctx, { freq: 1000, freqEnd: 500, vol: 0.15, duration: 0.1 })
@@ -32,11 +32,15 @@ export function useSFX() {
       tone(ctx, { freq: 900, freqEnd: 300, vol: 0.12, duration: 0.1, offset: 0 })
       tone(ctx, { freq: 400, freqEnd: 900, vol: 0.15, duration: 0.1, offset: 0.14 })
     } else if (name === 'flip_card_correct') {
-      tone(ctx, { freq: 350, freqEnd: 600, vol: 0.18, type: 'sine', duration: 0.1, offset: 0 })
-      tone(ctx, { freq: 600, freqEnd: 1100, vol: 0.18, type: 'sine', duration: 0.12, offset: 0.12 })
+      tone(ctx, { freq: 350 * pitchFactor, freqEnd: 600 * pitchFactor, vol: 0.18, type: 'sine', duration: 0.1, offset: 0 })
+      tone(ctx, { freq: 600 * pitchFactor, freqEnd: 1100 * pitchFactor, vol: 0.18, type: 'sine', duration: 0.12, offset: 0.12 })
     } else if (name === 'flip_card_wrong') {
-      tone(ctx, { freq: 300, freqEnd: 550, vol: 0.20, type: 'sawtooth', duration: 0.07, offset: 0 })
-      tone(ctx, { freq: 550, freqEnd: 180, vol: 0.20, type: 'sawtooth', duration: 0.20, offset: 0.07 })
+      tone(ctx, { freq: 330, freqEnd: 240, vol: 0.18, type: 'triangle', duration: 0.18, offset: 0 })
+      tone(ctx, { freq: 240, freqEnd: 140, vol: 0.18, type: 'triangle', duration: 0.24, offset: 0.16 })
+    } else if (name === 'best_streak_broken') {
+      tone(ctx, { freq: 420, freqEnd: 330, vol: 0.26, type: 'triangle', duration: 0.16, offset: 0 })
+      tone(ctx, { freq: 350, freqEnd: 270, vol: 0.26, type: 'triangle', duration: 0.16, offset: 0.14 })
+      tone(ctx, { freq: 260, freqEnd: 120, vol: 0.32, type: 'triangle', duration: 0.38, offset: 0.28 })
     }
   }
 

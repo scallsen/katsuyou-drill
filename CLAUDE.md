@@ -31,17 +31,25 @@ export const description = 'One sentence shown in the Algorithm section of the o
 
 export function init(pool, floatSize) {
   // shuffle pool, take first floatSize as float
-  return { float, pool, retired, streak, totalCorrect, totalWrong }
+  return { float, pool, retired, streak, bestStreak: 0, totalCorrect, totalWrong, prevSnapshot: null }
 }
 
 export function onCorrect(state) {
   // retire float[0], pull next card from pool, increment streak
+  // must update bestStreak and set prevSnapshot: { ...state, prevSnapshot: null }
   return newState
 }
 
 export function onWrong(state) {
   // reinsert float[0] later in float, reset streak
+  // must set prevSnapshot: { ...state, prevSnapshot: null }
   return newState
+}
+
+// optional — enables undo
+export function onUndo(state) {
+  if (!state.prevSnapshot) return state
+  return { ...state.prevSnapshot, prevSnapshot: null }
 }
 ```
 
@@ -69,6 +77,8 @@ It will automatically appear as a selectable option in the options drawer.
 | `src/engines/simpleQueue.js` | Default engine — float + wrong-card reinsertion |
 | `src/hooks/useDrill.js` | React wrapper for any engine; `ENGINES` registry; seek-on-reinit |
 | `src/hooks/useTTS.js` | Web Speech API wrapper; speaks `conjugation` on card flip-to-back; `ttsEnabled` persisted in localStorage |
+| `src/hooks/useSFX.js` | Web Audio API sound effects: `flip_card`, `draw_card`, `flip_card_correct` (pitch scales with streak), `flip_card_wrong`, `best_streak_broken` |
+| `src/components/DrillHUD.jsx` | HUD wrapper: streak display with pop/wiggle/wave animations, best streak, show/hide stats toggle, undo button |
 | `src/pages/DrillPage.jsx` | Main page — options state, pool memoization, drill rendering, `findSeekCard` |
 | `src/components/ConjugationCard/` | Card component family (CardShell, CardContent, variants) |
 | `src/pages/ColorReview.jsx` | Static color/appearance testing grid — all variants, all states |
