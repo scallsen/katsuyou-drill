@@ -753,7 +753,7 @@ export default function DrillPage() {
             overflow: 'hidden',
             transition: 'width 220ms ease',
           }}>
-            <div style={{ width: PANEL_CONTENT_W, height: '100%', overflowY: 'auto' }}>
+            <div className="sidebar-scroll" style={{ width: PANEL_CONTENT_W, height: '100%', overflowY: 'auto' }}>
               {renderPanelContent(16)}
             </div>
           </div>
@@ -798,7 +798,7 @@ export default function DrillPage() {
                 Hide
               </button>
             </div>
-            <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+            <div className="sidebar-scroll" style={{ flex: 1, overflowY: 'auto', paddingBottom: 'env(safe-area-inset-bottom)' }}>
               {renderPanelContent(20)}
             </div>
           </div>
