@@ -89,7 +89,7 @@ function findSeekCard(newPool, currentCard, axis, value) {
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
-function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, showFurigana, onPulse }) {
+function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, showFurigana, pixelFont, onPulse }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
@@ -218,6 +218,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
             word={currentCard.word.kanji}
             kana={currentCard.word.kana}
             showFurigana={showFurigana}
+            pixelFont={pixelFont}
             answer={currentCard.conjugation}
             negative={currentCard.polarity === 'negative'}
             past={currentCard.tense === 'past'}
@@ -350,6 +351,10 @@ export default function DrillPage() {
     const stored = localStorage.getItem('show-visual-effects')
     return stored === null ? true : stored === 'true'
   })
+  const [pixelFont,          setPixelFont]          = useState(() => {
+    const stored = localStorage.getItem('pixel-font')
+    return stored === null ? true : stored === 'true'
+  })
   const [pulseColor,         setPulseColor]         = useState(null)
   const isMobile = useIsMobile()
   const jaVoices = useJaVoices()
@@ -361,6 +366,7 @@ export default function DrillPage() {
   useEffect(() => { localStorage.setItem('hud-show-stats', showStreak) }, [showStreak])
   useEffect(() => { localStorage.setItem('show-furigana', showFurigana) }, [showFurigana])
   useEffect(() => { localStorage.setItem('show-visual-effects', showVisualEffects) }, [showVisualEffects])
+  useEffect(() => { localStorage.setItem('pixel-font', pixelFont) }, [pixelFont])
 
   function seek(newWordTypes, newForms, newRegs, newTenses, newPols, axis, value) {
     const newPool = buildPool({
@@ -570,6 +576,11 @@ export default function DrillPage() {
             label="Show visual effects"
           />
           <DrawerCheckbox
+            checked={pixelFont}
+            onChange={() => setPixelFont(v => !v)}
+            label="Use pixel font"
+          />
+          <DrawerCheckbox
             checked={audioEnabled}
             onChange={() => setAudioEnabled(v => !v)}
             label="Enable audio"
@@ -694,7 +705,7 @@ export default function DrillPage() {
           ) : drill.done ? (
             <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
           ) : (
-            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} onPulse={setPulseColor} />
+            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} pixelFont={pixelFont} onPulse={setPulseColor} />
           )}
         </div>
       </div>
