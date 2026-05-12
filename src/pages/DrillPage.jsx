@@ -13,6 +13,8 @@ import { useTTS } from '../hooks/useTTS.js'
 import { useSFX } from '../hooks/useSFX.js'
 import VolumeOnIcon from '../icons/volume-on.svg?react'
 import VolumeOffIcon from '../icons/volume-off.svg?react'
+import TtsOnIcon from '../icons/tts-on.svg?react'
+import TtsOffIcon from '../icons/tts-off.svg?react'
 
 const PANEL_W = 420
 const CHEVRON_W = 28
@@ -539,8 +541,8 @@ export default function DrillPage() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button
-              onClick={() => { setTtsEnabled(v => !v); setSfxEnabled(v => !v) }}
-              title={ttsEnabled ? 'Mute audio' : 'Enable audio'}
+              onClick={() => setTtsEnabled(v => !v)}
+              title={ttsEnabled ? 'Mute speech' : 'Enable speech'}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -556,6 +558,28 @@ export default function DrillPage() {
               }}
             >
               {ttsEnabled
+                ? <TtsOnIcon width={16} height={16} />
+                : <TtsOffIcon width={16} height={16} />
+              }
+            </button>
+            <button
+              onClick={() => setSfxEnabled(v => !v)}
+              title={sfxEnabled ? 'Mute sounds' : 'Enable sounds'}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 34,
+                height: 34,
+                background: 'rgba(255,255,255,0.1)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: 8,
+                cursor: 'pointer',
+                opacity: sfxEnabled ? 1 : 0.35,
+                padding: 0,
+              }}
+            >
+              {sfxEnabled
                 ? <VolumeOnIcon width={16} height={16} />
                 : <VolumeOffIcon width={16} height={16} />
               }
