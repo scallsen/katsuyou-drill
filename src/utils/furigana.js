@@ -18,3 +18,10 @@ export function buildFurigana(kanjiStr, kanaStr) {
 
   return { kanjiPart, furigana, okurigana }
 }
+
+export function buildFuriganaForConjugation(conjugation, wordKanji, wordKana) {
+  const base = buildFurigana(wordKanji, wordKana)
+  if (!base) return null
+  if (!conjugation.startsWith(base.kanjiPart)) return null
+  return { kanjiPart: base.kanjiPart, furigana: base.furigana, okurigana: conjugation.slice(base.kanjiPart.length) }
+}
