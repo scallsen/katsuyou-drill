@@ -89,7 +89,7 @@ function findSeekCard(newPool, currentCard, axis, value) {
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
-function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, onPulse }) {
+function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, showFurigana, onPulse }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
@@ -196,6 +196,8 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, onPu
           <ConjugationCard
             variant={currentCard.variant}
             word={currentCard.word.kanji}
+            kana={currentCard.word.kana}
+            showFurigana={showFurigana}
             answer={currentCard.conjugation}
             negative={currentCard.polarity === 'negative'}
             past={currentCard.tense === 'past'}
@@ -320,6 +322,10 @@ export default function DrillPage() {
     const stored = localStorage.getItem('hud-show-stats')
     return stored === null ? true : stored === 'true'
   })
+  const [showFurigana,       setShowFurigana]       = useState(() => {
+    const stored = localStorage.getItem('show-furigana')
+    return stored === null ? false : stored === 'true'
+  })
   const [pulseColor,         setPulseColor]         = useState(null)
   const isMobile = useIsMobile()
   const jaVoices = useJaVoices()
@@ -329,6 +335,7 @@ export default function DrillPage() {
   useEffect(() => { localStorage.setItem('sfx-enabled', sfxEnabled) }, [sfxEnabled])
   useEffect(() => { localStorage.setItem('tts-voice', ttsVoice) }, [ttsVoice])
   useEffect(() => { localStorage.setItem('hud-show-stats', showStreak) }, [showStreak])
+  useEffect(() => { localStorage.setItem('show-furigana', showFurigana) }, [showFurigana])
 
   function seek(newWordTypes, newForms, newRegs, newTenses, newPols, axis, value) {
     const newPool = buildPool({
@@ -528,9 +535,14 @@ export default function DrillPage() {
             label="Show streak"
           />
           <DrawerCheckbox
+            checked={showFurigana}
+            onChange={() => setShowFurigana(v => !v)}
+            label="Show furigana"
+          />
+          <DrawerCheckbox
             checked={audioEnabled}
             onChange={() => setAudioEnabled(v => !v)}
-            label="Audio"
+            label="Enable audio"
           />
           {audioEnabled && (
             <>
@@ -651,7 +663,7 @@ export default function DrillPage() {
           ) : drill.done ? (
             <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
           ) : (
-            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} onPulse={setPulseColor} />
+            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} onPulse={setPulseColor} />
           )}
         </div>
       </div>

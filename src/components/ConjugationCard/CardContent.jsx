@@ -1,6 +1,7 @@
 import { getTextColor } from '../../utils/color.js'
+import { buildFurigana } from '../../utils/furigana.js'
 
-export default function CardContent({ label, n, past, word, answerLabel = null, answerBg = null }) {
+export default function CardContent({ label, n, past, word, kana = null, showFurigana = false, answerLabel = null, answerBg = null }) {
   const textColor = answerBg ? getTextColor(answerBg) : null
   return (
     <div
@@ -55,7 +56,32 @@ export default function CardContent({ label, n, past, word, answerLabel = null, 
             textShadow: '2px 2px 0 rgba(0,0,0,0.25)',
           }}
         >
-          {word}
+          {showFurigana && kana ? (() => {
+            const f = buildFurigana(word, kana)
+            if (!f) return word
+            return (
+              <span>
+                <span style={{ position: 'relative', display: 'inline-block' }}>
+                  <span style={{
+                    position: 'absolute',
+                    bottom: '100%',
+                    marginBottom: 2,
+                    left: 0,
+                    right: 0,
+                    textAlign: 'center',
+                    fontSize: '0.45em',
+                    fontFamily: "'DotGothic16', sans-serif",
+                    letterSpacing: '0.05em',
+                    whiteSpace: 'nowrap',
+                  }}>
+                    {f.furigana}
+                  </span>
+                  {f.kanjiPart}
+                </span>
+                {f.okurigana}
+              </span>
+            )
+          })() : word}
         </div>
         <div
           style={{
