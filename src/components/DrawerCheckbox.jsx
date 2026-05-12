@@ -1,10 +1,10 @@
-export default function DrawerCheckbox({ checked, onChange, label, indent = 0 }) {
+export default function DrawerCheckbox({ checked, onChange, label, subtext, indent = 0 }) {
   return (
     <div
       onClick={onChange}
       style={{
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         gap: 8,
         paddingLeft: indent * 14,
         cursor: 'pointer',
@@ -15,6 +15,7 @@ export default function DrawerCheckbox({ checked, onChange, label, indent = 0 })
         width: 14,
         height: 14,
         flexShrink: 0,
+        marginTop: 1,
         border: checked ? 'none' : '1px solid rgba(255,255,255,0.35)',
         borderRadius: 3,
         background: checked ? 'rgba(255,255,255,0.85)' : 'transparent',
@@ -29,9 +30,16 @@ export default function DrawerCheckbox({ checked, onChange, label, indent = 0 })
           </svg>
         )}
       </div>
-      <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: 13, fontFamily: 'inherit' }}>
-        {label}
-      </span>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: 13, fontFamily: 'inherit' }}>
+          {label}
+        </span>
+        {subtext && (
+          <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, fontFamily: 'inherit' }}>
+            {subtext}
+          </span>
+        )}
+      </div>
     </div>
   )
 }

@@ -584,6 +584,7 @@ export default function DrillPage() {
                 checked={sfxEnabled}
                 onChange={() => setSfxEnabled(v => !v)}
                 label="Sound effects"
+                subtext="Silent mode may mute sound effects"
                 indent={1}
               />
             </>

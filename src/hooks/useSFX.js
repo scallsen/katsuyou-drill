@@ -1,8 +1,11 @@
 import { useRef } from 'react'
 
-function getCtx(ctxRef) {
-  if (!ctxRef.current) ctxRef.current = new AudioContext()
-  if (ctxRef.current.state === 'suspended') ctxRef.current.resume()
+async function getCtx(ctxRef) {
+  if (!ctxRef.current) {
+    const Ctx = window.AudioContext || window.webkitAudioContext
+    ctxRef.current = new Ctx()
+  }
+  if (ctxRef.current.state === 'suspended') await ctxRef.current.resume()
   return ctxRef.current
 }
 
@@ -24,8 +27,8 @@ function tone(ctx, { freq, freqEnd, vol, type = 'triangle', duration, offset = 0
 export function useSFX() {
   const ctxRef = useRef(null)
 
-  function play(name, { pitchFactor = 1 } = {}) {
-    const ctx = getCtx(ctxRef)
+  async function play(name, { pitchFactor = 1 } = {}) {
+    const ctx = await getCtx(ctxRef)
     if (name === 'flip_card') {
       tone(ctx, { freq: 1000, freqEnd: 500, vol: 0.15, duration: 0.1 })
     } else if (name === 'draw_card') {
