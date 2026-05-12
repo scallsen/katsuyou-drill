@@ -37,8 +37,10 @@ export function init(pool, floatSize = 7) {
     pool:         shuffled.slice(floatSize),
     retired:      [],
     streak:       0,
+    bestStreak:   0,
     totalCorrect: 0,
     totalWrong:   0,
+    prevSnapshot: null,
   }
 }
 
@@ -48,14 +50,17 @@ export function onCorrect(state) {
   const idx  = state.pool.length ? nextPoolIndex(state.pool, rest) : -1
   const next = idx >= 0 ? state.pool[idx] : null
   const newPool = next ? state.pool.filter((_, i) => i !== idx) : state.pool
+  const newStreak = state.streak + 1
 
   return {
     ...state,
     float:        next ? [...rest, next] : rest,
     pool:         newPool,
     retired:      [...state.retired, current],
-    streak:       state.streak + 1,
+    streak:       newStreak,
+    bestStreak:   Math.max(state.bestStreak, newStreak),
     totalCorrect: state.totalCorrect + 1,
+    prevSnapshot: { ...state, prevSnapshot: null },
   }
 }
 
@@ -66,8 +71,14 @@ export function onWrong(state) {
 
   return {
     ...state,
-    float:       newFloat,
-    streak:      0,
-    totalWrong:  state.totalWrong + 1,
+    float:        newFloat,
+    streak:       0,
+    totalWrong:   state.totalWrong + 1,
+    prevSnapshot: { ...state, prevSnapshot: null },
   }
+}
+
+export function onUndo(state) {
+  if (!state.prevSnapshot) return state
+  return { ...state.prevSnapshot, prevSnapshot: null }
 }

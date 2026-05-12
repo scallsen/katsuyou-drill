@@ -33,17 +33,22 @@ export function useDrill(pool, { engine = SimpleQueue, floatSize = 7, seekCardId
 
   const onCorrect = useCallback(() => setState(s => engine.onCorrect(s)), [engine])
   const onWrong   = useCallback(() => setState(s => engine.onWrong(s)),   [engine])
+  const onUndo    = useCallback(() => setState(s => engine.onUndo ? engine.onUndo(s) : s), [engine])
   const restart   = useCallback(() => setState(engine.init(poolRef.current, floatSize)), [engine, floatSize])
 
   return {
     currentCard:  state.float[0] ?? null,
     streak:       state.streak,
+    bestStreak:   state.bestStreak ?? 0,
     totalCorrect: state.totalCorrect,
     totalWrong:   state.totalWrong,
     remaining:    state.pool.length,
     done:         state.float.length === 0,
+    canUndo:      state.prevSnapshot !== null,
+    prevCard:     state.prevSnapshot?.float[0] ?? null,
     onCorrect,
     onWrong,
+    onUndo,
     restart,
   }
 }

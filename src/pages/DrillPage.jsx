@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 import ConjugationCard from '../components/ConjugationCard/index.jsx'
 import VARIANTS from '../components/ConjugationCard/variants.js'
 import PlainBg from '../components/ConjugationCard/backgrounds/PlainBg.jsx'
+import DrillHUD from '../components/DrillHUD.jsx'
 import SelectButton from '../components/SelectButton.jsx'
 import DrawerSectionHeader from '../components/DrawerSectionHeader.jsx'
 import SelectionError from '../components/SelectionError.jsx'
@@ -90,30 +91,43 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, onPulse }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
-  const [streakLost, setStreakLost] = useState(null)
-  const { currentCard, streak, totalCorrect, totalWrong, remaining } = drill
+  const { currentCard, streak, bestStreak, totalCorrect, totalWrong, remaining, canUndo, prevCard, onUndo } = drill
   const isFlipped = flippedCardId === currentCard.id
   const tts = useTTS()
 
+  // Optimistic streak — updates immediately on button press, syncs after engine resolves
+  const [localStreak,     setLocalStreak]     = useState(streak)
+  const [localBestStreak, setLocalBestStreak] = useState(bestStreak)
+  useEffect(() => { setLocalStreak(streak) },     [streak])
+  useEffect(() => { setLocalBestStreak(bestStreak) }, [bestStreak])
+
   const isFlippedRef = useRef(isFlipped)
   const transitioningRef = useRef(false)
+  const localStreakRef = useRef(localStreak)
   useEffect(() => { isFlippedRef.current = isFlipped }, [isFlipped])
   useEffect(() => { transitioningRef.current = transitioning }, [transitioning])
+  useEffect(() => { localStreakRef.current = localStreak }, [localStreak])
   const sfx = useSFX()
 
   const handleVerdictRef = useRef()
   handleVerdictRef.current = (isCorrect) => {
     if (transitioningRef.current) return
     const action = isCorrect ? drill.onCorrect : drill.onWrong
-    if (sfxEnabled) sfx.play(isCorrect ? 'flip_card_correct' : 'flip_card_wrong')
+    const breaksBest = !isCorrect && localStreak > 0 && localStreak === localBestStreak
+    if (sfxEnabled) sfx.play(
+      isCorrect ? 'flip_card_correct' : breaksBest ? 'best_streak_broken' : 'flip_card_wrong',
+      isCorrect ? { pitchFactor: 1 + Math.min(localStreak + 1, 20) * 0.03 } : {}
+    )
+    if (isCorrect) {
+      const next = localStreak + 1
+      setLocalStreak(next)
+      setLocalBestStreak(prev => Math.max(prev, next))
+    } else {
+      setLocalStreak(0)
+    }
     setTransitioning(true)
     setExitDir(isCorrect ? 'up' : 'down')
     onPulse(isCorrect ? 'correct' : 'wrong')
-    if (!isCorrect && streak > 0) {
-      setStreakLost('visible')
-      setTimeout(() => setStreakLost('fading'), 250)
-      setTimeout(() => setStreakLost(null), 400)
-    }
     setTimeout(() => {
       action()
       setExitDir(null)
@@ -156,8 +170,8 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, onPulse }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [currentCard.id, drill])
 
-  const bgComponent    = currentCard.register === 'plain' ? PlainBg : null
-  const registerLabel  = currentCard.register ? VARIANTS[currentCard.register]?.label ?? null : null
+  const bgComponent   = currentCard.register === 'plain' ? PlainBg : null
+  const registerLabel = currentCard.register ? VARIANTS[currentCard.register]?.label ?? null : null
 
   let cardClass = ''
   if (exitDir === 'up') cardClass = 'card-exit-up'
@@ -165,87 +179,77 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, onPulse }) {
   else if (transitioning) cardClass = 'card-entering'
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+    <DrillHUD
+      streak={localStreak}
+      bestStreak={localBestStreak}
+      totalCorrect={totalCorrect}
+      totalWrong={totalWrong}
+      remaining={remaining}
+      canUndo={canUndo}
+      onUndo={onUndo}
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+        <div key={currentCard.id} className={cardClass}>
+          <ConjugationCard
+            variant={currentCard.variant}
+            word={currentCard.word.kanji}
+            answer={currentCard.conjugation}
+            negative={currentCard.polarity === 'negative'}
+            past={currentCard.tense === 'past'}
+            bgComponent={bgComponent}
+            bgComponentColor={currentCard.bgColor}
+            registerLabel={registerLabel}
+            flipped={isFlipped}
+            onFlip={handleFlip}
+          />
+        </div>
 
-      <div style={{ height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {streak > 0 && !streakLost && (
-          <div style={{ color: '#fff', fontSize: 20, fontWeight: 700, fontFamily: "'DotGothic16', sans-serif", letterSpacing: '0.05em' }}>
-            Current streak: {streak}
-          </div>
-        )}
-        {streakLost && (
-          <div style={{ color: '#f87171', fontSize: 16, fontWeight: 700, fontFamily: "'DotGothic16', sans-serif", opacity: streakLost === 'fading' ? 0 : 1, transition: 'opacity 0.3s ease' }}>
-            Streak lost
-          </div>
-        )}
+        <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {isFlipped ? (
+            <div style={{ display: 'flex', gap: 12 }}>
+              <button
+                onClick={() => handleVerdictRef.current(false)}
+                disabled={transitioning}
+                className="verdict-btn"
+                style={{
+                  padding: '10px 28px',
+                  fontSize: 14,
+                  fontFamily: 'inherit',
+                  background: 'rgba(192, 57, 43, 0.85)',
+                  color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  borderRadius: 8,
+                  cursor: 'pointer',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                Wrong [Z]
+              </button>
+              <button
+                onClick={() => handleVerdictRef.current(true)}
+                disabled={transitioning}
+                className="verdict-btn"
+                style={{
+                  padding: '10px 28px',
+                  fontSize: 14,
+                  fontFamily: 'inherit',
+                  background: 'rgba(39, 174, 96, 0.85)',
+                  color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  borderRadius: 8,
+                  cursor: 'pointer',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                Correct [X]
+              </button>
+            </div>
+          ) : (
+            <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>Click or Space to flip</div>
+          )}
+        </div>
       </div>
-
-      <div key={currentCard.id} className={cardClass}>
-        <ConjugationCard
-          variant={currentCard.variant}
-          word={currentCard.word.kanji}
-          answer={currentCard.conjugation}
-          negative={currentCard.polarity === 'negative'}
-          past={currentCard.tense === 'past'}
-          bgComponent={bgComponent}
-          bgComponentColor={currentCard.bgColor}
-          registerLabel={registerLabel}
-          flipped={isFlipped}
-          onFlip={handleFlip}
-        />
-      </div>
-
-      <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {isFlipped ? (
-          <div style={{ display: 'flex', gap: 12 }}>
-            <button
-              onClick={() => handleVerdictRef.current(false)}
-              disabled={transitioning}
-              className="verdict-btn"
-              style={{
-                padding: '10px 28px',
-                fontSize: 14,
-                fontFamily: 'inherit',
-                background: 'rgba(192, 57, 43, 0.85)',
-                color: '#fff',
-                border: '1px solid rgba(255,255,255,0.15)',
-                borderRadius: 8,
-                cursor: 'pointer',
-                letterSpacing: '0.05em',
-              }}
-            >
-              Wrong [Z]
-            </button>
-            <button
-              onClick={() => handleVerdictRef.current(true)}
-              disabled={transitioning}
-              className="verdict-btn"
-              style={{
-                padding: '10px 28px',
-                fontSize: 14,
-                fontFamily: 'inherit',
-                background: 'rgba(39, 174, 96, 0.85)',
-                color: '#fff',
-                border: '1px solid rgba(255,255,255,0.15)',
-                borderRadius: 8,
-                cursor: 'pointer',
-                letterSpacing: '0.05em',
-              }}
-            >
-              Correct [X]
-            </button>
-          </div>
-        ) : (
-          <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>Click or Space to flip</div>
-        )}
-      </div>
-
-      <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.25)', fontSize: 12, fontFamily: "'DotGothic16', sans-serif" }}>
-        <span>{remaining} remaining</span>
-        <span>{totalCorrect} correct</span>
-        {totalWrong > 0 && <span>{totalWrong} wrong</span>}
-      </div>
-    </div>
+    </DrillHUD>
   )
 }
 
