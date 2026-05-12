@@ -6,7 +6,7 @@ Japanese verb conjugation drill app. Vite + React, no TypeScript.
 - **Always create a feature branch before making any code changes.** Never commit directly to `main`.
 
 ## Conventions
-- **Inline styles only** — no CSS modules, no Tailwind. The one exception is `FlipCard.css` (3D flip animation that needs CSS classes).
+- **Inline styles only** — no CSS modules, no Tailwind. CSS files are only for things that can't be expressed inline: `FlipCard.css` (3D flip animation), `global.css` (pseudo-element styles like custom scrollbars).
 - **No comments** unless the WHY is non-obvious (a hidden constraint, a workaround, a subtle invariant).
 - **No TypeScript** — plain JS throughout.
 - `src/pages/CardPreview.jsx` is a dev sandbox for visual testing. `DrillPage` is the real entry point (`App.jsx` renders it).
