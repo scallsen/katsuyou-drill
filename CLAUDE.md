@@ -66,6 +66,35 @@ export const ENGINES = {
 
 It will automatically appear as a selectable option in the options drawer.
 
+## Word list distribution targets (`src/data/words.json`)
+
+Target counts to maintain when adding new words. Prioritise N5 then N4; only go to N3 if a group can't reach its target with N5/N4 alone (mainly affects ぬ and ぐ).
+
+**Group 1 verbs (~55 total)** — distribute by conjugation-behaviour ending, not evenly:
+| Ending | Target | Notes |
+|--------|--------|-------|
+| く | 8–10 | includes 行く (special て form: いって) |
+| ぐ | 4–5 | て form: いで |
+| す | 8–10 | |
+| つ | 5–6 | |
+| う | 7–8 | |
+| る-godan | 5–6 | only true godan-る (e.g. 乗る, 走る, 知る); never ichidan |
+| ぬ | 1–2 | 死ぬ is the only common N5/N4 word |
+| ぶ | 5–6 | |
+| む | 6–7 | |
+
+**Group 2 verbs (ichidan) — ~35 total**
+
+**Group 3 (irregular) — 6–8 total** — する + くる, plus compound する verbs (e.g. 勉強する, 運動する)
+
+**い-adjectives — 15–17 total**
+
+**な-adjectives — 15–17 total**
+
+**Nouns — 20–25 total**
+
+IDs use the romaji of the kana reading. Disambiguate homophones with a suffix: `kiru_cut` (切る, godan) vs `kiru_wear` (着る, ichidan); `kaeru` (帰る, godan) vs `kaeru_change` (変える, ichidan). The `romaji` field always holds the bare pronunciation without the suffix.
+
 ## Key files
 
 | File | Purpose |
