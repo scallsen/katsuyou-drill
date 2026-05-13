@@ -1,0 +1,74 @@
+{
+  "groups": [
+    {
+      "key": "verb",
+      "label": "Verb forms",
+      "forms": [
+        { "id": "plain",  "label": "Plain form" },
+        { "id": "polite", "label": "Polite (ます)" },
+        { "id": "te",     "label": "て-form" },
+        { "id": "potential",   "label": "Potential" },
+        { "id": "volitional",  "label": "Volitional" },
+        { "id": "conditional", "label": "Conditional" },
+        {
+          "id": "passive",
+          "label": "Passive",
+          "title": "Passive form",
+          "jp": "受身形",
+          "usage": "Used when the subject receives an action. Can carry a nuance of inconvenience or suffering when the action is unwanted.",
+          "sections": [
+            {
+              "label": "う VERBS",
+              "rows": [
+                { "from": "く", "to": "かれる" },
+                { "from": "ぐ", "to": "がれる" },
+                { "from": "す", "to": "される" },
+                { "from": "つ", "to": "たれる" },
+                { "from": "う", "to": "われる" },
+                { "from": "る", "to": "られる" },
+                { "from": "ぬ", "to": "なれる" },
+                { "from": "ぶ", "to": "ばれる" },
+                { "from": "む", "to": "まれる" }
+              ]
+            },
+            {
+              "label": "る VERBS",
+              "rows": [
+                { "from": "る", "to": "られる" }
+              ],
+              "note": "※ Same form as potential — context decides"
+            },
+            {
+              "label": "IRREGULAR",
+              "rows": [
+                { "from": "する", "to": "される" },
+                { "from": "くる", "to": "こられる" }
+              ]
+            }
+          ]
+        },
+        { "id": "causative",        "label": "Causative" },
+        { "id": "passive_causative", "label": "Passive-causative" },
+        { "id": "imperative",        "label": "Imperative" }
+      ]
+    },
+    {
+      "key": "adjective",
+      "label": "Adjective forms",
+      "forms": [
+        { "id": "adj_plain",       "label": "Plain / polite" },
+        { "id": "adj_te",          "label": "て-form" },
+        { "id": "adj_conditional", "label": "Conditional" },
+        { "id": "adverbial",       "label": "Adverbial" }
+      ]
+    },
+    {
+      "key": "noun",
+      "label": "Noun forms",
+      "forms": [
+        { "id": "noun_plain", "label": "Noun + だ / です" },
+        { "id": "noun_te",    "label": "Noun + で" }
+      ]
+    }
+  ]
+}
