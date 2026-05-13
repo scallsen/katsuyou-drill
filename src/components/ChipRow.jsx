@@ -14,10 +14,10 @@ function chipStyle(active) {
     fontFamily: 'inherit',
     cursor: 'pointer',
     textAlign: 'center',
-    borderRadius: 14,
-    border: active ? '1.5px solid rgba(255,255,255,0.45)' : '1px solid rgba(255,255,255,0.15)',
-    background: active ? 'rgba(255,255,255,0.14)' : 'transparent',
-    color: active ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.38)',
+    borderRadius: 6,
+    border: active ? '2px solid #aaaaaa' : '1px solid rgba(255,255,255,0.18)',
+    background: active ? '#ffffff' : 'transparent',
+    color: active ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.5)',
     transition: 'background 130ms, color 130ms, border-color 130ms',
   }
 }
