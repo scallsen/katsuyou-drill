@@ -3,7 +3,7 @@ import { PlainBg } from './backgrounds/index.js'
 
 const BG_COMPONENTS = { plain: PlainBg }
 
-const VARIANT_KEYS = ['plain', 'polite', 'te', 'potential', 'volitional', 'conditional', 'passive', 'causative', 'passive_causative', 'imperative', 'adverbial']
+const VARIANT_KEYS = ['plain', 'polite', 'te', 'potential', 'volitional', 'conditional', 'passive', 'causative', 'passive_causative', 'imperative']
 
 const VARIANTS = Object.fromEntries(
   VARIANT_KEYS.map(key => [key, {

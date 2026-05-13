@@ -387,7 +387,6 @@ export default function DrillPage() {
   }
 
   const verbSelected     = ['u-verb', 'ru-verb', 'irregular'].some(k => selectedWordTypes.includes(k))
-  const registerVisible  = selectedWordTypes.length > 0
   const drillMode    = selectedWordTypes.length > 0
 
   const poolKey = [selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, selectedPolarities]
@@ -463,18 +462,16 @@ export default function DrillPage() {
               setSelectedTenses(newSel)
             }}
           />
-          {registerVisible && (
-            <ChipRow
-              label="Register"
-              options={REGISTERS.map(({ key }) => ({ key, label: VARIANTS[key].label }))}
-              selected={selectedRegisters}
-              axis="register"
-              onChange={(newSel, axis, val) => {
-                seek(selectedWordTypes, selectedForms, newSel, selectedTenses, selectedPolarities, axis, val)
-                setSelectedRegisters(newSel)
-              }}
-            />
-          )}
+          <ChipRow
+            label="Register"
+            options={REGISTERS.map(({ key }) => ({ key, label: VARIANTS[key].label }))}
+            selected={selectedRegisters}
+            axis="register"
+            onChange={(newSel, axis, val) => {
+              seek(selectedWordTypes, selectedForms, newSel, selectedTenses, selectedPolarities, axis, val)
+              setSelectedRegisters(newSel)
+            }}
+          />
         </div>
 
         {/* ── Separator + Section 3: Verb Forms ── */}

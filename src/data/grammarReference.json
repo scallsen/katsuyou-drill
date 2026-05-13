@@ -4,12 +4,227 @@
       "key": "verb",
       "label": "Verb forms",
       "forms": [
-        { "id": "plain",  "label": "Plain form" },
-        { "id": "polite", "label": "Polite (ます)" },
-        { "id": "te",     "label": "て-form" },
-        { "id": "potential",   "label": "Potential" },
-        { "id": "volitional",  "label": "Volitional" },
-        { "id": "conditional", "label": "Conditional" },
+        {
+          "id": "plain",
+          "label": "Plain form",
+          "title": "Plain form",
+          "jp": "辞書形",
+          "usage": "The dictionary form. Used in casual speech and as the base for all other conjugations.",
+          "sections": [
+            {
+              "label": "う VERBS",
+              "rows": [
+                { "from": "positive", "to": "dictionary form" },
+                { "from": "negative", "to": "～ない" },
+                { "from": "past", "to": "～た" },
+                { "from": "past neg", "to": "～なかった" }
+              ]
+            },
+            {
+              "label": "る VERBS",
+              "rows": [
+                { "from": "positive", "to": "dictionary form" },
+                { "from": "negative", "to": "～ない" },
+                { "from": "past", "to": "～た" },
+                { "from": "past neg", "to": "～なかった" }
+              ]
+            },
+            {
+              "label": "IRREGULAR",
+              "rows": [
+                { "from": "する", "to": "しない / した / しなかった" },
+                { "from": "くる", "to": "こない / きた / こなかった" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "polite",
+          "label": "Polite (ます)",
+          "title": "Polite form",
+          "jp": "丁寧形",
+          "usage": "Standard polite register. Used with strangers, in formal situations, and professional contexts.",
+          "sections": [
+            {
+              "label": "う VERBS (い-row + ます)",
+              "rows": [
+                { "from": "く", "to": "きます" },
+                { "from": "ぐ", "to": "ぎます" },
+                { "from": "す", "to": "します" },
+                { "from": "つ", "to": "ちます" },
+                { "from": "う", "to": "います" },
+                { "from": "る", "to": "ります" },
+                { "from": "ぬ", "to": "にます" },
+                { "from": "ぶ", "to": "びます" },
+                { "from": "む", "to": "みます" }
+              ]
+            },
+            {
+              "label": "る VERBS",
+              "rows": [
+                { "from": "る", "to": "ます" }
+              ]
+            },
+            {
+              "label": "IRREGULAR",
+              "rows": [
+                { "from": "する", "to": "します" },
+                { "from": "くる", "to": "きます" }
+              ]
+            },
+            {
+              "label": "POLITE FORMS",
+              "rows": [
+                { "from": "positive", "to": "～ます" },
+                { "from": "negative", "to": "～ません" },
+                { "from": "past", "to": "～ました" },
+                { "from": "past neg", "to": "～ませんでした" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "te",
+          "label": "て-form",
+          "title": "て-form",
+          "jp": "て形",
+          "usage": "Connects sequential actions, makes requests, and describes ongoing state. Foundation for many compound forms.",
+          "sections": [
+            {
+              "label": "う VERBS",
+              "rows": [
+                { "from": "く", "to": "いて" },
+                { "from": "ぐ", "to": "いで" },
+                { "from": "す", "to": "して" },
+                { "from": "つ・う・る", "to": "って" },
+                { "from": "ぬ・ぶ・む", "to": "んで" }
+              ],
+              "note": "※ exception: 行く → 行って"
+            },
+            {
+              "label": "る VERBS",
+              "rows": [
+                { "from": "る", "to": "て" }
+              ]
+            },
+            {
+              "label": "IRREGULAR",
+              "rows": [
+                { "from": "する", "to": "して" },
+                { "from": "くる", "to": "きて" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "potential",
+          "label": "Potential",
+          "title": "Potential form",
+          "jp": "可能形",
+          "usage": "Expresses ability or possibility — can do something. Group 2 potential is identical to passive; rely on context.",
+          "sections": [
+            {
+              "label": "う VERBS (え-row + る)",
+              "rows": [
+                { "from": "く", "to": "ける" },
+                { "from": "ぐ", "to": "げる" },
+                { "from": "す", "to": "せる" },
+                { "from": "つ", "to": "てる" },
+                { "from": "う", "to": "える" },
+                { "from": "る", "to": "れる" },
+                { "from": "ぬ", "to": "ねる" },
+                { "from": "ぶ", "to": "べる" },
+                { "from": "む", "to": "める" }
+              ]
+            },
+            {
+              "label": "る VERBS",
+              "rows": [
+                { "from": "る", "to": "られる" }
+              ],
+              "note": "※ same form as passive — context decides"
+            },
+            {
+              "label": "IRREGULAR",
+              "rows": [
+                { "from": "する", "to": "できる" },
+                { "from": "くる", "to": "こられる" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "volitional",
+          "label": "Volitional",
+          "title": "Volitional form",
+          "jp": "意向形",
+          "usage": "Expresses the speaker's intention or an invitation — 'let's do' or 'I think I will do'.",
+          "sections": [
+            {
+              "label": "う VERBS (お-row + う)",
+              "rows": [
+                { "from": "く", "to": "こう" },
+                { "from": "ぐ", "to": "ごう" },
+                { "from": "す", "to": "そう" },
+                { "from": "つ", "to": "とう" },
+                { "from": "う", "to": "おう" },
+                { "from": "る", "to": "ろう" },
+                { "from": "ぬ", "to": "のう" },
+                { "from": "ぶ", "to": "ぼう" },
+                { "from": "む", "to": "もう" }
+              ]
+            },
+            {
+              "label": "る VERBS",
+              "rows": [
+                { "from": "る", "to": "よう" }
+              ]
+            },
+            {
+              "label": "IRREGULAR",
+              "rows": [
+                { "from": "する", "to": "しよう" },
+                { "from": "くる", "to": "こよう" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "conditional",
+          "label": "Conditional",
+          "title": "Conditional form (ば)",
+          "jp": "仮定形",
+          "usage": "Expresses a hypothetical condition — 'if X, then Y'. More hypothetical and formal in nuance than たら.",
+          "sections": [
+            {
+              "label": "う VERBS (え-row + ば)",
+              "rows": [
+                { "from": "く", "to": "けば" },
+                { "from": "ぐ", "to": "げば" },
+                { "from": "す", "to": "せば" },
+                { "from": "つ", "to": "てば" },
+                { "from": "う", "to": "えば" },
+                { "from": "る", "to": "れば" },
+                { "from": "ぬ", "to": "ねば" },
+                { "from": "ぶ", "to": "べば" },
+                { "from": "む", "to": "めば" }
+              ]
+            },
+            {
+              "label": "る VERBS",
+              "rows": [
+                { "from": "る", "to": "れば" }
+              ]
+            },
+            {
+              "label": "IRREGULAR",
+              "rows": [
+                { "from": "する", "to": "すれば" },
+                { "from": "くる", "to": "くれば" }
+              ]
+            }
+          ]
+        },
         {
           "id": "passive",
           "label": "Passive",
@@ -18,7 +233,7 @@
           "usage": "Used when the subject receives an action. Can carry a nuance of inconvenience or suffering when the action is unwanted.",
           "sections": [
             {
-              "label": "う VERBS",
+              "label": "う VERBS (あ-row + れる)",
               "rows": [
                 { "from": "く", "to": "かれる" },
                 { "from": "ぐ", "to": "がれる" },
@@ -36,7 +251,7 @@
               "rows": [
                 { "from": "る", "to": "られる" }
               ],
-              "note": "※ Same form as potential — context decides"
+              "note": "※ same form as potential — context decides"
             },
             {
               "label": "IRREGULAR",
@@ -47,27 +262,264 @@
             }
           ]
         },
-        { "id": "causative",        "label": "Causative" },
-        { "id": "passive_causative", "label": "Passive-causative" },
-        { "id": "imperative",        "label": "Imperative" }
+        {
+          "id": "causative",
+          "label": "Causative",
+          "title": "Causative form",
+          "jp": "使役形",
+          "usage": "Makes or lets someone do something. The context and particles determine whether it expresses compulsion or permission.",
+          "sections": [
+            {
+              "label": "う VERBS (あ-row + せる)",
+              "rows": [
+                { "from": "く", "to": "かせる" },
+                { "from": "ぐ", "to": "がせる" },
+                { "from": "す", "to": "させる" },
+                { "from": "つ", "to": "たせる" },
+                { "from": "う", "to": "わせる" },
+                { "from": "る", "to": "らせる" },
+                { "from": "ぬ", "to": "なせる" },
+                { "from": "ぶ", "to": "ばせる" },
+                { "from": "む", "to": "ませる" }
+              ]
+            },
+            {
+              "label": "る VERBS",
+              "rows": [
+                { "from": "る", "to": "させる" }
+              ]
+            },
+            {
+              "label": "IRREGULAR",
+              "rows": [
+                { "from": "する", "to": "させる" },
+                { "from": "くる", "to": "こさせる" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "passive_causative",
+          "label": "Passive-causative",
+          "title": "Passive-causative form",
+          "jp": "受身使役形",
+          "usage": "Being made to do something unwillingly. Combines causative and passive — always carries a sense of reluctance or imposition.",
+          "sections": [
+            {
+              "label": "う VERBS (あ-row + せられる)",
+              "rows": [
+                { "from": "く", "to": "かせられる" },
+                { "from": "ぐ", "to": "がせられる" },
+                { "from": "す", "to": "させられる" },
+                { "from": "つ", "to": "たせられる" },
+                { "from": "う", "to": "わせられる" },
+                { "from": "る", "to": "らせられる" },
+                { "from": "ぬ", "to": "なせられる" },
+                { "from": "ぶ", "to": "ばせられる" },
+                { "from": "む", "to": "ませられる" }
+              ],
+              "note": "※ contracted form (あ-row + される) used in casual speech — not valid for す-verbs"
+            },
+            {
+              "label": "る VERBS",
+              "rows": [
+                { "from": "る", "to": "させられる" }
+              ]
+            },
+            {
+              "label": "IRREGULAR",
+              "rows": [
+                { "from": "する", "to": "させられる" },
+                { "from": "くる", "to": "こさせられる" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "imperative",
+          "label": "Imperative",
+          "title": "Imperative form",
+          "jp": "命令形",
+          "usage": "Direct command. Blunt and can be rude — used in emergencies, martial arts, or between close friends.",
+          "sections": [
+            {
+              "label": "う VERBS (え-row)",
+              "rows": [
+                { "from": "く", "to": "け" },
+                { "from": "ぐ", "to": "げ" },
+                { "from": "す", "to": "せ" },
+                { "from": "つ", "to": "て" },
+                { "from": "う", "to": "え" },
+                { "from": "る", "to": "れ" },
+                { "from": "ぬ", "to": "ね" },
+                { "from": "ぶ", "to": "べ" },
+                { "from": "む", "to": "め" }
+              ]
+            },
+            {
+              "label": "る VERBS",
+              "rows": [
+                { "from": "る", "to": "ろ" }
+              ],
+              "note": "※ よ is a softer alternative (食べよ)"
+            },
+            {
+              "label": "IRREGULAR",
+              "rows": [
+                { "from": "する", "to": "しろ" },
+                { "from": "くる", "to": "こい" }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
       "key": "adjective",
       "label": "Adjective forms",
       "forms": [
-        { "id": "adj_plain",       "label": "Plain / polite" },
-        { "id": "adj_te",          "label": "て-form" },
-        { "id": "adj_conditional", "label": "Conditional" },
-        { "id": "adverbial",       "label": "Adverbial" }
+        {
+          "id": "adj_plain",
+          "label": "Plain / polite",
+          "title": "Adjective plain / polite",
+          "jp": "形容詞",
+          "usage": "い-adjectives inflect directly. な-adjectives use だ/です and behave similarly to nouns.",
+          "sections": [
+            {
+              "label": "い-ADJECTIVES",
+              "rows": [
+                { "from": "positive", "to": "～い / ～いです" },
+                { "from": "negative", "to": "～くない / ～くないです" },
+                { "from": "past", "to": "～かった / ～かったです" },
+                { "from": "past neg", "to": "～くなかった" }
+              ],
+              "note": "※ exception: いい (good) → よくない / よかった"
+            },
+            {
+              "label": "な-ADJECTIVES",
+              "rows": [
+                { "from": "positive", "to": "～だ / ～です" },
+                { "from": "negative", "to": "～じゃない / ～ではない" },
+                { "from": "past", "to": "～だった / ～でした" },
+                { "from": "past neg", "to": "～じゃなかった" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "adj_te",
+          "label": "て-form",
+          "title": "Adjective て-form",
+          "jp": "形容詞て形",
+          "usage": "Connects adjectives in a sequence — 'it is big and...' Can also modify verbs.",
+          "sections": [
+            {
+              "label": "い-ADJECTIVES",
+              "rows": [
+                { "from": "い", "to": "くて" }
+              ],
+              "note": "※ exception: いい → よくて"
+            },
+            {
+              "label": "な-ADJECTIVES",
+              "rows": [
+                { "from": "な", "to": "で" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "adj_conditional",
+          "label": "Conditional",
+          "title": "Adjective conditional (ば / なら)",
+          "jp": "仮定形",
+          "usage": "Expresses a hypothetical condition — 'if it is [adjective]'.",
+          "sections": [
+            {
+              "label": "い-ADJECTIVES",
+              "rows": [
+                { "from": "い", "to": "ければ" }
+              ],
+              "note": "※ exception: いい → よければ"
+            },
+            {
+              "label": "な-ADJECTIVES",
+              "rows": [
+                { "from": "な", "to": "なら(ば)" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "adverbial",
+          "label": "Adverbial",
+          "title": "Adverbial form",
+          "jp": "副詞形",
+          "usage": "Turns an adjective into an adverb — 'quickly', 'quietly'. Placed directly before the verb it modifies.",
+          "sections": [
+            {
+              "label": "い-ADJECTIVES",
+              "rows": [
+                { "from": "い", "to": "く" }
+              ]
+            },
+            {
+              "label": "な-ADJECTIVES",
+              "rows": [
+                { "from": "な", "to": "に" }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
       "key": "noun",
       "label": "Noun forms",
       "forms": [
-        { "id": "noun_plain", "label": "Noun + だ / です" },
-        { "id": "noun_te",    "label": "Noun + で" }
+        {
+          "id": "noun_plain",
+          "label": "Noun + だ / です",
+          "title": "Noun copula",
+          "jp": "名詞文",
+          "usage": "Connects a noun to the predicate. だ is plain register; です is polite. Nouns do not inflect — the copula changes.",
+          "sections": [
+            {
+              "label": "PLAIN",
+              "rows": [
+                { "from": "positive", "to": "～だ" },
+                { "from": "negative", "to": "～じゃない / ではない" },
+                { "from": "past", "to": "～だった" },
+                { "from": "past neg", "to": "～じゃなかった" }
+              ]
+            },
+            {
+              "label": "POLITE",
+              "rows": [
+                { "from": "positive", "to": "～です" },
+                { "from": "negative", "to": "～じゃないです / ではありません" },
+                { "from": "past", "to": "～でした" },
+                { "from": "past neg", "to": "～じゃなかったです" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "noun_te",
+          "label": "Noun + で",
+          "title": "Noun て-form (で)",
+          "jp": "名詞て形",
+          "usage": "The て-form equivalent for nouns. Used to connect clauses, or to indicate means, material, or cause.",
+          "sections": [
+            {
+              "label": "NOUN + で",
+              "rows": [
+                { "from": "noun", "to": "で" }
+              ],
+              "note": "※ で is the て-form of だ — 学生で、先生で..."
+            }
+          ]
+        }
       ]
     }
   ]

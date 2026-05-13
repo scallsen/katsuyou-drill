@@ -22,5 +22,4 @@ export const FORMS = {
   causative:        def('Causative',         'FF5858', ['register', 'tense', 'polarity'], ['verb']),
   passive_causative: def('Passive-Causative', 'FF5895', ['register', 'tense', 'polarity'], ['verb']),
   imperative:       def('Imperative',        'FF4E18', ['polarity'],                     ['verb']),
-  adverbial:        def('Adverbial',         'A0C4FF', ['polarity'],                     ['adjective']),
 }
