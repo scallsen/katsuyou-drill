@@ -11,6 +11,7 @@ import { buildPool } from '../data/drill.js'
 import { useDrill, ENGINES } from '../hooks/useDrill.js'
 import { useTTS, useJaVoices } from '../hooks/useTTS.js'
 import { useSFX } from '../hooks/useSFX.js'
+import ChipRow from '../components/ChipRow.jsx'
 import DrawerCheckbox from '../components/DrawerCheckbox.jsx'
 import DrawerSelect from '../components/DrawerSelect.jsx'
 import VolumeOnIcon from '../icons/volume-on.svg?react'
@@ -437,87 +438,37 @@ export default function DrillPage() {
 
         {/* ── Section 2: Polarity / Tense / Register ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-
-          {/* Polarity */}
-          <div>
-            <div style={rowStyle}>
-              <span style={rowLabelStyle}>Polarity</span>
-              <div style={{ display: 'flex', gap: 8, flex: 1, minWidth: 0 }}>
-                {POLARITIES.map(({ key, label, subtext }) => (
-                  <SelectButton
-                    key={key}
-                    selected={selectedPolarities.includes(key)}
-                    horizontal
-                    fontSize={BTN_FONT}
-                    subtext={subtext}
-                    onClick={() => {
-                      const next = toggle(selectedPolarities, key)
-                      const adding = !selectedPolarities.includes(key)
-                      seek(selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, next, adding ? 'polarity' : null, adding ? key : null)
-                      setSelectedPolarities(next)
-                    }}
-                  >
-                    {label}
-                  </SelectButton>
-                ))}
-              </div>
-            </div>
-            <SelectionError visible={selectedPolarities.length === 0} />
-          </div>
-
-          {/* Tense */}
-          <div>
-            <div style={rowStyle}>
-              <span style={rowLabelStyle}>Tense</span>
-              <div style={{ display: 'flex', gap: 8, flex: 1, minWidth: 0 }}>
-                {TENSES.map(({ key, label, subtext }) => (
-                  <SelectButton
-                    key={key}
-                    selected={selectedTenses.includes(key)}
-                    horizontal
-                    fontSize={BTN_FONT}
-                    subtext={subtext}
-                    onClick={() => {
-                      const next = toggle(selectedTenses, key)
-                      const adding = !selectedTenses.includes(key)
-                      seek(selectedWordTypes, selectedForms, selectedRegisters, next, selectedPolarities, adding ? 'tense' : null, adding ? key : null)
-                      setSelectedTenses(next)
-                    }}
-                  >
-                    {label}
-                  </SelectButton>
-                ))}
-              </div>
-            </div>
-            <SelectionError visible={selectedTenses.length === 0} />
-          </div>
-
-          {/* Register — shown whenever any word type is selected */}
+          <ChipRow
+            label="Polarity"
+            options={POLARITIES}
+            selected={selectedPolarities}
+            axis="polarity"
+            onChange={(newSel, axis, val) => {
+              seek(selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, newSel, axis, val)
+              setSelectedPolarities(newSel)
+            }}
+          />
+          <ChipRow
+            label="Tense"
+            options={TENSES}
+            selected={selectedTenses}
+            axis="tense"
+            onChange={(newSel, axis, val) => {
+              seek(selectedWordTypes, selectedForms, selectedRegisters, newSel, selectedPolarities, axis, val)
+              setSelectedTenses(newSel)
+            }}
+          />
           {registerVisible && (
-            <div>
-              <div style={rowStyle}>
-                <span style={rowLabelStyle}>Register</span>
-                <div style={{ display: 'flex', gap: 8, flex: 1, minWidth: 0 }}>
-                  {REGISTERS.map(({ key }) => (
-                    <SelectButton
-                      key={key}
-                      selected={selectedRegisters.includes(key)}
-                      horizontal
-                      fontSize={BTN_FONT}
-                      onClick={() => {
-                        const next = toggle(selectedRegisters, key)
-                        const adding = !selectedRegisters.includes(key)
-                        seek(selectedWordTypes, selectedForms, next, selectedTenses, selectedPolarities, adding ? 'register' : null, adding ? key : null)
-                        setSelectedRegisters(next)
-                      }}
-                    >
-                      {VARIANTS[key].label}
-                    </SelectButton>
-                  ))}
-                </div>
-              </div>
-              <SelectionError visible={selectedRegisters.length === 0} />
-            </div>
+            <ChipRow
+              label="Register"
+              options={REGISTERS.map(({ key }) => ({ key, label: VARIANTS[key].label }))}
+              selected={selectedRegisters}
+              axis="register"
+              onChange={(newSel, axis, val) => {
+                seek(selectedWordTypes, selectedForms, newSel, selectedTenses, selectedPolarities, axis, val)
+                setSelectedRegisters(newSel)
+              }}
+            />
           )}
         </div>
 
