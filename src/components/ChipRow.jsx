@@ -4,7 +4,7 @@ const labelStyle = {
   width: 60,
   flexShrink: 0,
   color: 'rgba(255,255,255,0.4)',
-  fontSize: 11,
+  fontSize: 13,
   letterSpacing: '0.08em',
   textTransform: 'uppercase',
 }
@@ -12,7 +12,7 @@ const labelStyle = {
 function chipStyle(active, hovered) {
   return {
     padding: '4px 0',
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: 'inherit',
     cursor: 'pointer',
     textAlign: 'center',

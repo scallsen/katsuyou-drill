@@ -10,7 +10,7 @@ export default function DrawerSelect({ value, onChange, options, indent = 0 }) {
           border: '1px solid rgba(255,255,255,0.18)',
           borderRadius: 6,
           color: 'rgba(255,255,255,0.65)',
-          fontSize: 12,
+          fontSize: 13,
           fontFamily: 'inherit',
           padding: '6px 28px 6px 10px',
           cursor: 'pointer',

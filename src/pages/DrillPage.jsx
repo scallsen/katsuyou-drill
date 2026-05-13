@@ -22,7 +22,7 @@ const CHEVRON_W = 28
 const PANEL_CONTENT_W = PANEL_W - CHEVRON_W
 
 const BTN_FONT  = 13
-const META_FONT = 11
+const META_FONT = 13
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint)
@@ -431,8 +431,8 @@ export default function DrillPage() {
                 setSelectedWordTypes(next)
               }}
             >
-              <span style={{ fontSize: 15 }}>{line1}</span>
-              {line2 && <span style={{ fontSize: META_FONT, opacity: 0.8 }}>{line2}</span>}
+              <span style={{ fontSize: BTN_FONT }}>{line1}</span>
+              {line2 && <span style={{ fontSize: BTN_FONT, opacity: 0.8 }}>{line2}</span>}
             </SelectButton>
           ))}
         </div>
