@@ -152,10 +152,24 @@
 /* ── Verdict buttons ─────────────────────────────────────────── */
 
 .verdict-btn {
-  transition: transform 80ms ease-out;
+  transition: transform 80ms ease-out, filter 120ms ease;
+}
+
+.verdict-btn:hover:not(:disabled) {
+  filter: brightness(1.18);
 }
 
 .verdict-btn:active:not(:disabled) {
   transform: scale(0.93);
   transition: transform 40ms ease-in;
+}
+
+/* ── Undo button ──────────────────────────────────────────────── */
+
+.undo-btn {
+  transition: background 150ms ease;
+}
+
+.undo-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
 }

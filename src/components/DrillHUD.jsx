@@ -86,7 +86,7 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
   const streakColor = streak > 0 ? '#fff' : 'transparent'
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
 
       <div style={{ height: 64, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, visibility: showStreak ? 'visible' : 'hidden' }}>
         {streakLost ? (
@@ -128,8 +128,25 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
 
       <div>{children}</div>
 
-      <div style={{ display: 'flex', gap: 24, visibility: canUndo ? 'visible' : 'hidden' }}>
-        {ghostBtn(true, onUndo, 'Undo')}
+      <div style={{ width: 380, visibility: canUndo ? 'visible' : 'hidden', marginTop: -5 }}>
+        <button
+          onClick={onUndo}
+          className="undo-btn"
+          style={{
+            width: '100%',
+            padding: '10px 0',
+            background: 'none',
+            border: 'none',
+            borderRadius: 8,
+            color: 'rgba(255,255,255,0.45)',
+            fontSize: 14,
+            fontFamily: 'inherit',
+            letterSpacing: '0.05em',
+            cursor: 'pointer',
+          }}
+        >
+          Undo
+        </button>
       </div>
 
       <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.25)', fontSize: 12, fontFamily: "'DotGothic16', sans-serif", alignItems: 'center', visibility: showStreak && (totalCorrect > 0 || totalWrong > 0) ? 'visible' : 'hidden' }}>

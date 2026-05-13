@@ -211,7 +211,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
       onUndo={handleUndo}
       showStreak={showStreak}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
         <div key={currentCard.id} className={cardClass}>
           <ConjugationCard
             variant={currentCard.variant}
@@ -231,20 +231,21 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-          <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ height: 52, width: '380px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {isFlipped ? (
-              <div style={{ display: 'flex', gap: 12 }}>
+              <div style={{ display: 'flex', width: '100%', gap: 12 }}>
                 <button
                   onClick={() => handleVerdictRef.current(false)}
                   disabled={transitioning}
                   className="verdict-btn"
                   style={{
-                    padding: '10px 28px',
+                    flex: 1,
+                    padding: '10px 0',
                     fontSize: 14,
                     fontFamily: 'inherit',
                     background: 'rgba(192, 57, 43, 0.85)',
                     color: '#fff',
-                    border: '1px solid rgba(255,255,255,0.15)',
+                    border: 'none',
                     borderRadius: 8,
                     cursor: 'pointer',
                     letterSpacing: '0.05em',
@@ -257,12 +258,13 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
                   disabled={transitioning}
                   className="verdict-btn"
                   style={{
-                    padding: '10px 28px',
+                    flex: 1,
+                    padding: '10px 0',
                     fontSize: 14,
                     fontFamily: 'inherit',
                     background: 'rgba(39, 174, 96, 0.85)',
                     color: '#fff',
-                    border: '1px solid rgba(255,255,255,0.15)',
+                    border: 'none',
                     borderRadius: 8,
                     cursor: 'pointer',
                     letterSpacing: '0.05em',
@@ -272,7 +274,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
                 </button>
               </div>
             ) : (
-              <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>{navigator.maxTouchPoints > 0 ? 'Tap card to flip' : 'Click card or Spacebar to flip'}</div>
+              <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>{navigator.maxTouchPoints > 0 ? 'Tap card to flip' : 'Click card or press spacebar to flip'}</div>
             )}
           </div>
         </div>
