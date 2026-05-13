@@ -15,7 +15,6 @@ import DrawerCheckbox from '../components/DrawerCheckbox.jsx'
 import DrawerSelect from '../components/DrawerSelect.jsx'
 import VolumeOnIcon from '../icons/volume-on.svg?react'
 import VolumeOffIcon from '../icons/volume-off.svg?react'
-import GrammarReference from '../components/GrammarReference.jsx'
 
 const PANEL_W = 420
 const CHEVRON_W = 28
@@ -90,7 +89,7 @@ function findSeekCard(newPool, currentCard, axis, value) {
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
-function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, showFurigana, pixelFont, onPulse, onOpenGrammar }) {
+function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, showFurigana, pixelFont, onPulse }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
@@ -275,21 +274,6 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
               <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>{navigator.maxTouchPoints > 0 ? 'Tap card to flip' : 'Click card or Spacebar to flip'}</div>
             )}
           </div>
-          <button
-            onClick={onOpenGrammar}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'rgba(255,255,255,0.3)',
-              fontSize: 12,
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              padding: '2px 0',
-              letterSpacing: '0.04em',
-            }}
-          >
-            Grammar Reference
-          </button>
         </div>
       </div>
     </DrillHUD>
@@ -373,7 +357,6 @@ export default function DrillPage() {
     return stored === null ? true : stored === 'true'
   })
   const [pulseColor,         setPulseColor]         = useState(null)
-  const [showGrammar,        setShowGrammar]        = useState(false)
   const isMobile = useIsMobile()
   const jaVoices = useJaVoices()
 
@@ -724,7 +707,7 @@ export default function DrillPage() {
           ) : drill.done ? (
             <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
           ) : (
-            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} pixelFont={pixelFont} onPulse={setPulseColor} onOpenGrammar={() => setShowGrammar(true)} />
+            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} pixelFont={pixelFont} onPulse={setPulseColor} />
           )}
         </div>
       </div>
@@ -778,8 +761,6 @@ export default function DrillPage() {
           </div>
         </>
       )}
-
-      <GrammarReference open={showGrammar} onClose={() => setShowGrammar(false)} />
 
       {/* ── Mobile overlay ── */}
       {isMobile && showOptions && (
