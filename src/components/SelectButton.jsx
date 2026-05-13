@@ -1,10 +1,16 @@
+import { useState } from 'react'
+
 export default function SelectButton({ selected, bgColor = '#ffffff', borderColor = '#aaaaaa', subtext, onClick, children, centered, minHeight, horizontal, fontSize = 13 }) {
+  const [hovered, setHovered] = useState(false)
   return (
     <button
       onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
-        background: selected ? bgColor : 'transparent',
-        color: selected ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.5)',
+        background: selected ? bgColor : hovered ? 'rgba(255,255,255,0.08)' : 'transparent',
+        color: selected ? 'rgba(0,0,0,0.85)' : hovered ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.5)',
+        boxShadow: selected && hovered ? 'inset 0 0 0 100px rgba(0,0,0,0.10)' : 'none',
         border: selected ? `2px solid ${borderColor}` : '1px solid rgba(255,255,255,0.18)',
         borderRadius: 6,
         padding: selected

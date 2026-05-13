@@ -360,6 +360,9 @@ export default function DrillPage() {
     return stored === null ? true : stored === 'true'
   })
   const [pulseColor,         setPulseColor]         = useState(null)
+  const [audioHovered,       setAudioHovered]       = useState(false)
+  const [optionsHovered,     setOptionsHovered]     = useState(false)
+  const [chevronHovered,     setChevronHovered]     = useState(false)
   const isMobile = useIsMobile()
   const jaVoices = useJaVoices()
 
@@ -604,6 +607,8 @@ export default function DrillPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button
               onClick={() => setAudioEnabled(v => !v)}
+              onMouseEnter={() => setAudioHovered(true)}
+              onMouseLeave={() => setAudioHovered(false)}
               title={audioEnabled ? 'Mute audio' : 'Enable audio'}
               style={{
                 display: 'flex',
@@ -611,12 +616,13 @@ export default function DrillPage() {
                 justifyContent: 'center',
                 width: 34,
                 height: 34,
-                background: 'rgba(255,255,255,0.1)',
+                background: audioHovered ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.1)',
                 border: '1px solid rgba(255,255,255,0.2)',
                 borderRadius: 8,
                 cursor: 'pointer',
                 opacity: audioEnabled ? 1 : 0.35,
                 padding: 0,
+                transition: 'background 130ms',
               }}
             >
               {audioEnabled
@@ -626,6 +632,8 @@ export default function DrillPage() {
             </button>
             <button
               onClick={() => setShowOptions(v => !v)}
+              onMouseEnter={() => setOptionsHovered(true)}
+              onMouseLeave={() => setOptionsHovered(false)}
               title={showOptions ? 'Hide options' : 'Show options'}
               style={{
                 display: 'flex',
@@ -635,11 +643,12 @@ export default function DrillPage() {
                 padding: '0 12px',
                 fontSize: 13,
                 fontFamily: 'inherit',
-                background: 'rgba(255,255,255,0.1)',
+                background: optionsHovered ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.1)',
                 color: 'rgba(255,255,255,0.7)',
                 border: '1px solid rgba(255,255,255,0.2)',
                 borderRadius: 8,
                 cursor: 'pointer',
+                transition: 'background 130ms',
               }}
             >
               {showOptions ? 'Hide options' : 'Show options'}
@@ -671,6 +680,8 @@ export default function DrillPage() {
           {/* Chevron — always visible, outside the collapsible panel */}
           <div
             onClick={() => setShowOptions(v => !v)}
+            onMouseEnter={() => setChevronHovered(true)}
+            onMouseLeave={() => setChevronHovered(false)}
             style={{
               flexShrink: 0,
               width: CHEVRON_W,
@@ -680,6 +691,8 @@ export default function DrillPage() {
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
+              background: chevronHovered ? 'rgba(255,255,255,0.05)' : 'transparent',
+              transition: 'background 130ms',
             }}>
             <button
               style={{
