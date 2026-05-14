@@ -594,12 +594,11 @@ export default function DrillPage() {
         {/* Header */}
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0,
-          display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '20px 24px', zIndex: 10,
         }}>
           <div>
             <div style={{ color: '#fff', fontSize: 15, fontWeight: 700, letterSpacing: '0.01em' }}>Doushi Drill v0.1</div>
-            <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, marginTop: 3 }}>by Simon Callsen</div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button
@@ -668,6 +667,37 @@ export default function DrillPage() {
           ) : (
             <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} pixelFont={pixelFont} onPulse={setPulseColor} />
           )}
+        </div>
+
+        {/* Footer */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16,
+          padding: '12px 24px',
+          zIndex: 10,
+          pointerEvents: 'none',
+        }}>
+          <a
+            href="https://scallsen.ca"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, textDecoration: 'none', pointerEvents: 'auto' }}
+            onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}
+          >
+            Developed by Simon Callsen
+          </a>
+          <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 12 }}>·</span>
+          <a
+            href="https://github.com/scallsen/doushi-drill"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, textDecoration: 'none', pointerEvents: 'auto' }}
+            onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}
+          >
+            GitHub
+          </a>
         </div>
       </div>
 
@@ -769,6 +799,7 @@ export default function DrillPage() {
           </div>
         </>
       )}
+
 
     </div>
   )
