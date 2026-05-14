@@ -22,5 +22,9 @@ export default function ConjugationCard({ variant = 'plain', word = '', kana = n
     </CardShell>
   )
 
-  return <FlipCard front={front} back={back} width="380px" height="280px" flipped={flipped} onFlip={onFlip} />
+  return (
+    <div style={{ width: 'min(380px, calc(100vw - 32px))', aspectRatio: '380 / 280', containerType: 'size' }}>
+      <FlipCard front={front} back={back} width="100%" height="100%" flipped={flipped} onFlip={onFlip} />
+    </div>
+  )
 }

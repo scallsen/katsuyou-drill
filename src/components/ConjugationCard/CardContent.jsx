@@ -17,18 +17,18 @@ export default function CardContent({ label, n, past, word, kana = null, wordKan
     >
       {/* Answer label */}
       {answerLabel && (
-        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, textAlign: 'center', fontFamily: "'DotGothic16', sans-serif", fontSize: 24, letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor === '#ffffff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.35)' }}>
+        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, textAlign: 'center', fontFamily: "'DotGothic16', sans-serif", fontSize: '6.32cqw', letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor === '#ffffff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.35)' }}>
           {answerLabel}
         </div>
       )}
 
       {n && (
-        <div style={{ position: 'absolute', bottom: 12, right: 20, fontFamily: "'DotGothic16', sans-serif", fontSize: 24, letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor ?? '#222', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', bottom: 12, right: 20, fontFamily: "'DotGothic16', sans-serif", fontSize: '6.32cqw', letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor ?? '#222', pointerEvents: 'none' }}>
           Negative
         </div>
       )}
       {past && (
-        <div style={{ position: 'absolute', bottom: 12, left: 20, fontFamily: "'DotGothic16', sans-serif", fontSize: 24, letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor ?? '#222', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', bottom: 12, left: 20, fontFamily: "'DotGothic16', sans-serif", fontSize: '6.32cqw', letterSpacing: '0.1em', textTransform: 'uppercase', color: textColor ?? '#222', pointerEvents: 'none' }}>
           Past
         </div>
       )}
@@ -49,7 +49,7 @@ export default function CardContent({ label, n, past, word, kana = null, wordKan
         <div
           style={{
             fontFamily: jaFont,
-            fontSize: 48,
+            fontSize: '12.63cqw',
             fontWeight: 400,
             color: textColor ?? '#222',
             letterSpacing: '0.02em',
@@ -89,7 +89,7 @@ export default function CardContent({ label, n, past, word, kana = null, wordKan
         <div
           style={{
             fontFamily: "'DotGothic16', sans-serif",
-            fontSize: 26,
+            fontSize: '6.84cqw',
             fontWeight: 400,
             letterSpacing: '0.05em',
             color: textColor ?? '#222',

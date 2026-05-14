@@ -132,7 +132,7 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
 
       <div>{children}</div>
 
-      <div style={{ width: 380, visibility: canUndo ? 'visible' : 'hidden', marginTop: -5 }}>
+      <div style={{ width: 'min(380px, calc(100vw - 32px))', visibility: canUndo ? 'visible' : 'hidden', marginTop: -5 }}>
         <button
           onClick={onUndo}
           className="undo-btn"

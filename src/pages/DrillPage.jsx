@@ -266,7 +266,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-          <div style={{ height: 52, width: '380px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ height: 52, width: 'min(380px, calc(100vw - 32px))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {isFlipped ? (
               <div style={{ display: 'flex', width: '100%', gap: 12 }}>
                 <button
