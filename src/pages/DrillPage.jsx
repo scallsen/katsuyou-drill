@@ -90,7 +90,7 @@ function findSeekCard(newPool, currentCard, axis, value) {
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
-function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, showFurigana, pixelFont, onPulse }) {
+function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, showFurigana, pixelFont, onPulse, onFirstVerdict }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
@@ -148,6 +148,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
       setHintPhase('done')
       clearInterval(typewriterTimer.current)
       setDisplayedHint('')
+      onFirstVerdict?.()
     }
     const action = isCorrect ? drill.onCorrect : drill.onWrong
     const breaksBest = !isCorrect && localStreak > 0 && localStreak === localBestStreak
@@ -397,6 +398,7 @@ export default function DrillPage() {
   const [audioHovered,       setAudioHovered]       = useState(false)
   const [optionsHovered,     setOptionsHovered]     = useState(false)
   const [chevronHovered,     setChevronHovered]     = useState(false)
+  const [showMobileMenuHint, setShowMobileMenuHint] = useState(false)
   const isMobile = useIsMobile()
   const jaVoices = useJaVoices()
 
@@ -419,6 +421,19 @@ export default function DrillPage() {
     })
     setSeekCardId(findSeekCard(newPool, drill.currentCard, axis, value)?.id ?? null)
   }
+
+  function handleFirstVerdict() {
+    if (!isMobile) return
+    if (localStorage.getItem('menu-hint-shown') === 'true') return
+    if (showOptions) return
+    localStorage.setItem('menu-hint-shown', 'true')
+    setShowMobileMenuHint(true)
+    setTimeout(() => setShowMobileMenuHint(false), 6000)
+  }
+
+  useEffect(() => {
+    if (showOptions) setShowMobileMenuHint(false)
+  }, [showOptions])
 
   const verbSelected     = ['u-verb', 'ru-verb', 'irregular'].some(k => selectedWordTypes.includes(k))
   const drillMode    = selectedWordTypes.length > 0
@@ -686,6 +701,21 @@ export default function DrillPage() {
           </div>
         </div>
 
+        {/* Mobile menu hint */}
+        {showMobileMenuHint && (
+          <div style={{
+            position: 'absolute', top: 74, right: 24,
+            color: 'rgba(255,255,255,0.5)',
+            fontSize: 12,
+            fontFamily: 'inherit',
+            letterSpacing: '0.04em',
+            pointerEvents: 'none',
+            zIndex: 10,
+          }}>
+            Tap to explore conjugations ↑
+          </div>
+        )}
+
         {/* Center */}
         <div style={{
           position: 'absolute', inset: 0,
@@ -699,7 +729,7 @@ export default function DrillPage() {
           ) : drill.done ? (
             <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
           ) : (
-            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} pixelFont={pixelFont} onPulse={setPulseColor} />
+            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} pixelFont={pixelFont} onPulse={setPulseColor} onFirstVerdict={handleFirstVerdict} />
           )}
         </div>
 
