@@ -16,6 +16,8 @@ import DrawerCheckbox from '../components/DrawerCheckbox.jsx'
 import DrawerSelect from '../components/DrawerSelect.jsx'
 import VolumeOnIcon from '../icons/volume-on.svg?react'
 import VolumeOffIcon from '../icons/volume-off.svg?react'
+import logoMain from '../icons/logo-main.png'
+import Wordmark from '../icons/wordmark.svg?react'
 
 const PANEL_W = 420
 const CHEVRON_W = 28
@@ -646,8 +648,9 @@ export default function DrillPage() {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '20px 24px', zIndex: 10,
         }}>
-          <div>
-            <div style={{ color: '#fff', fontSize: 15, fontWeight: 700, letterSpacing: '0.01em' }}>Doushi Drill</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <img src={logoMain} alt="" style={{ height: 32, display: 'block' }} />
+            <Wordmark height={17} />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button
