@@ -25,7 +25,7 @@ function WaveText({ text, color }) {
   ))
 }
 
-export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong, canUndo, onUndo, showStreak, children }) {
+export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong, canUndo, onUndo, showStreak, onboardingHint, children }) {
   const [streakLost, setStreakLost] = useState(null)
   const [popCount,   setPopCount]   = useState(0)
   const prevStreakRef = useRef(streak)
@@ -88,8 +88,12 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
 
-      <div style={{ height: 64, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, visibility: showStreak ? 'visible' : 'hidden' }}>
-        {streakLost ? (
+      <div style={{ height: 64, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, visibility: (showStreak || onboardingHint != null) ? 'visible' : 'hidden' }}>
+        {onboardingHint != null ? (
+          <span style={{ fontSize: 20, fontWeight: 700, fontFamily: "'DotGothic16', sans-serif", color: '#fff', letterSpacing: '0.05em', lineHeight: 1.3, textAlign: 'center', maxWidth: 'calc(100vw - 48px)', whiteSpace: 'pre-line' }}>
+            {onboardingHint}
+          </span>
+        ) : streakLost ? (
           <span style={{ color: '#f87171', fontSize: 16, fontWeight: 700, fontFamily: "'DotGothic16', sans-serif", opacity: streakLost === 'fading' ? 0 : 1, transition: 'opacity 0.3s ease' }}>
             Streak lost
           </span>

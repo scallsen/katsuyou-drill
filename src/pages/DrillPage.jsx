@@ -113,9 +113,43 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
   useEffect(() => { localStreakRef.current = localStreak }, [localStreak])
   const sfx = useSFX()
 
+  const [showHint]        = useState(() => !sessionStorage.getItem('hasSeenOnboarding'))
+  const [hintPhase,        setHintPhase]        = useState('pre-flip')
+  const [displayedHint,    setDisplayedHint]    = useState('')
+  const typewriterTimer = useRef(null)
+
+  function runTypewriter(text, msPerChar) {
+    clearInterval(typewriterTimer.current)
+    setDisplayedHint('')
+    let i = 0
+    typewriterTimer.current = setInterval(() => {
+      i++
+      setDisplayedHint(text.slice(0, i))
+      if (i >= text.length) clearInterval(typewriterTimer.current)
+    }, msPerChar)
+  }
+
+  useEffect(() => {
+    if (!showHint) return
+    runTypewriter('Conjugate the verb below,\nthen flip to check.', 55)
+    return () => clearInterval(typewriterTimer.current)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!showHint || hintPhase !== 'pre-flip' || !isFlipped) return
+    setHintPhase('post-flip')
+    runTypewriter('Did you get it right?\nMark your answer.', 55)
+  }, [isFlipped]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleVerdictRef = useRef()
   handleVerdictRef.current = (isCorrect) => {
     if (transitioningRef.current) return
+    if (showHint && hintPhase !== 'done') {
+      sessionStorage.setItem('hasSeenOnboarding', 'true')
+      setHintPhase('done')
+      clearInterval(typewriterTimer.current)
+      setDisplayedHint('')
+    }
     const action = isCorrect ? drill.onCorrect : drill.onWrong
     const breaksBest = !isCorrect && localStreak > 0 && localStreak === localBestStreak
     if (sfxEnabled) sfx.play(
@@ -210,6 +244,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
       canUndo={canUndo}
       onUndo={handleUndo}
       showStreak={showStreak}
+      onboardingHint={showHint && hintPhase !== 'done' ? displayedHint : null}
     >
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
         <div key={currentCard.id} className={cardClass}>
