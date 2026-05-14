@@ -2,6 +2,10 @@
 
 Japanese verb conjugation drill app. Vite + React, no TypeScript.
 
+## Hosting
+- Served at `scallsen.ca/doushi-drill/` via GitHub Pages. `base: '/doushi-drill/'` in `vite.config.js` must match the repo name — changing it breaks asset loading.
+- `scallsen.ca` DNS is managed in Cloudflare (A records → GitHub Pages IPs, DNS only / grey cloud). The custom domain is set in the `scallsen.github.io` repo's GitHub Pages settings, not this one.
+
 ## Git workflow
 - **Always create a feature branch before making any code changes.** Never commit directly to `main`.
 
