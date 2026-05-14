@@ -756,7 +756,7 @@ export default function DrillPage() {
           </a>
           <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 12 }}>·</span>
           <a
-            href="https://github.com/scallsen/doushi-drill"
+            href="https://github.com/scallsen/katsuyou-drill"
             target="_blank"
             rel="noopener noreferrer"
             style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, textDecoration: 'none', pointerEvents: 'auto' }}
