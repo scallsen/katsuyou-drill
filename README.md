@@ -1,4 +1,10 @@
-# A Japanese Grammar Conjugation Drill Tool
-<img width="1200" height="750" alt="App layout" src="https://github.com/user-attachments/assets/32bf7c85-2433-4ec3-8922-95b884128b83" />
+# A tool to practice conjugating Japanese grammar forms.
+<img width="1152" height="681" alt="image" src="https://github.com/user-attachments/assets/3bf7ac32-5c7a-460c-b048-b94c9d1a1a7f" />
 
-<img width="1200" height="404" alt="Hero 1" src="https://github.com/user-attachments/assets/657f5c4c-e584-40c9-a187-ae0ed7f1a4f7" />
+## Features
+- Conjugate verbs, adjectives, and nouns
+- Customize states (past/present, polite/plain, positive/negative)
+- Choose verb forms (te form, potential, conditional, volitional, passive, causitive, passive-causative, imperative)
+- Keyboard controls for faster flipping
+- Track your best streak
+- TTS audio playback 
