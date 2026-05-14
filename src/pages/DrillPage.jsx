@@ -113,7 +113,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
   useEffect(() => { localStreakRef.current = localStreak }, [localStreak])
   const sfx = useSFX()
 
-  const [showHint]        = useState(() => !sessionStorage.getItem('hasSeenOnboarding'))
+  const [showHint]        = useState(true)
   const [hintPhase,        setHintPhase]        = useState('pre-flip')
   const [displayedHint,    setDisplayedHint]    = useState('')
   const typewriterTimer = useRef(null)
@@ -145,7 +145,6 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
   handleVerdictRef.current = (isCorrect) => {
     if (transitioningRef.current) return
     if (showHint && hintPhase !== 'done') {
-      sessionStorage.setItem('hasSeenOnboarding', 'true')
       setHintPhase('done')
       clearInterval(typewriterTimer.current)
       setDisplayedHint('')
