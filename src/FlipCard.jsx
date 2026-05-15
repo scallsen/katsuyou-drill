@@ -19,6 +19,7 @@ export default function FlipCard({
   className = '',
   flipped = false,
   onFlip,
+  animate = true,
 }) {
   function handleClick() {
     onFlip?.(!flipped);
@@ -30,7 +31,7 @@ export default function FlipCard({
       <div className="fc-shadow" />
       <div className="fc-container">
         <div className="fc-hover" onClick={handleClick}>
-          <div className={`fc-inner ${flipped ? 'fc-inner--flipped' : ''}`}>
+          <div className={`fc-inner ${flipped ? 'fc-inner--flipped' : ''}`} style={animate ? undefined : { transition: 'none' }}>
             <div className="fc-face fc-face--front">{front}</div>
             <div className="fc-face fc-face--back">{back}</div>
           </div>

@@ -92,7 +92,7 @@ function findSeekCard(newPool, currentCard, axis, value) {
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
-function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, showFurigana, pixelFont, onPulse, onFirstVerdict }) {
+function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, showFurigana, pixelFont, showVisualEffects, onPulse, onFirstVerdict }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
@@ -168,14 +168,16 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
     setTransitioning(true)
     setExitDir(isCorrect ? 'up' : 'down')
     onPulse(isCorrect ? 'correct' : 'wrong')
+    const exitDelay  = showVisualEffects ? 280 : 0
+    const clearDelay = showVisualEffects ? 600 : 0
     setTimeout(() => {
       action()
       setExitDir(null)
-    }, 280)
+    }, exitDelay)
     setTimeout(() => {
       setTransitioning(false)
       onPulse(null)
-    }, 600)
+    }, clearDelay)
   }
 
   useEffect(() => {
@@ -199,15 +201,17 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
     setFlippedCardId(null)
     setTransitioning(true)
     setExitDir('undo')
+    const undoExitDelay  = showVisualEffects ? 200 : 0
+    const undoClearDelay = showVisualEffects ? 580 : 0
     setTimeout(() => {
       onUndo()
       setExitDir(null)
       setUndoEntering(true)
-    }, 200)
+    }, undoExitDelay)
     setTimeout(() => {
       setTransitioning(false)
       setUndoEntering(false)
-    }, 580)
+    }, undoClearDelay)
   }
 
   useEffect(() => {
@@ -231,11 +235,13 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
   const registerLabel = currentCard.register ? VARIANTS[currentCard.register]?.label ?? null : null
 
   let cardClass = ''
-  if (exitDir === 'up') cardClass = 'card-exit-up'
-  else if (exitDir === 'down') cardClass = 'card-exit-down'
-  else if (exitDir === 'undo') cardClass = 'card-exit-undo'
-  else if (undoEntering) cardClass = 'card-entering-undo'
-  else if (transitioning) cardClass = 'card-entering'
+  if (showVisualEffects) {
+    if (exitDir === 'up') cardClass = 'card-exit-up'
+    else if (exitDir === 'down') cardClass = 'card-exit-down'
+    else if (exitDir === 'undo') cardClass = 'card-exit-undo'
+    else if (undoEntering) cardClass = 'card-entering-undo'
+    else if (transitioning) cardClass = 'card-entering'
+  }
 
   return (
     <DrillHUD
@@ -246,6 +252,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
       canUndo={canUndo}
       onUndo={handleUndo}
       showStreak={showStreak}
+      showVisualEffects={showVisualEffects}
       onboardingHint={showHint && hintPhase !== 'done' ? displayedHint : null}
     >
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
@@ -264,6 +271,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
             registerLabel={registerLabel}
             flipped={isFlipped}
             onFlip={handleFlip}
+            animate={showVisualEffects}
           />
         </div>
 
@@ -732,7 +740,7 @@ export default function DrillPage() {
           ) : drill.done ? (
             <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
           ) : (
-            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} pixelFont={pixelFont} onPulse={setPulseColor} onFirstVerdict={handleFirstVerdict} />
+            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} pixelFont={pixelFont} showVisualEffects={showVisualEffects} onPulse={setPulseColor} onFirstVerdict={handleFirstVerdict} />
           )}
         </div>
 
