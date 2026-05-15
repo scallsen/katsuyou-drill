@@ -618,6 +618,8 @@ export default function DrillPage() {
                   onChange={setTtsVoice}
                   options={[{ value: '', label: 'Default' }, ...jaVoices.map(v => ({ value: v.name, label: v.name }))]}
                   indent={2}
+                  label="Voice"
+                  subtext="Availability based on your device or browser"
                 />
               )}
               <DrawerCheckbox

@@ -1,7 +1,14 @@
-export default function DrawerSelect({ value, onChange, options, indent = 0 }) {
+export default function DrawerSelect({ value, onChange, options, indent = 0, label, subtext }) {
+  const id = label ? `drawer-select-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined
   return (
-    <div style={{ paddingLeft: indent * 14 }}>
+    <div style={{ paddingLeft: indent * 14, display: 'flex', flexDirection: 'column', gap: 4 }}>
+      {label && (
+        <label htmlFor={id} style={{ color: 'rgba(255,255,255,0.65)', fontSize: 13, fontFamily: 'inherit', cursor: 'default' }}>
+          {label}
+        </label>
+      )}
       <select
+        id={id}
         value={value}
         onChange={e => onChange(e.target.value)}
         style={{
@@ -27,6 +34,11 @@ export default function DrawerSelect({ value, onChange, options, indent = 0 }) {
           </option>
         ))}
       </select>
+      {subtext && (
+        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, fontFamily: 'inherit' }}>
+          {subtext}
+        </span>
+      )}
     </div>
   )
 }
