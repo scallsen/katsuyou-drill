@@ -123,7 +123,7 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
                 }
               </span>
             </span>
-            <span style={{ color: subLabel ? 'rgba(255,255,255,0.3)' : 'transparent', fontSize: 12, fontFamily: "'DotGothic16', sans-serif", userSelect: 'none', lineHeight: 1 }}>
+            <span style={{ color: subLabel ? 'rgba(255,255,255,0.5)' : 'transparent', fontSize: 13, fontFamily: "'DotGothic16', sans-serif", userSelect: 'none', lineHeight: 1 }}>
               {subLabel ?? 'Best streak: 0'}
             </span>
           </>
@@ -153,7 +153,7 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.5)', fontSize: 12, fontFamily: "'DotGothic16', sans-serif", alignItems: 'center', visibility: showStreak && (totalCorrect > 0 || totalWrong > 0) ? 'visible' : 'hidden' }}>
+      <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.5)', fontSize: 13, fontFamily: "'DotGothic16', sans-serif", alignItems: 'center', visibility: showStreak && (totalCorrect > 0 || totalWrong > 0) ? 'visible' : 'hidden' }}>
         <span>{totalCorrect} correct</span>
         <span>{totalWrong} wrong</span>
       </div>

@@ -717,7 +717,7 @@ export default function DrillPage() {
           <div style={{
             position: 'absolute', top: 74, right: 24,
             color: 'rgba(255,255,255,0.5)',
-            fontSize: 12,
+            fontSize: 13,
             fontFamily: 'inherit',
             letterSpacing: '0.04em',
             pointerEvents: 'none',
@@ -756,18 +756,18 @@ export default function DrillPage() {
             href="https://scallsen.ca"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, textDecoration: 'none', pointerEvents: 'auto' }}
+            style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, textDecoration: 'none', pointerEvents: 'auto' }}
             onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
             onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}
           >
             Developed by Simon Callsen
           </a>
-          <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 12 }}>·</span>
+          <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 13 }}>·</span>
           <a
             href="https://github.com/scallsen/katsuyou-drill"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, textDecoration: 'none', pointerEvents: 'auto' }}
+            style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, textDecoration: 'none', pointerEvents: 'auto' }}
             onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
             onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}
           >
