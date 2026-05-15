@@ -1,11 +1,15 @@
+const srOnly = {
+  position: 'absolute', width: 1, height: 1, padding: 0,
+  margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)',
+  whiteSpace: 'nowrap', border: 0,
+}
+
 export default function DrawerSelect({ value, onChange, options, indent = 0, label, subtext }) {
   const id = label ? `drawer-select-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined
   return (
-    <div style={{ paddingLeft: indent * 14, display: 'flex', flexDirection: 'column', gap: 4 }}>
+    <div style={{ paddingLeft: indent * 14 + 22, display: 'flex', flexDirection: 'column', gap: 4 }}>
       {label && (
-        <label htmlFor={id} style={{ color: 'rgba(255,255,255,0.65)', fontSize: 13, fontFamily: 'inherit', cursor: 'default' }}>
-          {label}
-        </label>
+        <label htmlFor={id} style={srOnly}>{label}</label>
       )}
       <select
         id={id}
@@ -35,7 +39,7 @@ export default function DrawerSelect({ value, onChange, options, indent = 0, lab
         ))}
       </select>
       {subtext && (
-        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, fontFamily: 'inherit' }}>
+        <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, fontFamily: 'inherit' }}>
           {subtext}
         </span>
       )}

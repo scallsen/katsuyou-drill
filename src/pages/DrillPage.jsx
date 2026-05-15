@@ -617,7 +617,7 @@ export default function DrillPage() {
                   value={ttsVoice}
                   onChange={setTtsVoice}
                   options={[{ value: '', label: 'Default' }, ...jaVoices.map(v => ({ value: v.name, label: v.name }))]}
-                  indent={2}
+                  indent={1}
                   label="Voice"
                   subtext="Availability based on your device or browser"
                 />
