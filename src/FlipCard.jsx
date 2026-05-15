@@ -25,16 +25,24 @@ export default function FlipCard({
     onFlip?.(!flipped);
   }
 
+  function handleKeyDown(e) {
+    if (e.code === 'Space' || e.code === 'Enter') {
+      e.preventDefault();
+      handleClick();
+    }
+  }
+
   return (
     <div className={`fc-wrapper ${className}`} style={{ width, height }}>
       {/* Shadow sits outside the 3D perspective context so it's always flat and always visible */}
       <div className="fc-shadow" />
       <div className="fc-container">
-        <div className="fc-hover" onClick={handleClick}>
+        <div className="fc-hover" tabIndex={0} onClick={handleClick} onKeyDown={handleKeyDown}>
           <div className={`fc-inner ${flipped ? 'fc-inner--flipped' : ''}`} style={animate ? undefined : { transition: 'none' }}>
             <div className="fc-face fc-face--front">{front}</div>
             <div className="fc-face fc-face--back">{back}</div>
           </div>
+          <div className="fc-focus-hint">↵ Flip card</div>
         </div>
       </div>
     </div>
