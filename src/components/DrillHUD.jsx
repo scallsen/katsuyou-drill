@@ -25,7 +25,7 @@ function WaveText({ text, color }) {
   ))
 }
 
-export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong, canUndo, onUndo, showStreak, onboardingHint, children }) {
+export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong, canUndo, onUndo, showStreak, showVisualEffects = true, onboardingHint, children }) {
   const [streakLost, setStreakLost] = useState(null)
   const [popCount,   setPopCount]   = useState(0)
   const prevStreakRef = useRef(streak)
@@ -80,8 +80,8 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
   const atBest   = streak > 0 && streak === bestStreak
   const subLabel = bestStreak === 0 ? null : atBest ? 'BEST STREAK' : `Best streak: ${bestStreak}`
 
-  const showWiggle  = streak >= WIGGLE_THRESHOLD
-  const showWave    = streak >= WAVE_THRESHOLD
+  const showWiggle  = showVisualEffects && streak >= WIGGLE_THRESHOLD
+  const showWave    = showVisualEffects && streak >= WAVE_THRESHOLD
   const streakText  = streak > 0 ? `Streak: ${streak}` : 'Streak: 0'
   const streakColor = streak > 0 ? '#fff' : 'transparent'
 
@@ -102,7 +102,7 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
             <span style={{
               display: 'inline-block',
               fontSize: streakFontSize(streak),
-              transition: 'font-size 0.35s ease',
+              transition: showVisualEffects ? 'font-size 0.35s ease' : 'none',
               fontWeight: 700,
               fontFamily: "'DotGothic16', sans-serif",
               letterSpacing: '0.05em',
@@ -114,7 +114,7 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
                 style={{
                   display: 'inline-block',
                   userSelect: 'none',
-                  animation: popCount > 0 ? 'streak-pop 0.18s ease-out' : 'none',
+                  animation: showVisualEffects && popCount > 0 ? 'streak-pop 0.18s ease-out' : 'none',
                 }}
               >
                 {showWave
