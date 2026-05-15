@@ -217,6 +217,9 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
   useEffect(() => {
     function onKey(e) {
       if (transitioningRef.current) return
+      const t = e.target
+      const focusedInteractive = t.tagName === 'BUTTON' || t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.getAttribute?.('role') === 'checkbox'
+      if (focusedInteractive) return
       if (e.code === 'Space') {
         e.preventDefault()
         if (sfxEnabled) sfx.play('flip_card')
