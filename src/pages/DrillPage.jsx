@@ -220,6 +220,8 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
       const t = e.target
       const focusedInteractive = t.tagName === 'BUTTON' || t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.getAttribute?.('role') === 'checkbox'
       if (focusedInteractive) return
+      // Card handles its own Space/Enter; Z/X verdicts still work while card is focused
+      if (t.classList.contains('fc-hover') && (e.code === 'Space' || e.code === 'Enter')) return
       if (e.code === 'Space') {
         e.preventDefault()
         if (sfxEnabled) sfx.play('flip_card')
