@@ -1,7 +1,12 @@
 export default function DrawerCheckbox({ checked, onChange, label, subtext, indent = 0 }) {
   return (
     <div
+      role="checkbox"
+      aria-checked={checked}
+      tabIndex={0}
       onClick={onChange}
+      onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); onChange() } }}
+      className="drawer-checkbox"
       style={{
         display: 'flex',
         alignItems: 'flex-start',
