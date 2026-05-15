@@ -3,13 +3,12 @@ import { useState, useEffect } from 'react'
 const supported = typeof window !== 'undefined' && 'speechSynthesis' in window
 
 export function useJaVoices() {
-  const [voices, setVoices] = useState(() =>
-    supported ? speechSynthesis.getVoices().filter(v => v.lang === 'ja-JP') : []
-  )
+  const [voices, setVoices] = useState([])
   useEffect(() => {
     if (!supported) return
     const update = () => setVoices(speechSynthesis.getVoices().filter(v => v.lang === 'ja-JP'))
     speechSynthesis.addEventListener('voiceschanged', update)
+    update()
     return () => speechSynthesis.removeEventListener('voiceschanged', update)
   }, [])
   return voices
