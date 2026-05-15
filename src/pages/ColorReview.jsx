@@ -61,7 +61,7 @@ export default function ColorReview() {
   const variantKeys = Object.keys(VARIANTS)
 
   return (
-    <div style={{ background: '#2E2E2E', minHeight: '100vh', padding: '32px 32px 64px', fontFamily: "'DotGothic16', system-ui, sans-serif" }}>
+    <div style={{ background: '#1E1E1E', minHeight: '100vh', padding: '32px 32px 64px', fontFamily: "'DotGothic16', system-ui, sans-serif" }}>
       <div style={{ color: '#fff', fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Color Review</div>
       <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, marginBottom: 36 }}>
         Card color combinations across all forms — word: 食べる / answer: 食べます

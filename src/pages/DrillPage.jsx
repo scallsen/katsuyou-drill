@@ -319,7 +319,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
                 </button>
               </div>
             ) : (
-              <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>{navigator.maxTouchPoints > 0 ? 'Tap card to flip' : 'Click card or press spacebar to flip'}</div>
+              <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{navigator.maxTouchPoints > 0 ? 'Tap card to flip' : 'Click card or press spacebar to flip'}</div>
             )}
           </div>
         </div>
@@ -636,7 +636,7 @@ export default function DrillPage() {
       position: 'relative',
       width: '100vw',
       height: '100dvh',
-      background: '#2E2E2E',
+      background: '#1E1E1E',
       fontFamily: "'DotGothic16', system-ui, sans-serif",
       overflow: 'hidden',
     }}>
@@ -802,7 +802,7 @@ export default function DrillPage() {
                 height: 44,
                 background: 'none',
                 border: 'none',
-                color: 'rgba(255,255,255,0.35)',
+                color: 'rgba(255,255,255,0.5)',
                 fontSize: 14,
                 cursor: 'pointer',
                 display: 'flex',
