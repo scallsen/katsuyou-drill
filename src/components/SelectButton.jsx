@@ -31,7 +31,7 @@ export default function SelectButton({ selected, bgColor = '#ffffff', borderColo
     >
       {children}
       {subtext && (
-        <span style={{ opacity: 0.65, fontSize: 11, flexShrink: horizontal ? 0 : undefined }}>
+        <span style={{ color: selected ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.55)', fontSize, flexShrink: horizontal ? 0 : undefined }}>
           {subtext}
         </span>
       )}
