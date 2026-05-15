@@ -35,7 +35,7 @@ export default function DrawerCheckbox({ checked, onChange, label, subtext, inde
           {label}
         </span>
         {subtext && (
-          <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, fontFamily: 'inherit' }}>
+          <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, fontFamily: 'inherit' }}>
             {subtext}
           </span>
         )}

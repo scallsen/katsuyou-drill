@@ -19,7 +19,7 @@ function useNarrow(breakpoint = 500) {
 function Section({ section, topMargin }) {
   return (
     <div style={{ marginTop: topMargin ? 16 : 0 }}>
-      <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.03em', marginBottom: 6, marginTop: 0 }}>
+      <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.03em', marginBottom: 6, marginTop: 0 }}>
         {section.label}
       </p>
       <table style={{ borderCollapse: 'collapse', fontSize: 13 }}>
@@ -203,7 +203,7 @@ export default function GrammarReference({ open, onClose }) {
                   {gi > 0 && (
                     <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.08)', margin: '6px 0' }} />
                   )}
-                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '10px 12px 4px', margin: 0 }}>
+                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '10px 12px 4px', margin: 0 }}>
                     {group.label}
                   </p>
                   {group.forms.map(item => (
@@ -217,7 +217,7 @@ export default function GrammarReference({ open, onClose }) {
                         background: active === item.id ? 'rgba(255,255,255,0.08)' : 'none',
                         border: 'none',
                         fontSize: 13,
-                        color: active === item.id ? '#fff' : 'rgba(255,255,255,0.45)',
+                        color: active === item.id ? '#fff' : 'rgba(255,255,255,0.55)',
                         padding: '7px 12px',
                         cursor: 'pointer',
                         lineHeight: 1.3,
