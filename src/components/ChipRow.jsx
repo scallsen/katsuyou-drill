@@ -3,7 +3,7 @@ import { useState } from 'react'
 const labelStyle = {
   width: 60,
   flexShrink: 0,
-  color: 'rgba(255,255,255,0.4)',
+  color: 'rgba(255,255,255,0.55)',
   fontSize: 13,
   letterSpacing: '0.08em',
   textTransform: 'uppercase',
