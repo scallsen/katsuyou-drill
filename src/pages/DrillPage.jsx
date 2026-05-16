@@ -555,7 +555,6 @@ export default function DrillPage() {
                 <SelectButton
                   key={key}
                   selected={selectedForms.includes(key)}
-                  bgColor={bgColor}
                   borderColor={keyColor}
                   subtext={subtext}
                   fontSize={BTN_FONT}
