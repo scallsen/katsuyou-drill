@@ -38,7 +38,6 @@ export function buildPool({ selectedWordTypes, selectedForms, selectedRegisters,
               conjugation: answers[0],
               acceptedAnswers: answers,
               variant: resolveVariant(formKey, register),
-              bgColor: form.color ?? null,
             }
             if (!isIllegal(spec)) cards.push(spec)
           }

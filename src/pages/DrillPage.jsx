@@ -551,7 +551,7 @@ export default function DrillPage() {
               fontSize={META_FONT}
             />
             <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 6 }}>
-              {GRAMMAR_FORMS.map(({ key, label, bgColor, keyColor, subtext }) => (
+              {GRAMMAR_FORMS.map(({ key, label, keyColor, subtext }) => (
                 <SelectButton
                   key={key}
                   selected={selectedForms.includes(key)}

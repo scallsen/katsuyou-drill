@@ -32,7 +32,6 @@ export const GRAMMAR_FORMS = Object.entries(FORMS)
   .map(([key, form]) => ({
     key,
     label:       form.label,
-    bgColor:     form.bgColor,
     keyColor:    form.color,
     subtext:     FORM_SUBTEXTS[key] ?? null,
   }))
