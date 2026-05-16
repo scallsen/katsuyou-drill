@@ -6,7 +6,6 @@ import SelectButton from '../components/SelectButton.jsx'
 import DrawerSectionHeader from '../components/DrawerSectionHeader.jsx'
 import SelectionError from '../components/SelectionError.jsx'
 import { WORD_TYPES, REGISTERS, REGISTER_KEYS, GRAMMAR_FORMS, TENSES, POLARITIES } from '../data/options.js'
-import { FORMS } from '../data/forms.js'
 import { filterWords, resolveVariant } from '../data/drill.js'
 import { conjugate } from '../data/conjugation.js'
 
@@ -52,7 +51,6 @@ export default function CardPreview() {
   const cardPast     = drillMode ? activeTense === 'past' : past
   // Show plain texture whenever register is plain, using the active form's key color
   const cardBgComponent    = drillMode && activeReg === 'plain' ? PlainBg : null
-  const cardBgColor        = drillMode ? (FORMS[activeForm]?.color ?? null) : null
   const cardRegisterLabel  = drillMode && activeReg ? VARIANTS[activeReg]?.label ?? null : null
 
   return (
@@ -82,7 +80,7 @@ export default function CardPreview() {
 
       {/* Card + hint */}
       <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
-        <ConjugationCard variant={cardVariant} word={cardWord} answer={cardAnswer} negative={cardNegative} past={cardPast} bgComponent={cardBgComponent} bgComponentColor={cardBgColor} registerLabel={cardRegisterLabel} />
+        <ConjugationCard variant={cardVariant} word={cardWord} answer={cardAnswer} negative={cardNegative} past={cardPast} bgComponent={cardBgComponent} registerLabel={cardRegisterLabel} />
         <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>Click to flip card</div>
       </div>
 
@@ -225,11 +223,10 @@ export default function CardPreview() {
               onClearAll={() => setSelectedForms([])}
             />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {GRAMMAR_FORMS.map(({ key, label, bgColor, keyColor, subtext }) => (
+              {GRAMMAR_FORMS.map(({ key, label, keyColor, subtext }) => (
                 <SelectButton
                   key={key}
                   selected={selectedForms.includes(key)}
-                  bgColor={bgColor}
                   borderColor={keyColor}
                   subtext={subtext}
                   onClick={() => setSelectedForms(v => toggle(v, key))}

@@ -272,7 +272,6 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
             negative={currentCard.polarity === 'negative'}
             past={currentCard.tense === 'past'}
             bgComponent={bgComponent}
-            bgComponentColor={currentCard.bgColor}
             registerLabel={registerLabel}
             flipped={isFlipped}
             onFlip={handleFlip}
@@ -552,11 +551,10 @@ export default function DrillPage() {
               fontSize={META_FONT}
             />
             <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 6 }}>
-              {GRAMMAR_FORMS.map(({ key, label, bgColor, keyColor, subtext }) => (
+              {GRAMMAR_FORMS.map(({ key, label, keyColor, subtext }) => (
                 <SelectButton
                   key={key}
                   selected={selectedForms.includes(key)}
-                  bgColor={bgColor}
                   borderColor={keyColor}
                   subtext={subtext}
                   fontSize={BTN_FONT}
@@ -617,7 +615,9 @@ export default function DrillPage() {
                   value={ttsVoice}
                   onChange={setTtsVoice}
                   options={[{ value: '', label: 'Default' }, ...jaVoices.map(v => ({ value: v.name, label: v.name }))]}
-                  indent={2}
+                  indent={1}
+                  label="Voice"
+                  subtext="Availability based on your device or browser"
                 />
               )}
               <DrawerCheckbox
