@@ -1,7 +1,7 @@
 import { FORMS } from '../../data/forms.js'
-import { PlainBg } from './backgrounds/index.js'
+import { PlainBg, GraphBg } from './backgrounds/index.js'
 
-const BG_COMPONENTS = { plain: PlainBg }
+const BG_COMPONENTS = { plain: PlainBg, te: GraphBg, conditional: GraphBg }
 
 const VARIANT_KEYS = ['plain', 'polite', 'te', 'potential', 'volitional', 'conditional', 'passive', 'causative', 'passive_causative', 'imperative']
 

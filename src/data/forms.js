@@ -14,12 +14,12 @@ export const FORMS = {
 
   // ── Verb / word forms ──────────────────────────────────────────────
   default:          def('Default',           '888888', ['register', 'tense', 'polarity'], ['verb', 'adjective', 'noun']),
-  te:               def('Te-form',           'FF8C18', ['polarity'],                      ['verb', 'adjective', 'noun']),
-  potential:        def('Potential',         'FFCC00', ['register', 'tense', 'polarity'], ['verb']),
-  volitional:       def('Volitional',        '5EFF74', ['register'],                      ['verb']),
-  conditional:      def('Conditional',       '468CFD', ['polarity'],                      ['verb', 'adjective']),
-  passive:          def('Passive',           'CE6CFB', ['register', 'tense', 'polarity'], ['verb']),
-  causative:        def('Causative',         'FF5858', ['register', 'tense', 'polarity'], ['verb']),
-  passive_causative: def('Passive-Causative', 'FF5895', ['register', 'tense', 'polarity'], ['verb']),
-  imperative:       def('Imperative',        'FF4E18', ['polarity'],                     ['verb']),
+  te:               def('Te-form',           '4A7FCC', ['polarity'],                      ['verb', 'adjective', 'noun']),
+  potential:        def('Potential',         'D4923A', ['register', 'tense', 'polarity'], ['verb']),
+  volitional:       def('Volitional',        '4E9E5A', ['register'],                      ['verb']),
+  conditional:      def('Conditional',       '7C5CBF', ['polarity'],                      ['verb', 'adjective']),
+  passive:          def('Passive',           '3B9EA8', ['register', 'tense', 'polarity'], ['verb']),
+  causative:        def('Causative',         'C45050', ['register', 'tense', 'polarity'], ['verb']),
+  passive_causative: def('Passive-Causative', 'B05C80', ['register', 'tense', 'polarity'], ['verb']),
+  imperative:       def('Imperative',        'CC3344', ['polarity'],                     ['verb']),
 }
