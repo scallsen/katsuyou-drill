@@ -272,7 +272,6 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
             negative={currentCard.polarity === 'negative'}
             past={currentCard.tense === 'past'}
             bgComponent={bgComponent}
-            bgComponentColor={currentCard.bgColor}
             registerLabel={registerLabel}
             flipped={isFlipped}
             onFlip={handleFlip}

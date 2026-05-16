@@ -5,12 +5,14 @@ const BG_COMPONENTS = { plain: PlainBg }
 
 const VARIANT_KEYS = ['plain', 'polite', 'te', 'potential', 'volitional', 'conditional', 'passive', 'causative', 'passive_causative', 'imperative']
 
+const NEUTRAL_FORMS = new Set(['plain', 'polite'])
+
 const VARIANTS = Object.fromEntries(
   VARIANT_KEYS.map(key => [key, {
     label:       FORMS[key].label,
     keyColor:    FORMS[key].color,
-    backColor:   FORMS[key].backColor ?? FORMS[key].color,
-    bgColor:     FORMS[key].bgColor,
+    backColor:   FORMS[key].backColor ?? (NEUTRAL_FORMS.has(key) ? FORMS[key].color : '#4C4C4C'),
+    bgColor:     NEUTRAL_FORMS.has(key) ? FORMS[key].bgColor : '#FFFFFF',
     border:      `3px solid ${FORMS[key].color}`,
     BgComponent: BG_COMPONENTS[key] ?? null,
   }])
