@@ -5,8 +5,8 @@ import { isIllegal } from './illegalCombos.js'
 import { conjugate } from './conjugation.js'
 
 // Builds a flat array of card specs from the current option selections.
-export function buildPool({ selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, selectedPolarities }) {
-  const words = filterWords(selectedWordTypes)
+export function buildPool({ selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, selectedPolarities, selectedJlpt = [] }) {
+  const words = filterWords(selectedWordTypes, selectedJlpt)
   if (!words.length) return []
 
   const forms = selectedForms.length ? selectedForms : ['default']
@@ -50,15 +50,17 @@ export function buildPool({ selectedWordTypes, selectedForms, selectedRegisters,
 }
 
 // Returns all words whose wordType+group matches any of the selected category keys.
-export function filterWords(selectedWordTypeKeys) {
+export function filterWords(selectedWordTypeKeys, selectedJlpt = []) {
   if (!selectedWordTypeKeys.length) return []
   const words = getAllWords()
-  return words.filter(word =>
-    selectedWordTypeKeys.some(key => {
+  return words.filter(word => {
+    const typeMatch = selectedWordTypeKeys.some(key => {
       const cat = CATEGORIES.find(c => c.key === key)
       return cat && word.wordType === cat.wordType && word.group === cat.group
     })
-  )
+    const jlptMatch = selectedJlpt.length === 0 || selectedJlpt.includes(word.jlpt)
+    return typeMatch && jlptMatch
+  })
 }
 
 // Returns the card variant key to use for a given form + register selection.
