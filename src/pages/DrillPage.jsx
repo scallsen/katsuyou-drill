@@ -7,6 +7,7 @@ import SelectButton from '../components/SelectButton.jsx'
 import DrawerSectionHeader from '../components/DrawerSectionHeader.jsx'
 import SelectionError from '../components/SelectionError.jsx'
 import { WORD_TYPES, REGISTERS, GRAMMAR_FORMS, TENSES, POLARITIES } from '../data/options.js'
+import { CATEGORIES } from '../data/categories.js'
 import { buildPool } from '../data/drill.js'
 import { useDrill, ENGINES } from '../hooks/useDrill.js'
 import { useTTS, useJaVoices } from '../hooks/useTTS.js'
@@ -470,8 +471,10 @@ export default function DrillPage() {
     if (showOptions) setShowMobileMenuHint(false)
   }, [showOptions])
 
-  const verbSelected     = ['u-verb', 'ru-verb', 'irregular'].some(k => selectedWordTypes.includes(k))
   const drillMode    = selectedWordTypes.length > 0
+
+  const activeWordTypes      = new Set(selectedWordTypes.map(k => CATEGORIES.find(c => c.key === k)?.wordType).filter(Boolean))
+  const availableGrammarForms = GRAMMAR_FORMS.filter(f => f.validWordTypes.some(wt => activeWordTypes.has(wt)))
 
   const poolKey = [selectedWordTypes, selectedForms, selectedRegisters, selectedTenses, selectedPolarities, selectedJlpt]
     .map(a => [...a].sort().join(','))
@@ -522,8 +525,14 @@ export default function DrillPage() {
               onClick={() => {
                 const next = toggle(selectedWordTypes, key)
                 const adding = !selectedWordTypes.includes(key)
-                seek(next, selectedForms, selectedRegisters, selectedTenses, selectedPolarities, adding ? 'wordType' : null, adding ? key : null)
+                const nextWordTypes = new Set(next.map(k => CATEGORIES.find(c => c.key === k)?.wordType).filter(Boolean))
+                const nextForms = selectedForms.filter(fk => {
+                  const f = GRAMMAR_FORMS.find(gf => gf.key === fk)
+                  return f && f.validWordTypes.some(wt => nextWordTypes.has(wt))
+                })
+                seek(next, nextForms, selectedRegisters, selectedTenses, selectedPolarities, adding ? 'wordType' : null, adding ? key : null)
                 setSelectedWordTypes(next)
+                if (nextForms.length !== selectedForms.length) setSelectedForms(nextForms)
               }}
             >
               <span style={{ fontSize: BTN_FONT }}>{line1}</span>
@@ -599,12 +608,12 @@ export default function DrillPage() {
           />
         </div>
 
-        {/* ── Separator + Section 3: Verb Forms ── */}
-        {verbSelected && (
+        {/* ── Separator + Section 3: Forms ── */}
+        {selectedWordTypes.length > 0 && (
           <>
             <div style={hairline} />
             <DrawerSectionHeader
-              title="Verb forms"
+              title="Forms"
               hasSelections={selectedForms.length > 0}
               onClearAll={() => {
                 seek(selectedWordTypes, [], selectedRegisters, selectedTenses, selectedPolarities, null, null)
@@ -613,7 +622,7 @@ export default function DrillPage() {
               fontSize={META_FONT}
             />
             <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 6 }}>
-              {GRAMMAR_FORMS.map(({ key, label, keyColor, subtext }) => (
+              {availableGrammarForms.map(({ key, label, keyColor, subtext }) => (
                 <SelectButton
                   key={key}
                   selected={selectedForms.includes(key)}

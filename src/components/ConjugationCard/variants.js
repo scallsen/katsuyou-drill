@@ -1,9 +1,9 @@
 import { FORMS } from '../../data/forms.js'
 import { PlainBg, GraphBg } from './backgrounds/index.js'
 
-const BG_COMPONENTS = { plain: PlainBg, te: GraphBg, conditional: GraphBg }
+const BG_COMPONENTS = { plain: PlainBg, te: GraphBg, conditional: GraphBg, adverbial: GraphBg }
 
-const VARIANT_KEYS = ['plain', 'polite', 'te', 'potential', 'volitional', 'conditional', 'passive', 'causative', 'passive_causative', 'imperative']
+const VARIANT_KEYS = ['plain', 'polite', 'te', 'potential', 'volitional', 'conditional', 'passive', 'causative', 'passive_causative', 'imperative', 'adverbial']
 
 const NEUTRAL_FORMS = new Set(['plain', 'polite'])
 
