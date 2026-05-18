@@ -12,7 +12,7 @@ const VARIANTS = Object.fromEntries(
     label:       FORMS[key].label,
     keyColor:    FORMS[key].color,
     bgColor:     NEUTRAL_FORMS.has(key) ? FORMS[key].bgColor : '#FFFFFF',
-    border:      `3px solid ${FORMS[key].color}`,
+    border:      `5px solid ${FORMS[key].color}`,
     BgComponent: BG_COMPONENTS[key] ?? null,
   }])
 )
