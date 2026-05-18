@@ -134,6 +134,10 @@ Output of `buildPool()`, input to engine and card rendering:
 // UI derives: bgComponent (register==='plain' → PlainBg), registerLabel (VARIANTS[register]?.label)
 ```
 
+## Known quirks
+
+- **Sidebar tab scroll** — the outer panel wrapper uses `overflow: hidden` for the slide-in width animation. This makes the browser's Tab-triggered scroll-into-view target the wrong container, so focused elements above the current scroll position have no visible focus ring. Fix: `handleSidebarFocus` on each `.sidebar-scroll` div directly scrolls the container whenever a descendant receives focus. Do not remove `overflow: hidden` from the outer wrapper — it's needed for the animation.
+
 ## Card appearance notes
 
 - **`backColor`** — optional field in `FORMS` / `variants`. Overrides the back-face background color (e.g. plain/polite use `#4C4C4C`; all others fall back to `keyColor`). When set, `PlainBg` on the back also receives `backColor` as its `color` prop so the ruled lines are derived from the dark bg rather than the form accent color.
