@@ -363,6 +363,13 @@ function DoneScreen({ totalCorrect, totalWrong, onRestart }) {
 
 // ── Main page ────────────────────────────────────────────────────────────────
 
+const JLPT_LEVELS = [5, 4, 3]
+
+function jlptLabel(levels) {
+  if (!levels.length) return 'all levels'
+  return levels.slice().sort((a, b) => b - a).map(n => `N${n}`).join(', ')
+}
+
 const DEFAULTS = {
   wordTypes:  ['u-verb', 'ru-verb', 'irregular'],
   registers:  ['polite'],
@@ -370,6 +377,7 @@ const DEFAULTS = {
   tenses:     ['present'],
   polarities: ['positive'],
   engine:     'simpleQueue',
+  jlpt:       JLPT_LEVELS,
 }
 
 export default function DrillPage() {
@@ -472,6 +480,18 @@ export default function DrillPage() {
   const hairline = { height: 1, background: 'rgba(255,255,255,0.08)', margin: '20px 0' }
   const rowStyle = { display: 'flex', alignItems: 'center', gap: 10 }
   const rowLabelStyle = { width: 60, flexShrink: 0, color: 'rgba(255,255,255,0.4)', fontSize: META_FONT, letterSpacing: '0.08em', textTransform: 'uppercase' }
+
+  function handleSidebarFocus(e) {
+    const container = e.currentTarget
+    const target = e.target
+    const cRect = container.getBoundingClientRect()
+    const tRect = target.getBoundingClientRect()
+    if (tRect.top < cRect.top + 8) {
+      container.scrollTop += tRect.top - cRect.top - 8
+    } else if (tRect.bottom > cRect.bottom - 8) {
+      container.scrollTop += tRect.bottom - cRect.bottom + 8
+    }
+  }
 
   function renderPanelContent(paddingH) {
     return (
@@ -851,7 +871,7 @@ export default function DrillPage() {
             overflow: 'hidden',
             transition: 'width 220ms ease',
           }}>
-            <div className="sidebar-scroll" style={{ width: PANEL_CONTENT_W, height: '100%', overflowY: 'auto' }}>
+            <div className="sidebar-scroll" style={{ width: PANEL_CONTENT_W, height: '100%', overflowY: 'auto' }} onFocus={handleSidebarFocus}>
               {renderPanelContent(16)}
             </div>
           </div>
@@ -896,7 +916,7 @@ export default function DrillPage() {
                 Hide
               </button>
             </div>
-            <div className="sidebar-scroll" style={{ flex: 1, overflowY: 'auto', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+            <div className="sidebar-scroll" style={{ flex: 1, overflowY: 'auto', paddingBottom: 'env(safe-area-inset-bottom)' }} onFocus={handleSidebarFocus}>
               {renderPanelContent(20)}
             </div>
           </div>
