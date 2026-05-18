@@ -21,6 +21,7 @@ const FORM_SUBTEXTS = {
   potential:        '〜られる',
   volitional:       '〜よう',
   conditional:      '〜えば',
+  adverbial:        '〜く·に',
   passive:          '〜られる',
   causative:        '〜させる',
   passive_causative: '〜させられる',
@@ -31,9 +32,10 @@ export const GRAMMAR_FORMS = Object.entries(FORMS)
   .filter(([key]) => !REGISTER_KEYS.includes(key))
   .map(([key, form]) => ({
     key,
-    label:       form.label,
-    keyColor:    form.color,
-    subtext:     FORM_SUBTEXTS[key] ?? null,
+    label:          form.label,
+    keyColor:       form.color,
+    subtext:        FORM_SUBTEXTS[key] ?? null,
+    validWordTypes: form.validWordTypes,
   }))
 
 export const TENSES = [

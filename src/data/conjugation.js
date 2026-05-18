@@ -328,6 +328,9 @@ function conjugateIAdj(word, formKey, register, tense, polarity) {
       return null
     }
 
+    case 'adverbial':
+      return buildPairs(kS + 'く', nS + 'く')
+
     default:
       return null
   }
@@ -360,6 +363,17 @@ function conjugateCopula(word, formKey, register, tense, polarity) {
       if (polarity === 'negative') return buildPairs(kK + 'じゃなくて',  kN + 'じゃなくて')
       return null
     }
+
+    case 'conditional': {
+      if (word.wordType === 'noun') return null
+      if (polarity === 'positive') return buildPairs(kK + 'なら',         kN + 'なら')
+      if (polarity === 'negative') return buildPairs(kK + 'じゃなければ', kN + 'じゃなければ')
+      return null
+    }
+
+    case 'adverbial':
+      if (word.wordType === 'noun') return null
+      return buildPairs(kK + 'に', kN + 'に')
 
     default:
       return null

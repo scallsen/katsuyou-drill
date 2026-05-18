@@ -18,6 +18,7 @@ export const FORMS = {
   potential:        def('Potential',         'E8962E', ['register', 'tense', 'polarity'], ['verb']),
   volitional:       def('Volitional',        '3CC25E', ['register'],                      ['verb']),
   conditional:      def('Conditional',       '8A55E0', ['polarity'],                      ['verb', 'adjective']),
+  adverbial:        def('Adverbial',         '2D7A4F', [],                                 ['adjective']),
   passive:          def('Passive',           '25B4C4', ['register', 'tense', 'polarity'], ['verb']),
   causative:        def('Causative',         'D83C3C', ['register', 'tense', 'polarity'], ['verb']),
   passive_causative: def('Passive-Causative', 'CC4888', ['register', 'tense', 'polarity'], ['verb']),
