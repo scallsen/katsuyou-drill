@@ -11,7 +11,7 @@ export default function DrawerCheckbox({ checked, onChange, label, subtext, inde
         display: 'flex',
         alignItems: 'flex-start',
         gap: 8,
-        paddingLeft: indent * 14,
+        paddingLeft: indent * 14 + 6,
         cursor: 'pointer',
         userSelect: 'none',
       }}

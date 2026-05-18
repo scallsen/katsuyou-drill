@@ -21,6 +21,16 @@
   scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
 }
 
+.drawer-checkbox {
+  padding: 4px 6px;
+  margin: -4px -6px;
+}
+
+.drawer-checkbox:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
 .drawer-checkbox:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.45);
   outline-offset: 3px;
