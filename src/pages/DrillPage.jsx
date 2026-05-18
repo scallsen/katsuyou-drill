@@ -92,7 +92,7 @@ function findSeekCard(newPool, currentCard, axis, value) {
 
 // ── Sub-views ────────────────────────────────────────────────────────────────
 
-function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, showFurigana, pixelFont, showVisualEffects, onPulse, onFirstVerdict }) {
+function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, showFurigana, pixelFont, showVisualEffects, showTranslation, onPulse, onFirstVerdict }) {
   const [flippedCardId, setFlippedCardId] = useState(null)
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
@@ -276,6 +276,8 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
             flipped={isFlipped}
             onFlip={handleFlip}
             animate={showVisualEffects}
+            translation={currentCard.word.english ?? null}
+            showTranslation={showTranslation}
           />
         </div>
 
@@ -408,6 +410,9 @@ export default function DrillPage() {
     const stored = localStorage.getItem('pixel-font')
     return stored === null ? true : stored === 'true'
   })
+  const [showTranslation,    setShowTranslation]    = useState(() => {
+    return localStorage.getItem('show-translation') ?? 'off'
+  })
   const [pulseColor,         setPulseColor]         = useState(null)
   const [audioHovered,       setAudioHovered]       = useState(false)
   const [optionsHovered,     setOptionsHovered]     = useState(false)
@@ -424,6 +429,7 @@ export default function DrillPage() {
   useEffect(() => { localStorage.setItem('show-furigana', showFurigana) }, [showFurigana])
   useEffect(() => { localStorage.setItem('show-visual-effects', showVisualEffects) }, [showVisualEffects])
   useEffect(() => { localStorage.setItem('pixel-font', pixelFont) }, [pixelFont])
+  useEffect(() => { localStorage.setItem('show-translation', showTranslation) }, [showTranslation])
 
   function seek(newWordTypes, newForms, newRegs, newTenses, newPols, axis, value) {
     const newPool = buildPool({
@@ -598,6 +604,23 @@ export default function DrillPage() {
             label="Use pixel font"
           />
           <DrawerCheckbox
+            checked={showTranslation !== 'off'}
+            onChange={() => setShowTranslation(v => v === 'off' ? 'back' : 'off')}
+            label="Show translation"
+          />
+          {showTranslation !== 'off' && (
+            <DrawerSelect
+              value={showTranslation}
+              onChange={setShowTranslation}
+              options={[
+                { value: 'back', label: 'Answer only' },
+                { value: 'both', label: 'Both sides' },
+              ]}
+              indent={1}
+              label="When to show translation"
+            />
+          )}
+          <DrawerCheckbox
             checked={audioEnabled}
             onChange={() => setAudioEnabled(v => !v)}
             label="Enable audio"
@@ -745,7 +768,7 @@ export default function DrillPage() {
           ) : drill.done ? (
             <DoneScreen totalCorrect={drill.totalCorrect} totalWrong={drill.totalWrong} onRestart={drill.restart} />
           ) : (
-            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} pixelFont={pixelFont} showVisualEffects={showVisualEffects} onPulse={setPulseColor} onFirstVerdict={handleFirstVerdict} />
+            <ActiveDrill drill={drill} ttsEnabled={audioEnabled && ttsEnabled} sfxEnabled={audioEnabled && sfxEnabled} ttsVoice={ttsVoice} showStreak={showStreak} showFurigana={showFurigana} pixelFont={pixelFont} showVisualEffects={showVisualEffects} showTranslation={showTranslation} onPulse={setPulseColor} onFirstVerdict={handleFirstVerdict} />
           )}
         </div>
 

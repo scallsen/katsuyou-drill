@@ -1,6 +1,6 @@
 import { buildFurigana, buildFuriganaForConjugation } from '../../utils/furigana.js'
 
-export default function CardContent({ label, n, past, word, kana = null, wordKanji = null, showFurigana = false, pixelFont = true, answerLabel = null }) {
+export default function CardContent({ label, n, past, word, kana = null, wordKanji = null, showFurigana = false, pixelFont = true, answerLabel = null, translation = null }) {
   const jaFont = pixelFont ? "'DotGothic16', sans-serif" : "system-ui, sans-serif"
   return (
     <div
@@ -96,6 +96,19 @@ export default function CardContent({ label, n, past, word, kana = null, wordKan
         >
           {label}
         </div>
+        {translation && (
+          <div
+            style={{
+              fontFamily: "'DotGothic16', sans-serif",
+              fontSize: '5.26cqw',
+              fontWeight: 400,
+              letterSpacing: '0.04em',
+              color: 'rgba(0,0,0,0.42)',
+            }}
+          >
+            {translation}
+          </div>
+        )}
       </div>
     </div>
   )

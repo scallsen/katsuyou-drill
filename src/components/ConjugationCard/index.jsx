@@ -4,20 +4,22 @@ import CardContent from './CardContent.jsx'
 import FlipCard from '../../FlipCard.jsx'
 import { FORMS } from '../../data/forms.js'
 
-export default function ConjugationCard({ variant = 'plain', word = '', kana = null, showFurigana = false, pixelFont = true, answer = null, negative = false, past = false, bgComponent = null, registerLabel = null, flipped = false, onFlip = null, animate = true }) {
+export default function ConjugationCard({ variant = 'plain', word = '', kana = null, showFurigana = false, pixelFont = true, answer = null, negative = false, past = false, bgComponent = null, registerLabel = null, flipped = false, onFlip = null, animate = true, translation = null, showTranslation = 'off' }) {
   const config = VARIANTS[variant] ?? VARIANTS.plain
   const FrontBg = bgComponent ?? config.BgComponent
   const answerLabel = FORMS[variant]?.axes?.includes('register') ? registerLabel : null
+  const frontTranslation = showTranslation === 'both' ? translation : null
+  const backTranslation  = showTranslation === 'both' || showTranslation === 'back' ? translation : null
 
   const front = (
     <CardShell bgColor={config.bgColor} border={config.border} BgComponent={FrontBg}>
-      <CardContent label={config.label} n={negative} past={past} word={word} kana={kana} showFurigana={showFurigana} pixelFont={pixelFont} answerLabel={answerLabel} />
+      <CardContent label={config.label} n={negative} past={past} word={word} kana={kana} showFurigana={showFurigana} pixelFont={pixelFont} answerLabel={answerLabel} translation={frontTranslation} />
     </CardShell>
   )
 
   const back = (
     <CardShell bgColor={config.bgColor} border={config.border} BgComponent={FrontBg}>
-      {answer && <CardContent label={config.label} n={negative} past={past} word={answer} kana={kana} wordKanji={word} showFurigana={showFurigana} pixelFont={pixelFont} answerLabel={answerLabel} />}
+      {answer && <CardContent label={config.label} n={negative} past={past} word={answer} kana={kana} wordKanji={word} showFurigana={showFurigana} pixelFont={pixelFont} answerLabel={answerLabel} translation={backTranslation} />}
     </CardShell>
   )
 
