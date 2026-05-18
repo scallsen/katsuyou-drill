@@ -538,6 +538,8 @@ export default function DrillPage() {
           Use vocabulary from{' '}
           <span
             onClick={() => setJlptExpanded(v => !v)}
+            onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.9)' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)' }}
             style={{ color: 'rgba(255,255,255,0.65)', textDecoration: 'underline', textUnderlineOffset: 3, cursor: 'pointer' }}
           >
             JLPT {jlptLabel(selectedJlpt)}
