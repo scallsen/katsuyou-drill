@@ -831,32 +831,51 @@ export default function DrillPage() {
         {/* Footer */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
           padding: '12px 24px',
           zIndex: 10,
           pointerEvents: 'none',
         }}>
           <a
-            href="https://scallsen.ca"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, textDecoration: 'none', pointerEvents: 'auto' }}
-            onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
-            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}
+            href="mailto:hello@scallsen.ca?subject=Katsuyou%20Drill%20-%20Issue%20Report"
+            style={{
+              color: 'rgba(255,255,255,0.35)',
+              fontSize: 12,
+              textDecoration: 'none',
+              border: '1px solid rgba(255,255,255,0.18)',
+              borderRadius: 6,
+              padding: '3px 10px',
+              pointerEvents: 'auto',
+              transition: 'color 0.15s, border-color 0.15s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.45)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)'; }}
           >
-            Developed by Simon Callsen
+            Report issue
           </a>
-          <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 13 }}>·</span>
-          <a
-            href="https://github.com/scallsen/katsuyou-drill"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, textDecoration: 'none', pointerEvents: 'auto' }}
-            onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
-            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}
-          >
-            GitHub
-          </a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <a
+              href="https://scallsen.ca"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, textDecoration: 'none', pointerEvents: 'auto' }}
+              onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}
+            >
+              Developed by Simon Callsen
+            </a>
+            <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 13 }}>·</span>
+            <a
+              href="https://github.com/scallsen/katsuyou-drill"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, textDecoration: 'none', pointerEvents: 'auto' }}
+              onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}
+            >
+              GitHub
+            </a>
+          </div>
         </div>
       </div>
 
