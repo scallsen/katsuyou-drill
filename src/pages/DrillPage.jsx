@@ -182,7 +182,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
 
   useEffect(() => {
     if (isFlipped && ttsEnabled) {
-      tts.speak(currentCard.conjugation)
+      tts.speak(currentCard.acceptedAnswers.at(-1))
     } else {
       tts.cancel()
     }
