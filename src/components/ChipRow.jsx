@@ -17,10 +17,10 @@ function chipStyle(active, hovered) {
     cursor: 'pointer',
     textAlign: 'center',
     borderRadius: 6,
-    border: active ? '2px solid #aaaaaa' : '1px solid rgba(255,255,255,0.18)',
-    background: active ? '#ffffff' : hovered ? 'rgba(255,255,255,0.08)' : 'transparent',
+    border: '1px solid rgba(255,255,255,0.18)',
+    background: active ? '#DDDDDD' : hovered ? 'rgba(255,255,255,0.08)' : 'transparent',
     color: active ? 'rgba(0,0,0,0.85)' : hovered ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.5)',
-    transition: 'background 130ms, color 130ms, border-color 130ms',
+    transition: 'background 130ms, color 130ms',
   }
 }
 
