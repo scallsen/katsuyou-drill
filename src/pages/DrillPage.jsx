@@ -831,7 +831,7 @@ export default function DrillPage() {
         {/* Footer */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
           padding: '12px 24px',
           zIndex: 10,
           pointerEvents: 'none',
