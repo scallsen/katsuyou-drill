@@ -3,6 +3,7 @@ import CardContent from '../components/ConjugationCard/CardContent.jsx'
 import VARIANTS from '../components/ConjugationCard/variants.js'
 import PlainBg from '../components/ConjugationCard/backgrounds/PlainBg.jsx'
 import { FORMS } from '../data/forms.js'
+import { FONT } from '../data/theme.js'
 
 const CARD_W = 380
 const CARD_H = 280
@@ -61,7 +62,7 @@ export default function ColorReview() {
   const variantKeys = Object.keys(VARIANTS)
 
   return (
-    <div style={{ background: '#1E1E1E', minHeight: '100vh', padding: '32px 32px 64px', fontFamily: "'DotGothic16', system-ui, sans-serif" }}>
+    <div style={{ background: '#1E1E1E', minHeight: '100vh', padding: '32px 32px 64px', fontFamily: FONT }}>
       <div style={{ color: '#fff', fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Color Review</div>
       <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, marginBottom: 36 }}>
         Card color combinations across all forms — word: 食べる / answer: 食べます

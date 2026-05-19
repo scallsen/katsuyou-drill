@@ -3,6 +3,7 @@ import ConjugationCard from '../components/ConjugationCard/index.jsx'
 import VARIANTS from '../components/ConjugationCard/variants.js'
 import PlainBg from '../components/ConjugationCard/backgrounds/PlainBg.jsx'
 import SelectButton from '../components/SelectButton.jsx'
+import { FONT } from '../data/theme.js'
 import DrawerSectionHeader from '../components/DrawerSectionHeader.jsx'
 import SelectionError from '../components/SelectionError.jsx'
 import { WORD_TYPES, REGISTERS, REGISTER_KEYS, GRAMMAR_FORMS, TENSES, POLARITIES } from '../data/options.js'
@@ -54,7 +55,7 @@ export default function CardPreview() {
   const cardRegisterLabel  = drillMode && activeReg ? VARIANTS[activeReg]?.label ?? null : null
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#1E1E1E', fontFamily: "'DotGothic16', system-ui, sans-serif", overflow: 'hidden' }}>
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#1E1E1E', fontFamily: FONT, overflow: 'hidden' }}>
 
       {/* Header */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 24px', zIndex: 10 }}>

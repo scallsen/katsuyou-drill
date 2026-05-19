@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { FONT } from '../data/theme.js'
 
 const KEYFRAMES_ID     = 'streak-keyframes'
 const WIGGLE_THRESHOLD = 10
@@ -90,11 +91,11 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
 
       <div style={{ height: 64, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, visibility: (showStreak || onboardingHint != null) ? 'visible' : 'hidden' }}>
         {onboardingHint != null ? (
-          <span style={{ fontSize: 20, fontWeight: 700, fontFamily: "'DotGothic16', sans-serif", color: '#fff', letterSpacing: '0.05em', lineHeight: 1.3, textAlign: 'center', maxWidth: 'calc(100vw - 48px)', whiteSpace: 'pre-line' }}>
+          <span style={{ fontSize: 20, fontWeight: 700, fontFamily: FONT, color: '#fff', letterSpacing: '0.05em', lineHeight: 1.3, textAlign: 'center', maxWidth: 'calc(100vw - 48px)', whiteSpace: 'pre-line' }}>
             {onboardingHint}
           </span>
         ) : streakLost ? (
-          <span style={{ color: '#f87171', fontSize: 16, fontWeight: 700, fontFamily: "'DotGothic16', sans-serif", opacity: streakLost === 'fading' ? 0 : 1, transition: 'opacity 0.3s ease' }}>
+          <span style={{ color: '#f87171', fontSize: 16, fontWeight: 700, fontFamily: FONT, opacity: streakLost === 'fading' ? 0 : 1, transition: 'opacity 0.3s ease' }}>
             Streak lost
           </span>
         ) : (
@@ -104,7 +105,7 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
               fontSize: streakFontSize(streak),
               transition: showVisualEffects ? 'font-size 0.35s ease' : 'none',
               fontWeight: 700,
-              fontFamily: "'DotGothic16', sans-serif",
+              fontFamily: FONT,
               letterSpacing: '0.05em',
               lineHeight: 1,
               animation: showWiggle ? 'streak-wiggle 1.4s ease-in-out infinite' : 'none',
@@ -123,7 +124,7 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
                 }
               </span>
             </span>
-            <span style={{ color: subLabel ? 'rgba(255,255,255,0.5)' : 'transparent', fontSize: 13, fontFamily: "'DotGothic16', sans-serif", userSelect: 'none', lineHeight: 1 }}>
+            <span style={{ color: subLabel ? 'rgba(255,255,255,0.5)' : 'transparent', fontSize: 13, fontFamily: FONT, userSelect: 'none', lineHeight: 1 }}>
               {subLabel ?? 'Best streak: 0'}
             </span>
           </>
@@ -153,7 +154,7 @@ export default function DrillHUD({ streak, bestStreak, totalCorrect, totalWrong,
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.5)', fontSize: 13, fontFamily: "'DotGothic16', sans-serif", alignItems: 'center', visibility: showStreak && (totalCorrect > 0 || totalWrong > 0) ? 'visible' : 'hidden' }}>
+      <div style={{ display: 'flex', gap: 20, color: 'rgba(255,255,255,0.5)', fontSize: 13, fontFamily: FONT, alignItems: 'center', visibility: showStreak && (totalCorrect > 0 || totalWrong > 0) ? 'visible' : 'hidden' }}>
         <span>{totalCorrect} correct</span>
         <span>{totalWrong} wrong</span>
       </div>

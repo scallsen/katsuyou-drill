@@ -8,6 +8,7 @@ import DrawerSectionHeader from '../components/DrawerSectionHeader.jsx'
 import SelectionError from '../components/SelectionError.jsx'
 import { WORD_TYPES, REGISTERS, GRAMMAR_FORMS, TENSES, POLARITIES } from '../data/options.js'
 import { CATEGORIES } from '../data/categories.js'
+import { FONT, TRACKING } from '../data/theme.js'
 import { buildPool } from '../data/drill.js'
 import { useDrill, ENGINES } from '../hooks/useDrill.js'
 import { useTTS, useJaVoices } from '../hooks/useTTS.js'
@@ -337,7 +338,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
 
 function DoneScreen({ totalCorrect, totalWrong, onRestart }) {
   return (
-    <div style={{ textAlign: 'center', fontFamily: "'DotGothic16', sans-serif" }}>
+    <div style={{ textAlign: 'center', fontFamily: FONT }}>
       <div style={{ color: '#fff', fontSize: 28, letterSpacing: '0.05em', marginBottom: 12 }}>All done!</div>
       <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, marginBottom: 28 }}>
         {totalCorrect} correct &nbsp;·&nbsp; {totalWrong} wrong
@@ -730,7 +731,8 @@ export default function DrillPage() {
       width: '100vw',
       height: '100dvh',
       background: '#1E1E1E',
-      fontFamily: "'DotGothic16', system-ui, sans-serif",
+      fontFamily: FONT,
+      letterSpacing: TRACKING,
       overflow: 'hidden',
     }}>
 

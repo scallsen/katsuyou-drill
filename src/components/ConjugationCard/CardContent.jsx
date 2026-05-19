@@ -1,7 +1,8 @@
 import { buildFurigana, buildFuriganaForConjugation } from '../../utils/furigana.js'
+import { FONT } from '../../data/theme.js'
 
 export default function CardContent({ label, n, past, word, kana = null, wordKanji = null, showFurigana = false, pixelFont = true, answerLabel = null, translation = null }) {
-  const jaFont = pixelFont ? "'DotGothic16', sans-serif" : "system-ui, sans-serif"
+  const jaFont = pixelFont ? FONT : "system-ui, sans-serif"
   return (
     <div
       style={{
@@ -15,18 +16,18 @@ export default function CardContent({ label, n, past, word, kana = null, wordKan
     >
       {/* Answer label */}
       {answerLabel && (
-        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, textAlign: 'center', fontFamily: "'DotGothic16', sans-serif", fontSize: '6.32cqw', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.35)' }}>
+        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, textAlign: 'center', fontFamily: FONT, fontSize: '6.32cqw', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.35)' }}>
           {answerLabel}
         </div>
       )}
 
       {n && (
-        <div style={{ position: 'absolute', bottom: 12, right: 20, fontFamily: "'DotGothic16', sans-serif", fontSize: '6.32cqw', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#222', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', bottom: 12, right: 20, fontFamily: FONT, fontSize: '6.32cqw', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#222', pointerEvents: 'none' }}>
           Negative
         </div>
       )}
       {past && (
-        <div style={{ position: 'absolute', bottom: 12, left: 20, fontFamily: "'DotGothic16', sans-serif", fontSize: '6.32cqw', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#222', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', bottom: 12, left: 20, fontFamily: FONT, fontSize: '6.32cqw', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#222', pointerEvents: 'none' }}>
           Past
         </div>
       )}
@@ -50,7 +51,7 @@ export default function CardContent({ label, n, past, word, kana = null, wordKan
             fontSize: '12.63cqw',
             fontWeight: 400,
             color: '#222',
-            letterSpacing: '0.02em',
+            letterSpacing: 'normal',
             lineHeight: 1.2,
             textShadow: '2px 2px 0 rgba(0,0,0,0.25)',
           }}
@@ -86,7 +87,7 @@ export default function CardContent({ label, n, past, word, kana = null, wordKan
         </div>
         <div
           style={{
-            fontFamily: "'DotGothic16', sans-serif",
+            fontFamily: FONT,
             fontSize: '6.84cqw',
             fontWeight: 400,
             letterSpacing: '0.05em',
@@ -99,7 +100,7 @@ export default function CardContent({ label, n, past, word, kana = null, wordKan
         {translation && (
           <div
             style={{
-              fontFamily: "'DotGothic16', sans-serif",
+              fontFamily: FONT,
               fontSize: '5.26cqw',
               fontWeight: 400,
               letterSpacing: '0.04em',

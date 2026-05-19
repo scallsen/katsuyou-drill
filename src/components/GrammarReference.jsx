@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import grammarData from '../data/grammarReference.json'
 import { FORMS } from '../data/forms.js'
+import { FONT } from '../data/theme.js'
 
 const ALL_FORMS = grammarData.groups.flatMap(g => g.forms)
 const FORM_BY_ID = Object.fromEntries(ALL_FORMS.map(f => [f.id, f]))
@@ -110,7 +111,7 @@ export default function GrammarReference({ open, onClose }) {
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          fontFamily: "'DotGothic16', system-ui, sans-serif",
+          fontFamily: FONT,
         }}
       >
         {/* Header */}
