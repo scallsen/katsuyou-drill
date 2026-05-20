@@ -14,7 +14,7 @@ export const REGISTERS = [
   { key: 'polite', subtext: '〜ます' },
 ]
 
-export const REGISTER_KEYS = REGISTERS.map(r => r.key)
+const REGISTER_KEYS = REGISTERS.map(r => r.key)
 
 const FORM_SUBTEXTS = {
   te:               '〜て',

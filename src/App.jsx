@@ -6,9 +6,10 @@ export default function App() {
   const isColorReview = hash === '#/color-review'
 
   const root = document.getElementById('root')
-  document.documentElement.style.overflow = isColorReview ? 'auto' : 'hidden'
-  document.body.style.overflow = isColorReview ? 'auto' : 'hidden'
-  root.style.overflow = isColorReview ? 'auto' : 'hidden'
+  const overflow = isColorReview ? 'auto' : 'hidden'
+  document.documentElement.style.overflow = overflow
+  document.body.style.overflow = overflow
+  root.style.overflow = overflow
   root.style.height = isColorReview ? 'auto' : '100%'
 
   if (isColorReview) return <ColorReview />
