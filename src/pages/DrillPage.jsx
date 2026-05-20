@@ -547,9 +547,15 @@ export default function DrillPage() {
         <div style={{ marginTop: 10, fontSize: 13, color: 'rgba(255,255,255,0.4)', lineHeight: 1.4 }}>
           Use vocabulary from{' '}
           <span
+            role="button"
+            tabIndex={0}
+            className="jlpt-toggle"
             onClick={() => setJlptExpanded(v => !v)}
+            onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setJlptExpanded(v => !v) } }}
             onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.9)' }}
             onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)' }}
+            onFocus={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.9)' }}
+            onBlur={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)' }}
             style={{ color: 'rgba(255,255,255,0.65)', textDecoration: 'underline', textUnderlineOffset: 3, cursor: 'pointer' }}
           >
             JLPT {jlptLabel(selectedJlpt)}
