@@ -99,7 +99,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
   const [transitioning, setTransitioning] = useState(false)
   const [exitDir, setExitDir] = useState(null)
   const [undoEntering, setUndoEntering] = useState(false)
-  const { currentCard, streak, bestStreak, totalCorrect, totalWrong, remaining, canUndo, prevCard, onUndo } = drill
+  const { currentCard, streak, bestStreak, totalCorrect, totalWrong, remaining, canUndo, onUndo } = drill
   const isFlipped = flippedCardId === currentCard.id
   const tts = useTTS(ttsVoice)
 
