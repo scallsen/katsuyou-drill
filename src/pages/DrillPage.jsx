@@ -375,7 +375,7 @@ const DEFAULTS = {
   tenses:     ['present'],
   polarities: ['positive'],
   engine:     'simpleQueue',
-  jlpt:       JLPT_LEVELS.filter(l => l !== 3),
+  jlpt:       [5],
 }
 
 export default function DrillPage() {
