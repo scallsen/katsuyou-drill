@@ -13,7 +13,7 @@ Japanese verb conjugation drill app. Vite + React, no TypeScript.
 - **Inline styles only** — no CSS modules, no Tailwind. CSS files are only for things that can't be expressed inline: `FlipCard.css` (3D flip animation), `global.css` (pseudo-element styles like custom scrollbars).
 - **No comments** unless the WHY is non-obvious (a hidden constraint, a workaround, a subtle invariant).
 - **No TypeScript** — plain JS throughout.
-- `src/pages/CardPreview.jsx` is a dev sandbox for visual testing. `DrillPage` is the real entry point (`App.jsx` renders it).
+- `DrillPage` is the real entry point (`App.jsx` renders it).
 - `src/pages/ColorReview.jsx` is a **color/appearance testing page** — navigate to `/#/color-review` in the dev server to see a static grid of all 11 card variants (4 columns × 2 rows each). Use it to tweak card visuals in isolation without loading the full drill. Routing is hash-based in `App.jsx`.
 
 ## How the drill works
