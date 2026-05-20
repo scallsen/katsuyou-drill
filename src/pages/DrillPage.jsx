@@ -111,13 +111,10 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
 
   const isFlippedRef = useRef(isFlipped)
   const transitioningRef = useRef(false)
-  const localStreakRef = useRef(localStreak)
   useEffect(() => { isFlippedRef.current = isFlipped }, [isFlipped])
   useEffect(() => { transitioningRef.current = transitioning }, [transitioning])
-  useEffect(() => { localStreakRef.current = localStreak }, [localStreak])
   const sfx = useSFX()
 
-  const [showHint]        = useState(true)
   const [hintPhase,        setHintPhase]        = useState('pre-flip')
   const [displayedHint,    setDisplayedHint]    = useState('')
   const typewriterTimer = useRef(null)
@@ -134,13 +131,12 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
   }
 
   useEffect(() => {
-    if (!showHint) return
     runTypewriter('Conjugate the verb below,\nthen flip to check.', 55)
     return () => clearInterval(typewriterTimer.current)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!showHint || hintPhase !== 'pre-flip' || !isFlipped) return
+    if (hintPhase !== 'pre-flip' || !isFlipped) return
     setHintPhase('post-flip')
     runTypewriter('Did you get it right?\nMark your answer.', 55)
   }, [isFlipped]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -148,7 +144,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
   const handleVerdictRef = useRef()
   handleVerdictRef.current = (isCorrect) => {
     if (transitioningRef.current) return
-    if (showHint && hintPhase !== 'done') {
+    if (hintPhase !== 'done') {
       setHintPhase('done')
       clearInterval(typewriterTimer.current)
       setDisplayedHint('')
@@ -260,7 +256,7 @@ function ActiveDrill({ drill, ttsEnabled, sfxEnabled, ttsVoice, showStreak, show
       onUndo={handleUndo}
       showStreak={showStreak}
       showVisualEffects={showVisualEffects}
-      onboardingHint={showHint && hintPhase !== 'done' ? displayedHint : null}
+      onboardingHint={hintPhase !== 'done' ? displayedHint : null}
     >
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
         <div key={currentCard.id} className={cardClass}>
