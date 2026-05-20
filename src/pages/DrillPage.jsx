@@ -752,7 +752,7 @@ export default function DrillPage() {
           padding: '20px 24px', zIndex: 10,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <img src={logoMain} alt="" style={{ height: 32, display: 'block' }} />
+            <img src={logoMain} alt="" width={36} height={32} style={{ display: 'block' }} />
             <Wordmark height={17} />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -850,17 +850,17 @@ export default function DrillPage() {
           <a
             href="mailto:hello@scallsen.ca?subject=Katsuyou%20Drill%20-%20Issue%20Report"
             style={{
-              color: 'rgba(255,255,255,0.35)',
+              color: 'rgba(255,255,255,0.55)',
               fontSize: 12,
               textDecoration: 'none',
-              border: '1px solid rgba(255,255,255,0.18)',
+              border: '1px solid rgba(255,255,255,0.28)',
               borderRadius: 6,
               padding: '3px 10px',
               pointerEvents: 'auto',
               transition: 'color 0.15s, border-color 0.15s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.45)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)'; }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.55)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.55)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.28)'; }}
           >
             Report issue
           </a>
@@ -869,9 +869,9 @@ export default function DrillPage() {
               href="https://scallsen.ca"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, textDecoration: 'none', pointerEvents: 'auto' }}
-              onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}
+              style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13, textDecoration: 'none', pointerEvents: 'auto' }}
+              onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.85)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.55)'}
             >
               Developed by Simon Callsen
             </a>
@@ -880,9 +880,9 @@ export default function DrillPage() {
               href="https://github.com/scallsen/katsuyou-drill"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, textDecoration: 'none', pointerEvents: 'auto' }}
-              onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}
+              style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13, textDecoration: 'none', pointerEvents: 'auto' }}
+              onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.85)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.55)'}
             >
               GitHub
             </a>
