@@ -1,5 +1,5 @@
 # A tool to practice conjugating Japanese grammar forms.
-<img width="1152" height="681" alt="image" src="https://github.com/user-attachments/assets/3bf7ac32-5c7a-460c-b048-b94c9d1a1a7f" />
+<img width="1109" height="653" alt="image" src="https://github.com/user-attachments/assets/19caa39c-317c-4343-aca9-5a1e294ef352" />
 
 ## Features
 - Conjugate verbs, adjectives, and nouns
